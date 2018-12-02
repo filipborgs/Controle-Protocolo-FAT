@@ -42,6 +42,22 @@ public class UsuarioRest {
         }
     }
 
+    @POST
+    @Path("/cadastrarUsuario")
+    @Produces("application/json")
+    @Consumes("application/json")
+    public String cadastrarUsuario(String json) {
+        Gson g = new Gson();
+        try {
+            Usuario u = g.fromJson(json, Usuario.class);
+            String user = g.toJson(control.createUsuario(u));
+
+            return user;
+        } catch (Exception ex) {
+            return g.toJson(ex.getMessage());
+        }
+    }
+
 //    @GET
 //    @Produces("application/json")
 //    public String getCursos(@QueryParam("cursoid") int cursoid) {

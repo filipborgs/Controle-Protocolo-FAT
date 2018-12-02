@@ -6,6 +6,7 @@
 package com.br.fat.controleprotocolo.controller;
 
 import com.br.fat.controleprotocolo.dao.UsuarioDAO;
+import com.br.fat.controleprotocolo.model.Permissao;
 import com.br.fat.controleprotocolo.model.Usuario;
 
 /**
@@ -30,5 +31,14 @@ public class ControllerUsuario {
             user = udao.validarUsuario(login, senha);
         }
         return user;
+    }
+
+    public Usuario createUsuario(Usuario u) throws Exception {
+        if (u.getNome() == null || u.getNome().isEmpty() || u.getUser() == null || u.getUser().isEmpty()
+                || u.getSenha() == null || u.getSenha().isEmpty() || u.getPermissao() == null) {
+            throw new Exception();
+        } else {
+            return udao.createUsuario(u);
+        }
     }
 }

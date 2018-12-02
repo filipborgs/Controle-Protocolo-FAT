@@ -11,7 +11,7 @@ package com.br.fat.controleprotocolo.model;
  */
 public class LivroRegistros {
 
-    private int id, paginaDoRegistro, numeroLivro;
+    private int id, folhas, numero;
     private String nome, detalhes, cor;
 
     public int getId() {
@@ -22,12 +22,28 @@ public class LivroRegistros {
         this.id = id;
     }
 
-    public int getPaginaDoRegistro() {
-        return paginaDoRegistro;
+    public int getFolhas() {
+        return folhas;
     }
 
-    public void setPaginaDoRegistro(int paginaDoRegistro) {
-        this.paginaDoRegistro = paginaDoRegistro;
+    public void setFolhas(int folhas) {
+        this.folhas = folhas;
+    }
+
+    public int getNumero() {
+        return numero;
+    }
+
+    public void setNumero(int numero) {
+        this.numero = numero;
+    }
+
+    public String getCor() {
+        return cor;
+    }
+
+    public void setCor(String cor) {
+        this.cor = cor;
     }
 
     public String getNome() {

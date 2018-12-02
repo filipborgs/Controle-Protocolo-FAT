@@ -11,7 +11,7 @@ package com.br.fat.controleprotocolo.model;
  */
 public class Requisicao {
 
-    private int protocolo, prazo;
+    private int protocolo, prazo, paginaLivro;
     private LivroRegistros livro;
     private Usuario usuario;
     private Pessoa remetente, destinatario;
@@ -25,6 +25,22 @@ public class Requisicao {
 
     public void setProtocolo(int protocolo) {
         this.protocolo = protocolo;
+    }
+
+    public int getPaginaLivro() {
+        return paginaLivro;
+    }
+
+    public void setPaginaLivro(int paginaLivro) {
+        this.paginaLivro = paginaLivro;
+    }
+
+    public String getDataRecebido() {
+        return dataRecebido;
+    }
+
+    public void setDataRecebido(String dataRecebido) {
+        this.dataRecebido = dataRecebido;
     }
 
     public int getPrazo() {

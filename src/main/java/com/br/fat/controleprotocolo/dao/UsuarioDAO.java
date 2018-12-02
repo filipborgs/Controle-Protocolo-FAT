@@ -6,6 +6,8 @@ import com.br.fat.controleprotocolo.model.Permissao;
 import com.br.fat.controleprotocolo.model.Usuario;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -54,27 +56,30 @@ public class UsuarioDAO extends DatabaseUtil {
         return user;
     }
 
-//    public Usuario createUsuario(Usuario u) {
-//        String sql = "INSERT INTO usuarios (nome_usuario, email_usuario, senha_usuario, tipo_usuario, status_usuario)"
-//                + " VALUES (?, ?, ?, ?, ?)";
-//        try {
-//            stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-//            stmt.setString(1, u.getNome());
-//            stmt.setString(2, u.getEmail());
-//            stmt.setString(3, u.getSenha());
-//            stmt.setString(4, u.getTipo().getTipo());
-//            stmt.setString(5, u.getStatus().getStatus());
-//            stmt.executeUpdate();
-//            rs = stmt.getGeneratedKeys();
-//            if (rs.next()) {
-//                u.setId(rs.getInt(1));
-//            }
-//        } catch (SQLException ex) {
-//            JOptionPane.showInputDialog(ex.getMessage());
-//        }
-//
-//        return u;
-//    }
+    public Usuario createUsuario(Usuario u) throws Exception {
+        String sql = "INSERT INTO usuario (" + UsuarioDaoUtil.USUARIO_ATRIBUTO_NOME + "," + UsuarioDaoUtil.USUARIO_ATRIBUTO_USER
+                + "," + UsuarioDaoUtil.USUARIO_ATRIBUTO_SENHA + "," + UsuarioDaoUtil.USUARIO_ATRIBUTO_EDITAR + ","
+                + UsuarioDaoUtil.USUARIO_ATRIBUTO_INSERIR + "," + UsuarioDaoUtil.USUARIO_ATRIBUTO_STATUS + ")"
+                + " VALUES (?, ?, ?, ?, ?, ?)";
+        try {
+            stmt = con.prepareStatement(sql);
+            stmt.setString(1, u.getNome());
+            stmt.setString(2, u.getUser());
+            stmt.setString(3, u.getSenha());
+            stmt.setString(4, String.valueOf(u.getPermissao().getUpdate()));
+            stmt.setString(5, String.valueOf(u.getPermissao().getWrite()));
+            stmt.setString(6, String.valueOf(u.getStatus()));
+
+            stmt.executeUpdate();
+            rs = stmt.getGeneratedKeys();
+            if (rs.next()) {
+                u.setId(rs.getInt(1));
+            }
+            return u;
+        } catch (Exception ex) {
+            throw new Exception(ex.getMessage());
+        }
+    }
 //
 //    public List getListaTiposUsuario() throws SQLException {
 //        List<Tipo> listaTipos = null;
