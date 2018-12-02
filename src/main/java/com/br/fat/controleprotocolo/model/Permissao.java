@@ -11,7 +11,7 @@ package com.br.fat.controleprotocolo.model;
  */
 public class Permissao {
 
-    private char read, whrite, delete, update;
+    private char read, write, delete, update;
 
     public char getRead() {
         return read;
@@ -21,12 +21,12 @@ public class Permissao {
         this.read = read;
     }
 
-    public char getWhrite() {
-        return whrite;
+    public char getWrite() {
+        return write;
     }
 
-    public void setWhrite(char whrite) {
-        this.whrite = whrite;
+    public void setWrite(char write) {
+        this.write = write;
     }
 
     public char getDelete() {

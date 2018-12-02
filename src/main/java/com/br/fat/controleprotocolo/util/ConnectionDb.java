@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.br.fat.avisa.util;
+package com.br.fat.controleprotocolo.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -20,7 +20,7 @@ import java.util.logging.Logger;
 public class ConnectionDb {
 
     private static final String DRIVER = "com.mysql.jdbc.Driver";
-    private static final String URL = "jdbc:mysql://localhost:3306/fat.avisa";
+    private static final String URL = "jdbc:mysql://localhost:3306/fat.protocolos";
     private static final String USER = "root";
     private static final String PASS = "";
 

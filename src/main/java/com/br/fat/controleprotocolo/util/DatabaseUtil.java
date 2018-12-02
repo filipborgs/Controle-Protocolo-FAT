@@ -3,14 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.br.fat.avisa.util;
+package com.br.fat.controleprotocolo.util;
+
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -30,22 +28,6 @@ public class DatabaseUtil {
 
     public DatabaseUtil() {
         this.con = ConnectionDb.getConnetion();
-    }
-
-    public boolean verificarUsuario(String usuario) {
-        boolean flag = false;
-        try {
-            stmt = con.prepareStatement("SELECT * FROM view_usuarios_agrupados v WHERE v.USUARIO = ?");
-            stmt.setString(1, usuario);
-            rs = stmt.executeQuery();
-            if (rs.next()) {
-                flag = true;
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(DatabaseUtil.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        return flag;
     }
 
     public void finalizarConexao() {
