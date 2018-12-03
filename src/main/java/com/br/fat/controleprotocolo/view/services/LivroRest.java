@@ -7,9 +7,12 @@ package com.br.fat.controleprotocolo.view.services;
 
 import com.br.fat.controleprotocolo.controller.ControllerLivroRegistro;
 import com.br.fat.controleprotocolo.model.LivroRegistros;
-import com.br.fat.controleprotocolo.model.Usuario;
 import com.google.gson.Gson;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -36,6 +39,21 @@ public class LivroRest {
 
             //return g.toJson("Cadastrado com sucesso");
         } catch (Exception ex) {
+            return g.toJson(ex.getMessage());
+        }
+    }
+
+    @GET
+    @Path("/listarLivros")
+    @Produces("application/json")
+    public String listarLivros() {
+        Gson g = new Gson();
+
+        try {
+            List lista = control.getAllLivros();
+            return g.toJson(lista);
+        } catch (Exception ex) {
+            Logger.getLogger(LivroRest.class.getName()).log(Level.SEVERE, null, ex);
             return g.toJson(ex.getMessage());
         }
     }

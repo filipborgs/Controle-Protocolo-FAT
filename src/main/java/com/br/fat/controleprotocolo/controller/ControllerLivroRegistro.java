@@ -7,6 +7,7 @@ package com.br.fat.controleprotocolo.controller;
 
 import com.br.fat.controleprotocolo.dao.LivroRegistroDao;
 import com.br.fat.controleprotocolo.model.LivroRegistros;
+import java.util.List;
 
 /**
  *
@@ -22,6 +23,10 @@ public class ControllerLivroRegistro {
         } else {
             ldao.insertLivro(l);
         }
+    }
+
+    public List<LivroRegistros> getAllLivros() throws Exception {
+        return ldao.selectAllLivroRegistros();
     }
 
 }
