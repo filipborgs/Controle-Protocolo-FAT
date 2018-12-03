@@ -1,0 +1,32 @@
+
+http://localhost:8080/ControleProtocolo/rest/usuario/login POST
+recebe um form com os seguinte campos user(string) e senha (string)
+
+http://localhost:8080/ControleProtocolo/rest/usuario/cadastrarUsuario POST
+recebe um json com os seguintes campos
+{
+"nome": "filipe", //not null
+"senha": "123", //not null
+"permissao": {
+"write": "S", //not null
+"delete": "", //not null
+"update": "S" //not null
+}
+}
+
+http://localhost:8080/ControleProtocolo/rest/livro/cadastrarLivro POST
+recebe um json com os seguintes campos
+{
+"folhas": 22,
+"numero": 6,
+"nome": "teste",
+"detalhes": "t",
+"cor": "123"
+}
+
+http://localhost:8080/ControleProtocolo/rest/livro/listarLivros GET
+retorna um json com uma lista de livros
+
+http://localhost:8080/ControleProtocolo/rest/motivo/listarMotivo GET
+
+http://localhost:8080/ControleProtocolo/rest/motivo/cadastrarMotivo POST
