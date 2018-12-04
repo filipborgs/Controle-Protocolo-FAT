@@ -45,6 +45,7 @@ public class ProtocoloRest {
     public String cadastrarProtocolo(String json) {
         Protocolo p = g.fromJson(json, Protocolo.class);
         return "";
+        
     }
 
 }
