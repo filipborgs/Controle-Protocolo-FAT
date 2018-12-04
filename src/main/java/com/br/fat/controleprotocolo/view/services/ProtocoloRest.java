@@ -43,10 +43,13 @@ public class ProtocoloRest {
     @Produces("application/json")
     @Consumes("application/json")
     public String cadastrarProtocolo(String json) {
-        Protocolo p = g.fromJson(json, Protocolo.class);
-        return "";
-        
-        
+        try {
+            Protocolo p = g.fromJson(json, Protocolo.class);
+            p = control.createProtocolo(p);
+            return g.toJson(p);
+        } catch (Exception e) {
+            return e.getMessage();
+        }
     }
 
 }

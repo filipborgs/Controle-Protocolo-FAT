@@ -37,7 +37,7 @@ public class ProtocoloDAO extends DatabaseUtil {
         p.getUsuario().setId(rs.getInt(ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_USUARIO));
         p.setObservacoes(rs.getString(ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_OBSERVACOES));
         p.setPaginaLivro(rs.getInt(ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_PAGINA));
-        p.setAssinado(rs.getString(ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_ASSINADO).charAt(0));
+        p.setAssinado(rs.getString(ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_ASSINADO));
         p.setId(rs.getInt(ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_ID));
         p.setDestinatario(new Pessoa());
         p.setRemetente(new Pessoa());
@@ -56,13 +56,13 @@ public class ProtocoloDAO extends DatabaseUtil {
                 + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_LIVRO + "," + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_MOTIVO + ","
                 + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_NUM + "," + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_OBSERVACOES + ","
                 + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_PAGINA + "," + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_REMETENTE + ","
-                + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_SITUACAO + "," + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_SOLICITANTE + ","
+                + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_SITUACAO + "," + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_SOLICITANTE
                 + ") VALUES (?,?,?,?,?,?,?,?,?,?,?)";
         super.getCon();
         try {
             stmt = con.prepareStatement(sql);
             stmt.setInt(1, p.getUsuario().getId());
-            stmt.setString(2, String.valueOf(p.getAssinado()));
+            stmt.setString(2, p.getAssinado());
             stmt.setInt(3, p.getDestinatario().getId());
             stmt.setInt(4, p.getLivro().getId());
             stmt.setInt(5, p.getMotivo().getId());
@@ -79,8 +79,7 @@ public class ProtocoloDAO extends DatabaseUtil {
             throw new Exception(ex.getMessage());
         }
     }
-    
-    
+
     public List<Protocolo> selectAllProtocolo() throws Exception {
         String sql = "SELECT * FROM protocolo";
         super.getCon();

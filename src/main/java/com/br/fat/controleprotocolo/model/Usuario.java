@@ -13,7 +13,7 @@ public class Usuario {
 
     private int id;
     private String nome, user, senha;
-    private char tipo, status;
+    private char status;
     private Permissao permissao;
 
     public int getId() {
@@ -64,11 +64,5 @@ public class Usuario {
         this.senha = senha;
     }
 
-    public char getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(char tipo) {
-        this.tipo = tipo;
-    }
+ 
 }

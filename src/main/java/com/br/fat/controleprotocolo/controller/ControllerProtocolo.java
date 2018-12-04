@@ -26,7 +26,7 @@ public class ControllerProtocolo {
                 || p.getSituacao() == null
                 || p.getUsuario() == null) {
             throw new Exception();
-        } else if (Character.isWhitespace(p.getAssinado())
+        } else if (p.getAssinado().isEmpty()
                 || p.getObservacoes().isEmpty()
                 || p.getPaginaLivro() <= 0
                 || p.getProtocolo() <= 0

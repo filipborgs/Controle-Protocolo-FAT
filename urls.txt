@@ -30,3 +30,32 @@ retorna um json com uma lista de livros
 http://localhost:8080/ControleProtocolo/rest/motivo/listarMotivo GET
 
 http://localhost:8080/ControleProtocolo/rest/motivo/cadastrarMotivo POST
+
+http://localhost:8080/ControleProtocolo/rest/protocolo/cadastrarProtocolo POST
+{
+"id": 1,
+"protocolo": 123,
+"prazo": 0,
+"paginaLivro": 2,
+"assinado": "n",
+"livro": {
+"id": 1,
+},
+"usuario": {
+"id": 1,
+},
+"remetente": {
+"id": 1
+},
+"destinatario": {
+"id": 3
+},
+"solicitante": "dsfsdf",
+"observacoes": "asdasd",
+"situacao": {
+"id": 1
+},
+"motivo": {
+"id": 1
+}
+}

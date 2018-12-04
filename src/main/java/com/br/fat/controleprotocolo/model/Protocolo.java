@@ -12,7 +12,7 @@ package com.br.fat.controleprotocolo.model;
 public class Protocolo {
 
     private int id, protocolo, prazo, paginaLivro;
-    private char assinado;
+    private String assinado;
     private LivroRegistros livro;
     private Usuario usuario;
     private Pessoa remetente, destinatario;
@@ -28,11 +28,11 @@ public class Protocolo {
         this.id = id;
     }
 
-    public char getAssinado() {
+    public String getAssinado() {
         return assinado;
     }
 
-    public void setAssinado(char assinado) {
+    public void setAssinado(String assinado) {
         this.assinado = assinado;
     }
 
