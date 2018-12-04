@@ -9,15 +9,32 @@ package com.br.fat.controleprotocolo.model;
  *
  * @author Filipe Borges
  */
-public class Requisicao {
+public class Protocolo {
 
-    private int protocolo, prazo, paginaLivro;
+    private int id, protocolo, prazo, paginaLivro;
+    private char assinado;
     private LivroRegistros livro;
     private Usuario usuario;
     private Pessoa remetente, destinatario;
     private String solicitante, observacoes, dataCadastro, dataFinal, dataRecebido;
     private Situacao situacao;
     private Motivo motivo;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public char getAssinado() {
+        return assinado;
+    }
+
+    public void setAssinado(char assinado) {
+        this.assinado = assinado;
+    }
 
     public int getProtocolo() {
         return protocolo;
