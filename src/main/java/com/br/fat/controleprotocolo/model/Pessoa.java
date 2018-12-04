@@ -22,6 +22,14 @@ public class Pessoa {
         this.id = id;
     }
 
+    public String getSetor() {
+        return setor;
+    }
+
+    public void setSetor(String setor) {
+        this.setor = setor;
+    }
+
     public String getNome() {
         return nome;
     }
