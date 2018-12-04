@@ -17,6 +17,7 @@ public class ControllerProtocolo {
 
     private ProtocoloDAO pdao = new ProtocoloDAO();
 
+    
     public Protocolo createProtocolo(Protocolo p) throws Exception {
         if (p.getLivro() == null
                 || p.getDestinatario() == null

@@ -11,6 +11,7 @@ package com.br.fat.controleprotocolo.dao.util;
  */
 public class ProtocoloDaoUtil {
 
+    
     public static final String PROTOCOLO_ATRIBUTO_ID = "id_protocolo";
     public static final String PROTOCOLO_ATRIBUTO_NUM = "num_protocolo";
     public static final String PROTOCOLO_ATRIBUTO_LIVRO = "fk_livro";

@@ -80,6 +80,7 @@ public class ProtocoloDAO extends DatabaseUtil {
         }
     }
     
+    
     public List<Protocolo> selectAllProtocolo() throws Exception {
         String sql = "SELECT * FROM protocolo";
         super.getCon();
