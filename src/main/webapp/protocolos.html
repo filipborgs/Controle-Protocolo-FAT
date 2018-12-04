@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+
+<html lang="en" >
+
+	<head>
+	
+		<meta charset="UTF-8">
+		
+		<!--====== TITLE TAG ======-->
+		<title>Gerenciador de Protocolos</title>
+		
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<script src="assest/js/vendor/jquery-1.12.4.min.js"></script>
+		
+		<!-- ===== TABLE RESPONSIVE ===== -->
+		<link rel="stylesheet" href="assest/css/style.css">
+		
+		 <!--====== FAVICON ICON =======-->
+		<link rel="shortcut icon" type="image/ico" href="assest/img/favicon.png" />
+
+		<!-- /\/\/\/\ TABLE RESPONSIVE /\/\/\/\ -->
+		
+		<link rel="stylesheet" href="assest/css/normalize.css">
+        <link rel="stylesheet" href="assest/css/demo.css">
+        <!-- Pushy CSS -->
+        <link rel="stylesheet" href="assest/css/pushy.css">
+		
+		<script src="assest/js/project/dados_connection.js"></script>
+		<script src="assest/js/project/control_user.js"></script>
+		
+		<style>
+	
+			.footer {
+			
+			bottom:0;
+			width:100%;
+			padding-left:0px;
+			padding-top:10%;
+			padding-bottom:0px;
+			
+			}
+
+		</style>
+		 
+	</head>
+
+	<body>
+		
+		<nav class="pushy pushy-left" data-focus="#first-link">
+            <div class="pushy-content">
+                <ul>
+                    <li class="pushy-link"><a href="protocolos.html">Protocolos</a></li>
+                    <li class="pushy-link"><a href="livros.html">Livros</a></li>
+                    <li class="pushy-link"><a href="pessoas.html">Pessoas</a></li>
+                    <li class="pushy-link"><a href="motivos.html">Motivos</a></li>
+					<li class="pushy-link"><a href="situacoes.html">Situações</a></li>
+					<li class="pushy-link"><a href="javascript:logout();">Sair</a></li>
+                </ul>
+            </div>
+        </nav>
+		
+		 <!-- Your Content -->
+        <div id="container" style="padding-left:0px;padding-top:40px;padding-bottom:0px;height:50px;">
+            <!-- Menu Button -->
+            <button class="menu-btn">&#9776; Menu</button>
+        </div>
+
+        
+
+        <!-- Pushy JS -->
+        <script src="assest/js/pushy.min.js"></script>
+
+
+		<h1 align="center" >Protocolos</h1>
+		<div>
+			<table class="rwd-table" id="table-protocols" >
+				<thead>
+					<tr>
+						<th>Movie Title</th>
+						<th>Genre</th>
+						<th>Year</th>
+						<th>Gross</th>
+					</tr>
+				</thead>
+				<tbody id="tboby-protocols">
+					<tr>
+						<td data-th="Movie Title">Star Wars</td>
+						<td data-th="Genre">Adventure, Sci-fi</td>
+						<td data-th="Year">1977</td>
+						<td data-th="Gross">$460,935,665</td>
+					</tr>
+					
+				</tbody>
+			</table>
+		</div>
+		
+		<div>
+			<footer class="footer">
+				<!--FOOER AREA END-->
+				<p align="center">Desenvolvido pela turma de Sistemas para Internet</br> Faculdade Anísio Teixeira - 2018.2</p>
+			</footer>
+		</div>
+		
+	</body>
+
+</html>

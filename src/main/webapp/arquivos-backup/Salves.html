@@ -1,0 +1,21 @@
+<html>
+
+	<script>
+
+		// CRIANDO UM ARRAY JSON NA MÃO E PEGANDO AS PARTES INDIVIDUAIS
+		
+		var obj= '[{"emailSend": "test@myjquery.com.br"},{"emailSend": "jssantos@javascript.com.br"}]';
+		
+		var contact = JSON.parse(obj);
+		
+		console.log(contact);
+		console.log(contact[0]);
+		console.log(contact[0].emailSend);
+		
+		// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+	</script>
+
+
+
+</html>
