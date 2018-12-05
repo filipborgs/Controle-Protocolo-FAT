@@ -4,7 +4,7 @@
  //-- CONFIGURAÇÕES PARA O SERVIDOR JAVA --//
 
  var protocolo = "http";
- //var ip = "127.0.0.1";
+ //var ip = "192.168.23.50";
  var ip = "localhost";
  var porta = "8084";
  var aplicacao = "ControleProtocolo";

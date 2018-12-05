@@ -1,3 +1,6 @@
+http://localhost:8080/ControleProtocolo/rest/pessoa/listarPessoa POST
+listar Pessoas
+
 
 http://localhost:8080/ControleProtocolo/rest/usuario/login POST
 recebe um form com os seguinte campos user(string) e senha (string)
@@ -24,8 +27,20 @@ recebe um json com os seguintes campos
 "cor": "123"
 }
 
+
+
 http://localhost:8080/ControleProtocolo/rest/livro/listarLivros GET
 retorna um json com uma lista de livros
+{
+    id: 1, 
+    folhas: 100, 
+    numero: 22, 
+    nome: "teste me", 
+    cor: "azul"
+    // AINDA FALTA dt_inicio, dt_fim e detalhes
+}
+
+
 
 http://localhost:8080/ControleProtocolo/rest/motivo/listarMotivo GET
 

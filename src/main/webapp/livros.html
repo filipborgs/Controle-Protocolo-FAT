@@ -2,326 +2,407 @@
 
 <html lang="en" >
 
-	<head>
-	
-		<meta charset="UTF-8">
-		
-		<!--====== TITLE TAG ======-->
-		<title>Gerenciador de Protocolos</title>
-		
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<script src="assest/js/vendor/jquery-1.12.4.min.js"></script>
-		
-		<!-- ===== BOOTSTRAP ===== 
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" >
-		-->
-		
-		
-		
-		 <!--====== FAVICON ICON =======-->
-		<link rel="shortcut icon" type="image/ico" href="assest/img/favicon.png" />
+    <head>
 
-		<!-- /\/\/\/\ TABLE RESPONSIVE /\/\/\/\ -->
-		
-		<link rel="stylesheet" href="assest/css/normalize.css">
+        <meta charset="UTF-8">
+
+        <!--====== TITLE TAG ======-->
+        <title>Gerenciador de Protocolos</title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="assest/js/vendor/jquery-1.12.4.min.js"></script>
+
+        <!-- ===== BOOTSTRAP ===== 
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" >
+        -->
+
+
+
+        <!--====== FAVICON ICON =======-->
+        <link rel="shortcut icon" type="image/ico" href="assest/img/favicon.png" />
+
+        <!-- /\/\/\/\ TABLE RESPONSIVE /\/\/\/\ -->
+
+        <link rel="stylesheet" href="assest/css/normalize.css">
         <link rel="stylesheet" href="assest/css/demo.css">
         <!-- Pushy CSS -->
         <link rel="stylesheet" href="assest/css/pushy.css">
-		
-		<script src="assest/js/project/dados_connection.js"></script>
-		<script src="assest/js/project/control_user.js"></script>
-		<!-- ===== TABLE RESPONSIVE ===== -->
-		<link rel="stylesheet" href="assest/css/style.css">
-		<link rel="stylesheet" href="assest/css/styles.css">
-		<script>
-		
-			function SendInputForm() {
-				alert("submit");
-			}
-		
-			function CallForm(){
-				
-				$("#div-protocols").empty();
-				
-				div_creat = document.getElementById("div-create-protocol");
-				
-				div_creat.removeAttribute("style");
-				div_creat.setAttribute("style","display:flow-root;");
-				
-			}
-			
-			function RemoveForm(){
 
-				$("#div-protocols").empty();
-				
-				div_creat = document.getElementById("div-create-protocol");
-				
-				div_creat.removeAttribute("style");
-				div_creat.setAttribute("style","display:none;");
-				
-				GetListLivros();
-				
-			}
-		
-			function GetListLivros(){
-			
-				var metodo = "get-livros.php";
-				var tokin = localStorage.getItem("Dw33&121#$%8\z|^");
-			
-				$.ajax
-				({
-					url : uri+metodo,
-					type : 'POST',
-					data : 
-					{
-						tokin: tokin
-					},
-					beforeSend : function(){
-						//alert("ENTRANDO...");
-					}
-				})
-				.done(function(returnJson){
-				
+        <script src="assest/js/project/dados_connection.js"></script>
+        <script src="assest/js/project/control_user.js"></script>
+        <script src="assest/js/project/alertas.js"></script>
+        <!-- ===== TABLE RESPONSIVE ===== -->
+        <link rel="stylesheet" href="assest/css/style.css">
+        <link rel="stylesheet" href="assest/css/styles.css">
+        <script>
 
-					var livros = JSON.parse(returnJson);
-					
-					
-						// PEGA A DIV PAI E ESVAZIA ELA
-						tdiv = document.getElementById("div-protocols");
-						$("#div-protocols").empty();
-						
-						
-						
-						// CRIA A TABELA E SETA OS ATRIBUTOS
-						ttable = document.createElement("table");
-						ttable.setAttribute("class","rwd-table");
-						ttable.setAttribute("id","table-protocols");
-						
-						// CRIA O THEAD E O TBODY E SETA OS ATRIBUTOS
-						tthead = document.createElement("thead");
-						ttbody = document.createElement("tbody");
-						ttbody.setAttribute("id","tboby-protocols");
-						
-						// CRIA A LINHA DO TÍTULO E AS COLUNAS E INSERI AS STRINGS
-						trowhead = document.createElement("tr");
-						
-						tcolNumerohead 	= document.createElement("th");
-						tcolNomehead 	= document.createElement("th");
-						tcolFolhashead 	= document.createElement("th");
-						tcolCorhead 	= document.createElement("th");
-						tcolIniciohead 	= document.createElement("th");
-						tcolFimhead 	= document.createElement("th");
-						tcolDetalheshead= document.createElement("th");
-						
-						tcolNumerohead.append("Número");
-						tcolNomehead.append("Nome");
-						tcolFolhashead.append("Folhas");
-						tcolCorhead.append("Cor");
-						tcolIniciohead.append("Abertura");
-						tcolFimhead.append("Término");
-						tcolDetalheshead.append("Detalhes");
-						
-						// INSERI AS COLUNAS DO TÍTULO NA LINHA DO TÍTULO
-						trowhead.appendChild(tcolNumerohead);
-						trowhead.appendChild(tcolNomehead);
-						trowhead.appendChild(tcolFolhashead);
-						trowhead.appendChild(tcolCorhead);
-						trowhead.appendChild(tcolIniciohead);
-						trowhead.appendChild(tcolFimhead);
-						trowhead.appendChild(tcolDetalheshead);
-						
-						// INSERI A LINHA DO TÍTULO NO THEAD
-						tthead.appendChild(trowhead);
-						
-						// INSERI O THEAD E O TBODY DENTRO DA TABELA
-						ttable.appendChild(tthead);
-						ttable.appendChild(ttbody);
-						
-						// INSERI A TABELA DENTRO DA DIV
-						tdiv.appendChild(ttable);
-				
-					// /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
-					// \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
-					
-					// ITERA O JSON (LINHA A LINHA) E CHAMA O METODO QUE PREENCHE A TABELA
-					for(var i=0; i < livros.length; i++) {
-					
-						PreencheTboby(livros[i]);
-						
-					}
-					
-					function PreencheTboby(livro){
-						
-						// CRIA A LINHA
-						trow = document.createElement("tr");
-						
-						// CRIA AS COLUNAS
-						tcolNumero 	= document.createElement("td");
-						tcolNome 	= document.createElement("td");
-						tcolFolhas 	= document.createElement("td");
-						tcolCor 	= document.createElement("td");
-						tcolInicio 	= document.createElement("td");
-						tcolFim 	= document.createElement("td");
-						tcolDetalhes= document.createElement("td");
-						
-						// ADICIONA ATRIBUTOS A COLUNA QUE GARANTE O TITULO NA RESPONSIVIDADE
-						tcolNumero.setAttribute("data-th","Número");
-						tcolNome.setAttribute("data-th","Nome");
-						tcolFolhas.setAttribute("data-th","Folhas");
-						tcolCor.setAttribute("data-th","Cor");
-						tcolInicio.setAttribute("data-th","Abertura");
-						tcolFim.setAttribute("data-th","Término");
-						tcolDetalhes.setAttribute("data-th","Detalhes");
-						
-						// INSERI O CONTEUDO DO JSON NA COLUNA DO CORPO DA TABELA
-						tcolNumero.append(livro.numero);
-						tcolNome.append(livro.nome);
-						tcolFolhas.append(livro.folhas);
-						tcolCor.append(livro.cor);
-						tcolInicio.append(livro.dt_inicio);
-						tcolFim.append(livro.dt_fim);
-						tcolDetalhes.append(livro.detalhes);
-						
-						// INSERI AS COLUNAS DENTRO DA LINHA
-						trow.appendChild(tcolNumero);
-						trow.appendChild(tcolNome);
-						trow.appendChild(tcolFolhas);
-						trow.appendChild(tcolCor);
-						trow.appendChild(tcolInicio);
-						trow.appendChild(tcolFim);
-						trow.appendChild(tcolDetalhes);
-						
-						// INSERI O CORPO DENTRO DA TABELA
-						ttbody.appendChild(trow);
-						
-					}
-					
-				})
-				.fail(function(msg){
-					alert("Falha ao tentar obter a lista de livros");
-					console.log(msg);
-				});
-				
-			}
-		
-		</script>
-		
-		<style>
-	
-			.footer {
-				bottom:0;
-				width:100%;
-				padding-left:0px;
-				padding-top:10%;
-				padding-bottom:0px;
-			
-			}
-			
-		</style>
-		 
-	</head>
+            function SendInputForm() {
 
-	<body onload="GetListLivros();">
-		
-		<!-- \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ NAV MENU \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ -->
-		<nav class="pushy pushy-left" data-focus="#first-link">
+                numero = document.getElementById("numero").value;
+                nome = document.getElementById("nome").value;
+                folhas = document.getElementById("folhas").value;
+                cor = document.getElementById("cor").value;
+                dtinicio = document.getElementById("dtinicio").value;
+                detalhes = document.getElementById("detalhes").value;
+
+                var metodo = "livro/cadastrarLivro";
+                var tokin = localStorage.getItem("Dw33&121#$%8\z|^");
+
+                $.ajax
+                        ({
+                            url: uri + metodo,
+                            type: 'POST',
+                            data: JSON.stringify(
+                                    {
+                                        folhas: folhas,
+                                        numero: numero,
+                                        nome: nome,
+                                        detalhes: detalhes,
+                                        cor: cor
+                                    }),
+                            contentType: 'application/json',
+                            beforeSend: function () {
+                                //alert("ENTRANDO...");
+                            }
+                        })
+                        .done(function (returnJson) {
+
+                            if (returnJson.numero == numero) {
+                                sendMensage = document.getElementById("sendMensage");
+                                $("#sendMensage").empty();
+                                sendMensage.append("Sucesso!");
+                                window.location.href="#popup1";
+                                cleanInputs();
+                            }else{
+                                
+                               
+                               
+                            }
+
+                        })
+                        .fail(function (msg) {
+                            alert("Falha ao tentar cadastrar livro");
+                            console.log(msg);
+                        });
+
+                function cleanInputs() {
+
+                    document.getElementById("numero").value("");
+                    document.getElementById("nome").value("");
+                    document.getElementById("folhas").value("");
+                    document.getElementById("cor").value("");
+                    document.getElementById("dtinicio").value("");
+                    document.getElementById("detalhes").value("");
+
+
+                }
+            }
+
+            function CallForm() {
+
+                $("#div-protocols").empty();
+
+                div_creat = document.getElementById("div-create-protocol");
+
+                div_creat.removeAttribute("style");
+                div_creat.setAttribute("style", "display:flow-root;");
+
+            }
+
+            function RemoveForm() {
+
+                $("#div-protocols").empty();
+
+                div_creat = document.getElementById("div-create-protocol");
+
+                div_creat.removeAttribute("style");
+                div_creat.setAttribute("style", "display:none;");
+
+                GetListLivros();
+
+            }
+
+            function GetListLivros() {
+
+                var metodo = "livro/listarLivros";
+                var tokin = localStorage.getItem("Dw33&121#$%8\z|^");
+
+                $.ajax
+                        ({
+                            url: uri + metodo,
+                            type: 'GET',
+                            data:
+                                    {
+                                        tokin: tokin
+                                    },
+                            beforeSend: function () {
+                                //alert("ENTRANDO...");
+                            }
+                        })
+                        .done(function (returnJson) {
+
+
+                            //var livros = JSON.parse(returnJson);
+                            livros = returnJson;
+                            console.log(livros);
+                            // PEGA A DIV PAI E ESVAZIA ELA
+                            tdiv = document.getElementById("div-protocols");
+                            $("#div-protocols").empty();
+
+
+
+                            // CRIA A TABELA E SETA OS ATRIBUTOS
+                            ttable = document.createElement("table");
+                            ttable.setAttribute("class", "rwd-table");
+                            ttable.setAttribute("id", "table-protocols");
+
+                            // CRIA O THEAD E O TBODY E SETA OS ATRIBUTOS
+                            tthead = document.createElement("thead");
+                            ttbody = document.createElement("tbody");
+                            ttbody.setAttribute("id", "tboby-protocols");
+
+                            // CRIA A LINHA DO TÍTULO E AS COLUNAS E INSERI AS STRINGS
+                            trowhead = document.createElement("tr");
+
+                            tcolNumerohead = document.createElement("th");
+                            tcolNomehead = document.createElement("th");
+                            tcolFolhashead = document.createElement("th");
+                            tcolCorhead = document.createElement("th");
+                            tcolIniciohead = document.createElement("th");
+                            tcolFimhead = document.createElement("th");
+                            tcolDetalheshead = document.createElement("th");
+
+                            tcolNumerohead.append("Número");
+                            tcolNomehead.append("Nome");
+                            tcolFolhashead.append("Folhas");
+                            tcolCorhead.append("Cor");
+                            tcolIniciohead.append("Abertura");
+                            tcolFimhead.append("Término");
+                            tcolDetalheshead.append("Detalhes");
+
+                            // INSERI AS COLUNAS DO TÍTULO NA LINHA DO TÍTULO
+                            trowhead.appendChild(tcolNumerohead);
+                            trowhead.appendChild(tcolNomehead);
+                            trowhead.appendChild(tcolFolhashead);
+                            trowhead.appendChild(tcolCorhead);
+                            trowhead.appendChild(tcolIniciohead);
+                            trowhead.appendChild(tcolFimhead);
+                            trowhead.appendChild(tcolDetalheshead);
+
+                            // INSERI A LINHA DO TÍTULO NO THEAD
+                            tthead.appendChild(trowhead);
+
+                            // INSERI O THEAD E O TBODY DENTRO DA TABELA
+                            ttable.appendChild(tthead);
+                            ttable.appendChild(ttbody);
+
+                            // INSERI A TABELA DENTRO DA DIV
+                            tdiv.appendChild(ttable);
+
+                            // /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+                            // \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+
+                            // ITERA O JSON (LINHA A LINHA) E CHAMA O METODO QUE PREENCHE A TABELA
+                            for (var i = 0; i < livros.length; i++) {
+
+                                PreencheTboby(livros[i]);
+
+                            }
+
+                            function PreencheTboby(livro) {
+
+                                // CRIA A LINHA
+                                trow = document.createElement("tr");
+
+                                // CRIA AS COLUNAS
+                                tcolNumero = document.createElement("td");
+                                tcolNome = document.createElement("td");
+                                tcolFolhas = document.createElement("td");
+                                tcolCor = document.createElement("td");
+                                tcolInicio = document.createElement("td");
+                                tcolFim = document.createElement("td");
+                                tcolDetalhes = document.createElement("td");
+
+                                // ADICIONA ATRIBUTOS A COLUNA QUE GARANTE O TITULO NA RESPONSIVIDADE
+                                tcolNumero.setAttribute("data-th", "Número");
+                                tcolNome.setAttribute("data-th", "Nome");
+                                tcolFolhas.setAttribute("data-th", "Folhas");
+                                tcolCor.setAttribute("data-th", "Cor");
+                                tcolInicio.setAttribute("data-th", "Abertura");
+                                tcolFim.setAttribute("data-th", "Término");
+                                tcolDetalhes.setAttribute("data-th", "Detalhes");
+
+                                // INSERI O CONTEUDO DO JSON NA COLUNA DO CORPO DA TABELA
+                                tcolNumero.append(livro.numero);
+                                tcolNome.append(livro.nome);
+                                tcolFolhas.append(livro.folhas);
+                                tcolCor.append(livro.cor);
+                                tcolInicio.append(livro.dt_inicio);
+                                tcolFim.append(livro.dt_fim);
+                                tcolDetalhes.append(livro.detalhes);
+
+                                // INSERI AS COLUNAS DENTRO DA LINHA
+                                trow.appendChild(tcolNumero);
+                                trow.appendChild(tcolNome);
+                                trow.appendChild(tcolFolhas);
+                                trow.appendChild(tcolCor);
+                                trow.appendChild(tcolInicio);
+                                trow.appendChild(tcolFim);
+                                trow.appendChild(tcolDetalhes);
+
+                                // INSERI O CORPO DENTRO DA TABELA
+                                ttbody.appendChild(trow);
+
+                            }
+
+                        })
+                        .fail(function (msg) {
+                            alert("Falha ao tentar obter a lista de livros");
+                            console.log(msg);
+                        });
+
+            }
+
+        </script>
+
+        <style>
+
+            .footer {
+                bottom:0;
+                width:100%;
+                padding-left:0px;
+                padding-top:10%;
+                padding-bottom:0px;
+
+            }
+
+        </style>
+
+    </head>
+
+    <body onload="GetListLivros();">
+
+        <!-- \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ NAV MENU \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ -->
+        <nav class="pushy pushy-left" data-focus="#first-link">
             <div class="pushy-content">
                 <ul>
                     <li class="pushy-link"><a href="protocolos.html">Protocolos</a></li>
                     <li class="pushy-link"><a href="livros.html">Livros</a></li>
                     <li class="pushy-link"><a href="pessoas.html">Pessoas</a></li>
                     <li class="pushy-link"><a href="motivos.html">Motivos</a></li>
-					<li class="pushy-link"><a href="situacoes.html">Situações</a></li>
-					<li class="pushy-link"><a href="javascript:logout();">Sair</a></li>
+                    <li class="pushy-link"><a href="situacoes.html">Situações</a></li>
+                    <li class="pushy-link"><a href="javascript:logout();">Sair</a></li>
                 </ul>
             </div>
         </nav>
-		
-		<!-- \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ DIV MENU \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ -->
+
+        <!-- \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ DIV MENU \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ -->
         <div id="container" style="padding-left:0px;padding-top:40px;padding-bottom:0px;height:50px;">
             <!-- Menu Button -->
             <button class="menu-btn">&#9776; Menu</button>
-			<div>
-				<img src="assest/img/new.png" height="45" style="cursor:pointer;" onclick="CallForm();"  width="47" title="Adicionar" />
-			</div>
+            <div>
+                <img src="assest/img/new.png" height="45" style="cursor:pointer;" onclick="CallForm();"  width="47" title="Adicionar" />
+            </div>
         </div>
 
         <!-- Pushy JS -->
         <script src="assest/js/pushy.min.js"></script>
 
-		<!-- \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ TÍTULO \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ -->
-		
-		<h1 align="center" >
-			Livros
-		</h1>
-		
-		
-		<!-- \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ DIV TABELA \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ -->
-		<div id="div-protocols" >
-			
-		</div>
-		
-		<!-- \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ DIV FORM \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ -->
-		<div id="div-create-protocol" style="display:none;" >
-			
-			<div class="container">
-			
-				
-					<div class="row">
-						<div class="col-25">
-							<label for="fname">Número</label>
-						</div>
-						<div class="col-75">
-							<input type="text" id="fname" name="firstname" placeholder="Your name..">
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-25">
-							<label for="lname">Nome</label>
-						</div>
-						<div class="col-75">
-							<input type="text" id="lname" name="lastname" placeholder="Your last name..">
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-25">
-							<label for="country">Country</label>
-						</div>
-						<div class="col-75">
-							<select id="country" name="country">
-								<option value="australia">Australia</option>
-								<option value="canada">Canada</option>
-								<option value="usa">USA</option>
-							</select>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-25">
-							<label for="subject">Subject</label>
-						</div>
-						<div class="col-75">
-							<textarea id="subject" name="subject" placeholder="Write something.." style="height:200px"></textarea>
-						</div>
-					</div>
-					<div class="row">
-						</br>
-							<input type="submit" style="margin-top: 10px" onclick="SendInputForm();" value="Salvar" />
-							<input type="submit" onclick="RemoveForm();" class="btn-danger" value="Cancelar" />
-					</div>
-				
-				
-			</div>
-			
-		</div>
-		
-		<!-- \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ DIV RODAPE \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ -->
-		<div>
-			<footer class="footer">
-				<!--FOOER AREA END-->
-				<p align="center">Desenvolvido pela turma de Sistemas para Internet</br> Faculdade Anísio Teixeira - 2018.2</p>
-			</footer>
-		</div>
-		
-	</body>
+        <!-- \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ TÍTULO \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ -->
+
+        <h1 align="center" >
+            Livros
+        </h1>
+
+        <br/>
+        <!-- \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ DIV TABELA \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ -->
+        <div id="div-protocols" >
+            
+        </div>
+
+
+        <div id="popup1" class="overlay">
+            <div class="popup">
+                <h2 style="text-align: center;">Mensagem:</h2>
+                <a class="close" href="#">&times;</a>
+                <div class="content" id="sendMensage">
+                </div>
+            </div>
+        </div>
+
+        <!-- \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ DIV FORM \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ -->
+        <div id="div-create-protocol" style="display:none;" >
+
+            <div class="container">
+
+
+                <div class="row">
+                    <div class="col-25">
+                        <label for="fname">Número</label>
+                    </div>
+                    <div class="col-75">
+                        <input type="number" required id="numero" name="numero" placeholder="obrigatório">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-25">
+                        <label for="lname">Nome</label>
+                    </div>
+                    <div class="col-75">
+                        <input type="text" required id="nome" name="nome" placeholder="obrigatório">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-25">
+                        <label for="lname">Folhas</label>
+                    </div>
+                    <div class="col-75">
+                        <input type="number" id="folhas" name="folhas" placeholder="">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-25">
+                        <label for="lname">Cor</label>
+                    </div>
+                    <div class="col-75">
+                        <input type="text" id="cor" name="cor" placeholder="">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-25">
+                        <label for="lname">Data Início</label>
+                    </div>
+                    <div class="col-75">
+                        <input type="date" id="dtinicio" name="dtinicio" placeholder="">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-25">
+                        <label for="subject">Detalhes</label>
+                    </div>
+                    <div class="col-75">
+                        <textarea id="detalhes" name="detalhes" style="height:100px"></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    </br>
+                    <input type="submit" style="margin-top: 10px" onclick="SendInputForm();" value="Salvar" />
+                    <input type="submit" onclick="RemoveForm();" class="btn-danger" value="Cancelar" />
+                </div>
+
+
+            </div>
+
+        </div>
+
+        <!-- \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ DIV RODAPE \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ -->
+        <div>
+            <footer class="footer">
+                <!--FOOER AREA END-->
+                <p align="center">Desenvolvido pela turma de Sistemas para Internet</br> Faculdade Anísio Teixeira - 2018.2</p>
+            </footer>
+        </div>
+
+    </body>
 
 </html>
