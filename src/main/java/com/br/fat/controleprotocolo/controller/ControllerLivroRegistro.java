@@ -40,4 +40,9 @@ public class ControllerLivroRegistro extends Controller {
         }
     }
 
+    public void editLivro(String jsonLivro) throws Exception {
+        LivroRegistros l = gson.fromJson(jsonLivro, LivroRegistros.class);
+        ldao.updateLivro(l);
+    }
+
 }

@@ -65,9 +65,27 @@ public class LivroRegistroDao extends DatabaseUtil {
         }
     }
 
-    public void updateLivro(int id) {
-        String sql = "SELECT * FROM livro ";
-
+    public void updateLivro(LivroRegistros l) throws Exception {
+        String sql = "UPDATE livro SET " + LivroDaoUtil.LIVRO_ATRIBUTO_NOME + "= ?," + LivroDaoUtil.LIVRO_ATRIBUTO_NUMERO + "= ?,"
+                + LivroDaoUtil.LIVRO_ATRIBUTO_FOLHAS + "= ?," + LivroDaoUtil.LIVRO_ATRIBUTO_DETALHES + "= ?,"
+                + LivroDaoUtil.LIVRO_ATRIBUTO_COR + "= ?," + LivroDaoUtil.LIVRO_ATRIBUTO_DATA_FIM + "= ?,"
+                + LivroDaoUtil.LIVRO_ATRIBUTO_DATA_INICIO + "=? WHERE " + LivroDaoUtil.LIVRO_ATRIBUTO_ID + "= ?";
+        super.getCon();
+        try {
+            stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            stmt.setString(1, l.getNome());
+            stmt.setInt(2, l.getNumero());
+            stmt.setInt(3, l.getFolhas());
+            stmt.setString(4, l.getDetalhes());
+            stmt.setString(5, l.getCor());
+            stmt.setDate(6, l.getDataFim());
+            stmt.setDate(7, l.getDataInicio());
+            stmt.setInt(8, l.getId());
+            stmt.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(LivroRegistroDao.class.getName()).log(Level.SEVERE, null, ex);
+            throw new Exception();
+        }
     }
 
     public List<LivroRegistros> selectAllLivroRegistros() throws Exception {

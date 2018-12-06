@@ -33,10 +33,11 @@ public class UsuarioRest {
     public String login(@FormParam("user") String login, @FormParam("senha") String senha) {
         Gson g = new Gson();
         try {
-            Usuario user = control.autenticacao(senha, login);
-            String u = g.toJson(user);
+//            Usuario user = control.autenticacao(senha, login);
+//            String u = g.toJson(user);
 
-            return u;
+            return g.toJson(control.autenticacao(senha, login));
+
         } catch (Exception ex) {
             return g.toJson(ex.getMessage());
         }
