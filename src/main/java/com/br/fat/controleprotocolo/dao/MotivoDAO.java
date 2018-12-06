@@ -67,5 +67,18 @@ public class MotivoDAO extends DatabaseUtil {
             throw new Exception(ex.getMessage());
         }
     }
+    public void deleteMotivo(int id) throws Exception {
+        String sql = "UPDATE motivo SET " + MotivoDaoUtil.MOTIVO_ATRIBUTO_EXCLUIDO + " = 'S' WHERE "
+                + MotivoDaoUtil.MOTIVO_ATRIBUTO_ID + "= ?";
+        super.getCon();
+        try {
+            stmt = con.prepareCall(sql);
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(LivroRegistroDao.class.getName()).log(Level.SEVERE, null, ex);
+            throw new Exception();
+        }
+    }
 
 }

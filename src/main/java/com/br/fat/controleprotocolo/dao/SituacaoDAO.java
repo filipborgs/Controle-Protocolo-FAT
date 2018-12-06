@@ -52,7 +52,7 @@ public class SituacaoDAO extends DatabaseUtil {
     }
 
     public List<Situacao> selectAllSituacao() throws Exception {
-        String sql = "SELECT * FROM situacao";
+        String sql = "SELECT * FROM situacao WHERE " + SituacaoDaoUtil.SITUACAO_ATRIBUTO_EXCLUIDO + " = 'N'";
         super.getCon();
         try {
             stmt = con.prepareStatement(sql);
@@ -65,6 +65,37 @@ public class SituacaoDAO extends DatabaseUtil {
         } catch (SQLException ex) {
             Logger.getLogger(LivroRegistroDao.class.getName()).log(Level.SEVERE, null, ex);
             throw new Exception(ex.getMessage());
+        }
+    }
+
+    public void deleteSituacao(int id) throws Exception {
+        String sql = "UPDATE livro SET " + SituacaoDaoUtil.SITUACAO_ATRIBUTO_EXCLUIDO + " = 'S' WHERE "
+                + SituacaoDaoUtil.SITUACAO_ATRIBUTO_ID + "= ?";
+        super.getCon();
+        try {
+            stmt = con.prepareCall(sql);
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(LivroRegistroDao.class.getName()).log(Level.SEVERE, null, ex);
+            throw new Exception();
+        }
+    }
+
+    public void updateSituacao(Situacao s) throws Exception {
+        String sql = "UPDATE situacao SET " + SituacaoDaoUtil.SITUACAO_ATRIBUTO_SITUACAO + "= ?,"
+                + SituacaoDaoUtil.SITUACAO_ATRIBUTO_DESCRICAO + "= ? WHERE "
+                + SituacaoDaoUtil.SITUACAO_ATRIBUTO_ID + "= ?";
+        super.getCon();
+        try {
+            stmt = con.prepareStatement(sql);
+            stmt.setString(1, s.getSituacao());
+            stmt.setString(2, s.getDescricao());
+            stmt.setInt(3, s.getId());
+            stmt.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(LivroRegistroDao.class.getName()).log(Level.SEVERE, null, ex);
+            throw new Exception();
         }
     }
 
