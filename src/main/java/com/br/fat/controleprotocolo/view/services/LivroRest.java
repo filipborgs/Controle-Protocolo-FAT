@@ -8,6 +8,8 @@ package com.br.fat.controleprotocolo.view.services;
 import com.br.fat.controleprotocolo.controller.ControllerLivroRegistro;
 import com.br.fat.controleprotocolo.model.LivroRegistros;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import java.text.DateFormat;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,7 +33,7 @@ public class LivroRest {
     @Produces("application/json")
     @Consumes("application/json")
     public String cadastrarUsuario(String json) {
-        Gson g = new Gson();
+        Gson g = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
         try {
             LivroRegistros l = g.fromJson(json, LivroRegistros.class);
             l = control.insertLivro(l);
@@ -47,8 +49,7 @@ public class LivroRest {
     @Path("/listarLivros")
     @Produces("application/json")
     public String listarLivros() {
-        Gson g = new Gson();
-
+        Gson g = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
         try {
             List lista = control.getAllLivros();
             return g.toJson(lista);

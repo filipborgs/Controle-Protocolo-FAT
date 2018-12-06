@@ -5,6 +5,10 @@
  */
 package com.br.fat.controleprotocolo.model;
 
+import java.sql.Date;
+import java.text.DateFormat;
+
+
 /**
  *
  * @author Filipe Borges
@@ -13,6 +17,24 @@ public class LivroRegistros {
 
     private int id, folhas, numero;
     private String nome, detalhes, cor;
+    private Date dataInicio, dataFim;
+
+    public Date getDataFim() {
+        return dataFim;
+    }
+
+    public void setDataFim(Date dataFim) {
+
+        this.dataFim = dataFim;
+    }
+
+    public Date getDataInicio() {
+        return dataInicio;
+    }
+
+    public void setDataInicio(Date dataInicio) {
+        this.dataInicio = dataInicio;
+    }
 
     public int getId() {
         return id;

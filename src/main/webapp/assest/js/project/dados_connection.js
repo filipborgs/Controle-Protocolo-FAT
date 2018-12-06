@@ -6,7 +6,7 @@
  var protocolo = "http";
  //var ip = "192.168.23.50";
  var ip = "localhost";
- var porta = "8084";
+ var porta = "8080";
  var aplicacao = "ControleProtocolo";
  var servico = "rest";
  

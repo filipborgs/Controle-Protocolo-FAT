@@ -18,5 +18,7 @@ public class LivroDaoUtil {
     public static final String LIVRO_ATRIBUTO_FOLHAS = "folhas";
     public static final String LIVRO_ATRIBUTO_COR = "cor";
     public static final String LIVRO_ATRIBUTO_EXCLUIDO = "excluido";
+    public static final String LIVRO_ATRIBUTO_DATA_INICIO = "data_inicio";
+    public static final String LIVRO_ATRIBUTO_DATA_FIM = "data_fim";
 
 }
