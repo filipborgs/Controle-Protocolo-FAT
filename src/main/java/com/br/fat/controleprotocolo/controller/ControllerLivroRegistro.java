@@ -13,20 +13,31 @@ import java.util.List;
  *
  * @author Filipe Borges
  */
-public class ControllerLivroRegistro {
+public class ControllerLivroRegistro extends Controller {
 
-    private LivroRegistroDao ldao = new LivroRegistroDao();
+    private final LivroRegistroDao ldao = new LivroRegistroDao();
 
-    public LivroRegistros insertLivro(LivroRegistros l) throws Exception {
+    public String insertLivro(String jsonLivro) throws Exception {
+        LivroRegistros l = gson.fromJson(jsonLivro, LivroRegistros.class);
+
         if (l.getNome().equals("")) {
             throw new Exception();
         } else {
-            return ldao.insertLivro(l);
+            return gson.toJson(ldao.insertLivro(l));
         }
     }
 
-    public List<LivroRegistros> getAllLivros() throws Exception {
-        return ldao.selectAllLivroRegistros();
+    public String getAllLivros() throws Exception {
+
+        return gson.toJson(ldao.selectAllLivroRegistros());
+    }
+
+    public void removeLivro(int idLivro) throws Exception {
+        if (idLivro <= 0) {
+            throw new Exception();
+        } else {
+            ldao.deleteLivro(idLivro);
+        }
     }
 
 }

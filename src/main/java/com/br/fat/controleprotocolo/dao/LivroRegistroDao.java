@@ -26,9 +26,8 @@ public class LivroRegistroDao extends DatabaseUtil {
     public LivroRegistros insertLivro(LivroRegistros l) throws Exception {
         String sql = "INSERT INTO livro (" + LivroDaoUtil.LIVRO_ATRIBUTO_NOME + "," + LivroDaoUtil.LIVRO_ATRIBUTO_NUMERO + ","
                 + LivroDaoUtil.LIVRO_ATRIBUTO_FOLHAS + "," + LivroDaoUtil.LIVRO_ATRIBUTO_DETALHES + ","
-                + LivroDaoUtil.LIVRO_ATRIBUTO_COR + "," + LivroDaoUtil.LIVRO_ATRIBUTO_EXCLUIDO + "," 
-                + LivroDaoUtil.LIVRO_ATRIBUTO_DATA_INICIO + "," + LivroDaoUtil.LIVRO_ATRIBUTO_DATA_FIM
-                + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                + LivroDaoUtil.LIVRO_ATRIBUTO_COR + "," + LivroDaoUtil.LIVRO_ATRIBUTO_EXCLUIDO + ","
+                + LivroDaoUtil.LIVRO_ATRIBUTO_DATA_INICIO + ") VALUES (?, ?, ?, ?, ?, ?, ?)";
         super.getCon();
         try {
             stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -39,22 +38,40 @@ public class LivroRegistroDao extends DatabaseUtil {
             stmt.setString(5, l.getCor());
             stmt.setString(6, "N");
             stmt.setDate(7, (Date) l.getDataInicio());
-            stmt.setDate(8, (Date) l.getDataFim());
             stmt.executeUpdate();
             rs = stmt.getGeneratedKeys();
             if (rs.next()) {
                 l.setId(rs.getInt(1));
                 return l;
             } else {
-                throw new Exception();
+                throw new Exception("Número já cadastrado");
             }
         } catch (SQLException ex) {
             throw new Exception();
         }
     }
 
+    public void deleteLivro(int id) throws Exception {
+        String sql = "UPDATE livro SET " + LivroDaoUtil.LIVRO_ATRIBUTO_EXCLUIDO + " = 'S' WHERE "
+                + LivroDaoUtil.LIVRO_ATRIBUTO_ID + "= ?";
+        super.getCon();
+        try {
+            stmt = con.prepareCall(sql);
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(LivroRegistroDao.class.getName()).log(Level.SEVERE, null, ex);
+            throw new Exception();
+        }
+    }
+
+    public void updateLivro(int id) {
+        String sql = "SELECT * FROM livro ";
+
+    }
+
     public List<LivroRegistros> selectAllLivroRegistros() throws Exception {
-        String sql = "SELECT * FROM livro";
+        String sql = "SELECT * FROM livro WHERE " + LivroDaoUtil.LIVRO_ATRIBUTO_EXCLUIDO + " = 'N'";
         super.getCon();
         try {
             stmt = con.prepareStatement(sql);

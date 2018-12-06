@@ -6,18 +6,16 @@
 package com.br.fat.controleprotocolo.view.services;
 
 import com.br.fat.controleprotocolo.controller.ControllerLivroRegistro;
-import com.br.fat.controleprotocolo.model.LivroRegistros;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import java.text.DateFormat;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 
 /**
  *
@@ -33,14 +31,11 @@ public class LivroRest {
     @Produces("application/json")
     @Consumes("application/json")
     public String cadastrarUsuario(String json) {
-        Gson g = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
         try {
-            LivroRegistros l = g.fromJson(json, LivroRegistros.class);
-            l = control.insertLivro(l);
-            return g.toJson(l);
-
-            //return g.toJson("Cadastrado com sucesso");
+            return control.insertLivro(json);
         } catch (Exception ex) {
+            Logger.getLogger(LivroRest.class.getName()).log(Level.SEVERE, null, ex);
+            Gson g = new Gson();
             return g.toJson(ex.getMessage());
         }
     }
@@ -49,13 +44,26 @@ public class LivroRest {
     @Path("/listarLivros")
     @Produces("application/json")
     public String listarLivros() {
-        Gson g = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
         try {
-            List lista = control.getAllLivros();
-            return g.toJson(lista);
+            return control.getAllLivros();
         } catch (Exception ex) {
             Logger.getLogger(LivroRest.class.getName()).log(Level.SEVERE, null, ex);
+            Gson g = new Gson();
             return g.toJson(ex.getMessage());
         }
     }
+
+    @DELETE
+    @Path("/deletarLivro")
+    public String deletarLivro(@QueryParam("idLivro") int idLivro) {
+        Gson g = new Gson();
+        try {
+            control.removeLivro(idLivro);
+            return g.toJson("Livro deletado com sucesso");
+        } catch (Exception ex) {
+            Logger.getLogger(LivroRest.class.getName()).log(Level.SEVERE, null, ex);
+            return g.toJson("Erro");
+        }
+    }
+
 }
