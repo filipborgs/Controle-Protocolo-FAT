@@ -10,6 +10,7 @@ import com.br.fat.controleprotocolo.model.LivroRegistros;
 import com.br.fat.controleprotocolo.util.DatabaseUtil;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -21,14 +22,14 @@ import java.util.logging.Logger;
  */
 public class LivroRegistroDao extends DatabaseUtil {
 
-    public void insertLivro(LivroRegistros l) throws Exception {
+    public LivroRegistros insertLivro(LivroRegistros l) throws Exception {
         String sql = "INSERT INTO livro (" + LivroDaoUtil.LIVRO_ATRIBUTO_NOME + "," + LivroDaoUtil.LIVRO_ATRIBUTO_NUMERO + ","
                 + LivroDaoUtil.LIVRO_ATRIBUTO_FOLHAS + "," + LivroDaoUtil.LIVRO_ATRIBUTO_DETALHES + ","
                 + LivroDaoUtil.LIVRO_ATRIBUTO_COR + "," + LivroDaoUtil.LIVRO_ATRIBUTO_EXCLUIDO
                 + ") VALUES (?, ?, ?, ?, ?, ?)";
         super.getCon();
         try {
-            stmt = con.prepareStatement(sql);
+            stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             stmt.setString(1, l.getNome());
             stmt.setInt(2, l.getNumero());
             stmt.setInt(3, l.getFolhas());
@@ -36,6 +37,13 @@ public class LivroRegistroDao extends DatabaseUtil {
             stmt.setString(5, l.getCor());
             stmt.setString(6, "N");
             stmt.executeUpdate();
+            rs = stmt.getGeneratedKeys();
+            if (rs.next()) {
+                l.setId(rs.getInt(1));
+                return l;
+            } else {
+                throw new Exception();
+            }
         } catch (SQLException ex) {
             throw new Exception();
         }

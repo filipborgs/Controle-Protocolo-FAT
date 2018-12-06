@@ -34,7 +34,7 @@ public class LivroRest {
         Gson g = new Gson();
         try {
             LivroRegistros l = g.fromJson(json, LivroRegistros.class);
-            control.insertLivro(l);
+            l = control.insertLivro(l);
             return g.toJson(l);
 
             //return g.toJson("Cadastrado com sucesso");

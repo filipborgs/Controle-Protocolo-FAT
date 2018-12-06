@@ -17,11 +17,11 @@ public class ControllerLivroRegistro {
 
     private LivroRegistroDao ldao = new LivroRegistroDao();
 
-    public void insertLivro(LivroRegistros l) throws Exception {
+    public LivroRegistros insertLivro(LivroRegistros l) throws Exception {
         if (l.getNome().equals("")) {
             throw new Exception();
         } else {
-            ldao.insertLivro(l);
+            return ldao.insertLivro(l);
         }
     }
 
