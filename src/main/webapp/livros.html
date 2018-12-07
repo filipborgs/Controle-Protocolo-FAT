@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en" >
+<html lang="br" >
 
     <head>
 
@@ -34,7 +34,142 @@
         <!-- ===== TABLE RESPONSIVE ===== -->
         <link rel="stylesheet" href="assest/css/style.css">
         <link rel="stylesheet" href="assest/css/styles.css">
+        
+        
+        <!-- \/\/\/\/\/\/\/\/ SCRIPTS JS \/\/\/\/\/\/\/\/ -->
         <script>
+            
+            /* 
+             *  **********   FUNÇÃO PARA SALVAR EDIAÇÃO DO LIVRO E 
+             *  ********** REALIZAR ENVIO DO JSON PARA FAZER O UPDATE 
+             */
+
+            function SalveEdition() {
+
+                alert("Salvar edição");
+                
+                cleanInputs();
+
+            }
+            
+            /* 
+             *  **********   FUNÇÃO PARA VALIDAR OS CAMPOS DE INPUT 
+             *  **********       ANTES DE ENVIAR O FORMULÁRIO 
+             */
+
+            function ValidaCampos() {
+
+                return true;
+
+            }
+            
+            /* 
+             *  **********   FUNÇÃO PARA EXCLUIR UM LIVRO, 
+             *  ********** REALIZAR ENVIO DO JSON COM O ID PARA FAZER O UPDATE 
+             */
+
+            function RemoveItem(id) {
+                alert("Remover");
+            }
+            
+            /* 
+             *  **********   FUNÇÃO PARA OBTER OS CAMPOS DE INPUT E 
+             *  ********** REALIZAR ENVIO DO JSON PARA FAZER O UPDATE 
+             */
+
+            function EditaItem(id) {
+
+                $("#div-protocols").empty();
+
+                div_creat = document.getElementById("div-create-protocol");
+
+                div_creat.removeAttribute("style");
+                div_creat.setAttribute("style", "display:flow-root;");
+
+                btn_save = document.getElementById("btn_save");
+                btn_save.removeAttribute("onclick");
+                btn_save.setAttribute("onclick", "SalveEdition()");
+
+                var metodo = "livro/listarLivros";
+                var tokin = localStorage.getItem("Dw33&121#$%8\z|^");
+
+                $.ajax
+                        ({
+                            url: uri + metodo,
+                            type: 'GET',
+                            data:
+                                    {
+                                        tokin: tokin
+                                    },
+                            beforeSend: function () {
+                                //alert("ENTRANDO...");
+                            }
+                        })
+                        .done(function (returnJson) {
+
+                            // ITERA O JSON (LINHA A LINHA) E CHAMA O METODO QUE PREENCHE A TABELA
+                            for (var i = 0; i < livros.length; i++) {
+
+                                if (livros[i].numero == id) {
+
+                                    document.getElementById("numero").value = livros[i].numero;
+                                    document.getElementById("nome").value = livros[i].nome;
+                                    document.getElementById("folhas").value = livros[i].folhas;
+                                    document.getElementById("cor").value = livros[i].paginas;
+                                    document.getElementById("dtinicio").value = livros[i].dtinicio;
+                                    document.getElementById("detalhes").value = livros[i].detalhes;
+
+                                }
+
+                            }
+                        })
+                        .fail(function (msg) {
+                            alert("Falha ao tentar obter a lista de livros");
+                            console.log(msg);
+                        });
+
+
+
+
+            }
+            
+            /* 
+             *  **********   FUNÇÃO PARA CHAMAR A EXIBIÇÃO DO MODAL 
+             *  ********** QUE APRESENTA AS OPÇÕES DE EXCLUIR E EDITAR
+             */
+
+            function chamaModal(id) {
+
+                sendMensage = document.getElementById("sendMensage");
+                $("#sendMensage").empty();
+
+                excluir = document.createElement("input");
+                excluir.setAttribute("type", "submit");
+                excluir.setAttribute("value", "excluir");
+                excluir.setAttribute("class", "btn-danger");
+                excluir.setAttribute("onclick", "RemoveItem(" + id + ")");
+
+                editar = document.createElement("input");
+                editar.setAttribute("type", "submit");
+                editar.setAttribute("value", "editar");
+                editar.setAttribute("style", "margin-right: 10px; margin-top: 10px;");
+                editar.setAttribute("onclick", "EditaItem(" + id + ")");
+
+                if (localStorage.getItem('sdw3354SD&@!5231') === 'S') {
+                    sendMensage.appendChild(excluir);
+                }
+
+                if (localStorage.getItem('zXGT*&&!3YHRU+|D') === 'S') {
+                    sendMensage.appendChild(editar);
+                }
+
+                window.location.href = "#popup1";
+            }
+
+            /* 
+             *  **********   FUNÇÃO PARA OBTER OS CAMPOS DO INPUT E 
+             *  ********** REALIZAR ENVIO DO JSON PARA FAZER O INSERT (CADASTRAR LIVRO) 
+             */
 
             function SendInputForm() {
 
@@ -59,8 +194,7 @@
                                         nome: nome,
                                         detalhes: detalhes,
                                         cor: cor,
-                                        dataInicio: dtinicio,
-                                        dataFim: dtinicio
+                                        dataInicio: dtinicio
                                     }),
                             contentType: 'application/json',
                             beforeSend: function () {
@@ -73,12 +207,12 @@
                                 sendMensage = document.getElementById("sendMensage");
                                 $("#sendMensage").empty();
                                 sendMensage.append("Sucesso!");
-                                window.location.href="#popup1";
+                                window.location.href = "#popup1";
                                 cleanInputs();
-                            }else{
-                                
-                               
-                               
+                            } else {
+
+
+
                             }
 
                         })
@@ -86,20 +220,29 @@
                             alert("Falha ao tentar cadastrar livro");
                             console.log(msg);
                         });
-
-                function cleanInputs() {
-
-                    document.getElementById("numero").value("");
-                    document.getElementById("nome").value("");
-                    document.getElementById("folhas").value("");
-                    document.getElementById("cor").value("");
-                    document.getElementById("dtinicio").value("");
-                    document.getElementById("detalhes").value("");
-
-
-                }
             }
 
+            /* 
+             *  **********   FUNÇÃO PARA LIMPAR TODOS OS CAMPOS DA TELA 
+             */
+
+            function cleanInputs() {
+
+                document.getElementById("numero").value("");
+                document.getElementById("nome").value("");
+                document.getElementById("folhas").value("");
+                document.getElementById("cor").value("");
+                document.getElementById("dtinicio").value("");
+                document.getElementById("detalhes").value("");
+
+
+            }
+
+            /* 
+             *  **********   FUNÇÃO PARA CHAMAR O FORMULÁRIO DE CADASTRO DE LIVRO 
+             *  **********          E REMOVER A TABELA DE LIVROS DA TELA
+             */
+            
             function CallForm() {
 
                 $("#div-protocols").empty();
@@ -109,7 +252,16 @@
                 div_creat.removeAttribute("style");
                 div_creat.setAttribute("style", "display:flow-root;");
 
+                btn_save = document.getElementById("btn_save");
+                btn_save.removeAttribute("onclick");
+                btn_save.setAttribute("onclick", "SendInputForm()");
+
             }
+            
+            /* 
+             *  **********       CHAMADO ATRAVES DO BOTÃO CANCELAR CADASTRO 
+             *  ********** FUNÇÃO QUE OCULTA O FORMULÁRIO E CHAMA A TABELA DE LIVROS 
+             */
 
             function RemoveForm() {
 
@@ -123,6 +275,12 @@
                 GetListLivros();
 
             }
+            
+            /* 
+             *  **********   FUNÇÃO PARA EXIBIR TODOS OS LIVROS CADASTRADOS 
+             *  **********  REALIZAR UMA CHAMADA JSON PARA RECEBER OS DADOS
+             *  **********           CRIAR UMA TABELA E PREENCHER 
+             */
 
             function GetListLivros() {
 
@@ -143,8 +301,8 @@
                         })
                         .done(function (returnJson) {
 
-
                             //var livros = JSON.parse(returnJson);
+                    
                             livros = returnJson;
                             console.log(livros);
                             // PEGA A DIV PAI E ESVAZIA ELA
@@ -215,6 +373,11 @@
 
                                 // CRIA A LINHA
                                 trow = document.createElement("tr");
+                                if ((localStorage.getItem('sdw3354SD&@!5231') === 'S') || (localStorage.getItem('zXGT*&&!3YHRU+|D') === 'S')) {
+                                    trow.setAttribute("onclick", "chamaModal(" + livro.numero + ")");
+                                }
+                                //trow.setAttribute("","");
+                                //trow.setAttribute("","");
 
                                 // CRIA AS COLUNAS
                                 tcolNumero = document.createElement("td");
@@ -319,7 +482,7 @@
         <br/>
         <!-- \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ DIV TABELA \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ -->
         <div id="div-protocols" >
-            
+
         </div>
 
 
@@ -340,7 +503,7 @@
 
                 <div class="row">
                     <div class="col-25">
-                        <label for="fname">Número</label>
+                        <label for="numero">Número</label>
                     </div>
                     <div class="col-75">
                         <input type="number" required id="numero" name="numero" placeholder="obrigatório">
@@ -348,7 +511,7 @@
                 </div>
                 <div class="row">
                     <div class="col-25">
-                        <label for="lname">Nome</label>
+                        <label for="nome">Nome</label>
                     </div>
                     <div class="col-75">
                         <input type="text" required id="nome" name="nome" placeholder="obrigatório">
@@ -356,39 +519,39 @@
                 </div>
                 <div class="row">
                     <div class="col-25">
-                        <label for="lname">Folhas</label>
+                        <label for="folhas">Folhas</label>
                     </div>
                     <div class="col-75">
-                        <input type="number" id="folhas" name="folhas" placeholder="">
+                        <input type="number" id="folhas" required name="folhas" placeholder="obrigatório">
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-25">
-                        <label for="lname">Cor</label>
+                        <label for="cor">Cor</label>
                     </div>
                     <div class="col-75">
-                        <input type="text" id="cor" name="cor" placeholder="">
+                        <input type="text" id="cor" name="cor" />
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-25">
-                        <label for="lname">Data Início</label>
+                        <label for="dtinicio">Data Início</label>
                     </div>
                     <div class="col-75">
-                        <input type="date" id="dtinicio" name="dtinicio" placeholder="">
+                        <input type="date" id="dtinicio" name="dtinicio"  />
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-25">
-                        <label for="subject">Detalhes</label>
+                        <label for="detalhes">Detalhes</label>
                     </div>
                     <div class="col-75">
                         <textarea id="detalhes" name="detalhes" style="height:100px"></textarea>
                     </div>
                 </div>
                 <div class="row">
-                    </br>
-                    <input type="submit" style="margin-top: 10px" onclick="SendInputForm();" value="Salvar" />
+                    <br/>
+                    <input type="submit" style="margin-top: 10px" id="btn_save" onclick="SendInputForm();" value="Salvar" />
                     <input type="submit" onclick="RemoveForm();" class="btn-danger" value="Cancelar" />
                 </div>
 
@@ -401,7 +564,7 @@
         <div>
             <footer class="footer">
                 <!--FOOER AREA END-->
-                <p align="center">Desenvolvido pela turma de Sistemas para Internet</br> Faculdade Anísio Teixeira - 2018.2</p>
+                <p align="center">Desenvolvido pela turma de Sistemas para Internet<br/> Faculdade Anísio Teixeira - 2018.2</p>
             </footer>
         </div>
 
