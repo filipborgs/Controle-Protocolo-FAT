@@ -56,8 +56,10 @@ public class ProtocoloDAO extends DatabaseUtil {
                 + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_LIVRO + "," + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_MOTIVO + ","
                 + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_NUM + "," + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_OBSERVACOES + ","
                 + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_PAGINA + "," + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_REMETENTE + ","
-                + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_SITUACAO + "," + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_SOLICITANTE
-                + ") VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+                + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_SITUACAO + "," + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_SOLICITANTE + ","
+                + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_DATA_LANCAMENTO + "," + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_DATA_RECEBIMENTO + ","
+                + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_DATA_PREVISAO + "," + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_DATA_DEVOLUCAO
+                + ") VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         super.getCon();
         try {
             stmt = con.prepareStatement(sql);
@@ -72,6 +74,10 @@ public class ProtocoloDAO extends DatabaseUtil {
             stmt.setInt(9, p.getRemetente().getId());
             stmt.setInt(10, p.getSituacao().getId());
             stmt.setString(11, p.getSolicitante());
+            stmt.setDate(12, p.getDataCadastral());
+            stmt.setDate(13, p.getDataRecebido());
+            stmt.setDate(14, p.getDataPrevisao());
+            stmt.setDate(15, p.getDataDevolvido());
             stmt.executeUpdate();
             return p;
         } catch (SQLException ex) {
@@ -96,4 +102,54 @@ public class ProtocoloDAO extends DatabaseUtil {
             throw new Exception(ex.getMessage());
         }
     }
+
+    public void deleteProtocolo(int id) throws Exception {
+        String sql = "UPDATE protocolo SET " + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_EXCLUIDO + " = 'S' WHERE "
+                + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_ID + "= ?";
+        super.getCon();
+        try {
+            stmt = con.prepareCall(sql);
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(LivroRegistroDao.class.getName()).log(Level.SEVERE, null, ex);
+            throw new Exception();
+        }
+    }
+
+    public void updateProtocolo(Protocolo p) throws Exception {
+        String sql = "UPDATE motivo SET " + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_USUARIO + "=?,"
+                + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_ASSINADO + "=?," + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_DESTINATARIO + "=?,"
+                + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_LIVRO + "=?," + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_MOTIVO + "=?,"
+                + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_NUM + "=?," + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_OBSERVACOES + "=?,"
+                + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_PAGINA + "=?," + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_REMETENTE + "=?,"
+                + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_SITUACAO + "=?," + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_DATA_LANCAMENTO + "=?,"
+                + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_DATA_RECEBIMENTO + "=?," + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_DATA_PREVISAO + "=?,"
+                + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_DATA_DEVOLUCAO + "=? WHERE " + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_ID + "= ?";
+        super.getCon();
+        try {
+            stmt = con.prepareStatement(sql);
+            stmt.setInt(1, p.getUsuario().getId());
+            stmt.setString(2, p.getAssinado());
+            stmt.setInt(3, p.getDestinatario().getId());
+            stmt.setInt(4, p.getLivro().getId());
+            stmt.setInt(5, p.getMotivo().getId());
+            stmt.setInt(6, p.getProtocolo());
+            stmt.setString(7, p.getObservacoes());
+            stmt.setInt(8, p.getPaginaLivro());
+            stmt.setInt(9, p.getRemetente().getId());
+            stmt.setInt(10, p.getSituacao().getId());
+            stmt.setString(11, p.getSolicitante());
+            stmt.setDate(12, p.getDataCadastral());
+            stmt.setDate(13, p.getDataRecebido());
+            stmt.setDate(14, p.getDataPrevisao());
+            stmt.setDate(15, p.getDataDevolvido());
+            stmt.setInt(16, p.getId());
+            stmt.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(LivroRegistroDao.class.getName()).log(Level.SEVERE, null, ex);
+            throw new Exception();
+        }
+    }
+
 }

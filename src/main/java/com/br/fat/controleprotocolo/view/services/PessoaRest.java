@@ -24,17 +24,15 @@ import javax.ws.rs.Produces;
 @Path("/pessoa")
 public class PessoaRest {
 
-    private ControllerPessoa control = new ControllerPessoa();
+    private final ControllerPessoa control = new ControllerPessoa();
     private Gson g = new Gson();
 
     @POST
     @Path("/cadastrarPessoa")
     @Consumes("application/json")
     public String cadastrarPessoa(String json) {
-        Pessoa p = g.fromJson(json, Pessoa.class);
         try {
-            p = control.createPessoa(p);
-            return g.toJson(p);
+            return control.createPessoa(json);
         } catch (Exception ex) {
             Logger.getLogger(PessoaRest.class.getName()).log(Level.SEVERE, null, ex);
             return g.toJson(ex.getMessage());

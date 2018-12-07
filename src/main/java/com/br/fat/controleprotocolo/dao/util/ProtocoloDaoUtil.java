@@ -26,6 +26,7 @@ public class ProtocoloDaoUtil {
     public static final String PROTOCOLO_ATRIBUTO_SITUACAO = "fk_situacao";
     public static final String PROTOCOLO_ATRIBUTO_MOTIVO = "fk_motivo";
     public static final String PROTOCOLO_ATRIBUTO_OBSERVACOES = "observacoes";
+    public static final String PROTOCOLO_ATRIBUTO_EXCLUIDO = "excluido";
     public static final String PROTOCOLO_ATRIBUTO_USUARIO = "fk_usuario";
     public static final String PROTOCOLO_ATRIBUTO_ASSINADO = "assinado";
 }

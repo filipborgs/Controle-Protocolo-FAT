@@ -7,7 +7,6 @@ package com.br.fat.controleprotocolo.controller;
 
 import com.br.fat.controleprotocolo.dao.LivroRegistroDao;
 import com.br.fat.controleprotocolo.model.LivroRegistros;
-import java.util.List;
 
 /**
  *

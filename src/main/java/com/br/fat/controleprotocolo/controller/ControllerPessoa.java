@@ -13,15 +13,19 @@ import java.util.List;
  *
  * @author Filipe Borges
  */
-public class ControllerPessoa {
+public class ControllerPessoa extends Controller {
 
-    private PessoaDAO pdao = new PessoaDAO();
+    private final PessoaDAO pdao = new PessoaDAO();
 
-    public Pessoa createPessoa(Pessoa p) throws Exception {
+    public String createPessoa(String jsonPessoa) throws Exception {
+
+        Pessoa p = gson.fromJson(jsonPessoa, Pessoa.class);
+
         if (p.getNome().equals("") || p.getSetor().equals("")) {
             throw new Exception();
         } else {
-            return pdao.insertPessoa(p);
+            p = pdao.insertPessoa(p);
+            return gson.toJson(p);
         }
     }
 

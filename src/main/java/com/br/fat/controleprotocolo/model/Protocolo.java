@@ -5,6 +5,8 @@
  */
 package com.br.fat.controleprotocolo.model;
 
+import java.sql.Date;
+
 /**
  *
  * @author Filipe Borges
@@ -16,9 +18,42 @@ public class Protocolo {
     private LivroRegistros livro;
     private Usuario usuario;
     private Pessoa remetente, destinatario;
-    private String solicitante, observacoes, dataCadastro, dataFinal, dataRecebido;
+    private String solicitante, observacoes, dataCadastro;
     private Situacao situacao;
     private Motivo motivo;
+    private Date dataPrevisao, dataRecebido, dataCadastral, dataDevolvido;
+
+    public Date getDataPrevisao() {
+        return dataPrevisao;
+    }
+
+    public void setDataPrevisao(Date dataPrevisao) {
+        this.dataPrevisao = dataPrevisao;
+    }
+
+    public Date getDataRecebido() {
+        return dataRecebido;
+    }
+
+    public void setDataRecebido(Date dataRecebido) {
+        this.dataRecebido = dataRecebido;
+    }
+
+    public Date getDataCadastral() {
+        return dataCadastral;
+    }
+
+    public void setDataCadastral(Date dataCadastral) {
+        this.dataCadastral = dataCadastral;
+    }
+
+    public Date getDataDevolvido() {
+        return dataDevolvido;
+    }
+
+    public void setDataDevolvido(Date dataDevolvido) {
+        this.dataDevolvido = dataDevolvido;
+    }
 
     public int getId() {
         return id;
@@ -50,14 +85,6 @@ public class Protocolo {
 
     public void setPaginaLivro(int paginaLivro) {
         this.paginaLivro = paginaLivro;
-    }
-
-    public String getDataRecebido() {
-        return dataRecebido;
-    }
-
-    public void setDataRecebido(String dataRecebido) {
-        this.dataRecebido = dataRecebido;
     }
 
     public int getPrazo() {
@@ -122,14 +149,6 @@ public class Protocolo {
 
     public void setDataCadastro(String dataCadastro) {
         this.dataCadastro = dataCadastro;
-    }
-
-    public String getDataFinal() {
-        return dataFinal;
-    }
-
-    public void setDataFinal(String dataFinal) {
-        this.dataFinal = dataFinal;
     }
 
     public Situacao getSituacao() {
