@@ -110,14 +110,16 @@
                             // ITERA O JSON (LINHA A LINHA) E CHAMA O METODO QUE PREENCHE A TABELA
                             for (var i = 0; i < livros.length; i++) {
 
-                                if (livros[i].numero == id) {
+                                if (livros[i].numero === parseInt(id)) {
+                                    
+                                    console.log(livros[i]);
 
                                     document.getElementById("numero").value = livros[i].numero;
                                     document.getElementById("nome").value = livros[i].nome;
                                     document.getElementById("folhas").value = livros[i].folhas;
                                     document.getElementById("cor").value = livros[i].cor;
-                                    document.getElementById("dtinicio").value = livros[i].dtinicio;
-                                    document.getElementById("detalhes").value = livros[i].detalhes;
+                                    document.getElementById("dtinicio").value = livros[i].dataInicio;
+                                    document.getElementById("detalhes").append(livros[i].detalhes);
 
                                 }
 
