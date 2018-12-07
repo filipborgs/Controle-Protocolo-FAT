@@ -24,7 +24,7 @@ public class ControllerUsuario {
 
     private UsuarioDAO udao = new UsuarioDAO();
 
-    public String autenticacao(String senha, String login) throws Exception {
+    public Usuario autenticacao(String senha, String login) throws Exception {
         Usuario user = null;
 
         //verifica se o login ou senha vieram vazios ou incorretos
@@ -37,19 +37,20 @@ public class ControllerUsuario {
             //se o retorno for nulo o login nao foi feito com sucesso
             user = udao.validarUsuario(login, senha);
 
-            FileInputStream serviceAccount = new FileInputStream("D:\\Users\\Filipe Borges\\Google Drive\\Documentos\\NetBeansProjects\\ControleProtocolo\\src\\main\\resources\\controleprotocolo-39b32-firebase-adminsdk-rer4f-cb86bfa396.json");
-
-            FirebaseOptions options = new FirebaseOptions.Builder()
-                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                    .build();
-
-            FirebaseApp.initializeApp(options);
-            String uid = Integer.toString(user.getId());
-            Map<String, Object> additionalClaims = new HashMap<>();
-            additionalClaims.put("permission", user.getPermissao());
-
-            String customToken = FirebaseAuth.getInstance().createCustomToken(uid);
-            return customToken;
+//            FileInputStream serviceAccount = new FileInputStream("D:\\Users\\Filipe Borges\\Google Drive\\Documentos\\NetBeansProjects\\ControleProtocolo\\src\\main\\resources\\controleprotocolo-39b32-firebase-adminsdk-rer4f-cb86bfa396.json");
+//
+//            FirebaseOptions options = new FirebaseOptions.Builder()
+//                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+//                    .build();
+//
+//            FirebaseApp.initializeApp(options);
+//            String uid = Integer.toString(user.getId());
+//            Map<String, Object> additionalClaims = new HashMap<>();
+//            additionalClaims.put("permission", user.getPermissao());
+//
+//            String customToken = FirebaseAuth.getInstance().createCustomToken(uid);
+//            return customToken;
+return user;
         }
     }
 

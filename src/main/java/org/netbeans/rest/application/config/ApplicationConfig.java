@@ -34,20 +34,6 @@ public class ApplicationConfig extends Application {
         resources.add(com.br.fat.controleprotocolo.view.services.PessoaRest.class);
         resources.add(com.br.fat.controleprotocolo.view.services.ProtocoloRest.class);
         resources.add(com.br.fat.controleprotocolo.view.services.UsuarioRest.class);
-        resources.add(org.jboss.resteasy.core.AsynchronousDispatcher.class);
-        resources.add(org.jboss.resteasy.plugins.interceptors.encoding.AcceptEncodingGZIPInterceptor.class);
-        resources.add(org.jboss.resteasy.plugins.interceptors.encoding.ClientContentEncodingHeaderInterceptor.class);
-        resources.add(org.jboss.resteasy.plugins.interceptors.encoding.GZIPDecodingInterceptor.class);
-        resources.add(org.jboss.resteasy.plugins.interceptors.encoding.GZIPEncodingInterceptor.class);
-        resources.add(org.jboss.resteasy.plugins.interceptors.encoding.ServerContentEncodingHeaderInterceptor.class);
-        resources.add(org.jboss.resteasy.plugins.providers.DataSourceProvider.class);
-        resources.add(org.jboss.resteasy.plugins.providers.DefaultTextPlain.class);
-        resources.add(org.jboss.resteasy.plugins.providers.DocumentProvider.class);
-        resources.add(org.jboss.resteasy.plugins.providers.FileProvider.class);
-        resources.add(org.jboss.resteasy.plugins.providers.FormUrlEncodedProvider.class);
-        resources.add(org.jboss.resteasy.plugins.providers.IIOImageProvider.class);
-        resources.add(org.jboss.resteasy.plugins.providers.InputStreamProvider.class);
-        resources.add(org.jboss.resteasy.plugins.providers.StringTextStar.class);
     }
     
 }
