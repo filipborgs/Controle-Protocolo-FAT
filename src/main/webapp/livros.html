@@ -115,7 +115,7 @@
                                     document.getElementById("numero").value = livros[i].numero;
                                     document.getElementById("nome").value = livros[i].nome;
                                     document.getElementById("folhas").value = livros[i].folhas;
-                                    document.getElementById("cor").value = livros[i].paginas;
+                                    document.getElementById("cor").value = livros[i].cor;
                                     document.getElementById("dtinicio").value = livros[i].dtinicio;
                                     document.getElementById("detalhes").value = livros[i].detalhes;
 
@@ -402,8 +402,8 @@
                                 tcolNome.append(livro.nome);
                                 tcolFolhas.append(livro.folhas);
                                 tcolCor.append(livro.cor);
-                                tcolInicio.append(livro.dt_inicio);
-                                tcolFim.append(livro.dt_fim);
+                                tcolInicio.append(livro.dataInicio);
+                                tcolFim.append(livro.dataFim);
                                 tcolDetalhes.append(livro.detalhes);
 
                                 // INSERI AS COLUNAS DENTRO DA LINHA
