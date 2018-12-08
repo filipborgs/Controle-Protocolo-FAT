@@ -89,7 +89,7 @@ public class LivroRegistroDao extends DatabaseUtil {
     }
 
     public List<LivroRegistros> selectAllLivroRegistros() throws Exception {
-        String sql = "SELECT * FROM livro WHERE " + LivroDaoUtil.LIVRO_ATRIBUTO_EXCLUIDO + " = 'N'";
+        String sql = "SELECT * FROM view_table_livro WHERE " + LivroDaoUtil.LIVRO_ATRIBUTO_EXCLUIDO + " = 'N'";
         super.getCon();
         try {
             stmt = con.prepareStatement(sql);
@@ -114,7 +114,11 @@ public class LivroRegistroDao extends DatabaseUtil {
         l.setFolhas(rs.getInt(LivroDaoUtil.LIVRO_ATRIBUTO_FOLHAS));
         l.setCor(rs.getString(LivroDaoUtil.LIVRO_ATRIBUTO_COR));
         l.setDetalhes(rs.getString(LivroDaoUtil.LIVRO_ATRIBUTO_DETALHES));
-        l.setDataInicio(rs.getDate("data_inicio"));
+        l.setDataInicio(rs.getDate(LivroDaoUtil.LIVRO_ATRIBUTO_DATA_INICIO));
+        l.setDataFim(rs.getDate(LivroDaoUtil.LIVRO_ATRIBUTO_DATA_FIM));
+        l.setDtFim(rs.getString(LivroDaoUtil.LIVRO_ATRIBUTO_STRING_DATA_FIM));
+        l.setDtIni(rs.getString(LivroDaoUtil.LIVRO_ATRIBUTO_STRING_DATA_INICIO));
+
         return l;
     }
 }

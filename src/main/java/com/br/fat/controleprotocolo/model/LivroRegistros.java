@@ -16,8 +16,24 @@ import java.text.DateFormat;
 public class LivroRegistros {
 
     private int id, folhas, numero;
-    private String nome, detalhes, cor;
+    private String nome, detalhes, cor, dtIni, dtFim;
     private Date dataInicio, dataFim;
+
+    public String getDtIni() {
+        return dtIni;
+    }
+
+    public void setDtIni(String dtIni) {
+        this.dtIni = dtIni;
+    }
+
+    public String getDtFim() {
+        return dtFim;
+    }
+
+    public void setDtFim(String dtFim) {
+        this.dtFim = dtFim;
+    }
 
     public Date getDataFim() {
         return dataFim;
