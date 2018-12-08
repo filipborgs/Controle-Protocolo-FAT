@@ -25,6 +25,7 @@ public class PessoaDAO extends DatabaseUtil {
     private Pessoa createObjPessoa(ResultSet rs) throws SQLException {
         Pessoa p = new Pessoa();
         p.setId(rs.getInt(PessoaDaoUtil.PESSOA_ATRIBUTO_ID));
+        p.setNome(rs.getString(PessoaDaoUtil.PESSOA_ATRIBUTO_NOME));
         p.setDescricao(rs.getString(PessoaDaoUtil.PESSOA_ATRIBUTO_DESCRICAO));
         p.setSetor(rs.getString(PessoaDaoUtil.PESSOA_ATRIBUTO_SETOR));
         return p;
@@ -54,7 +55,7 @@ public class PessoaDAO extends DatabaseUtil {
     }
 
     public List<Pessoa> selectAllPessoa() throws Exception {
-        String sql = "SELECT * FROM situacao";
+        String sql = "SELECT * FROM pessoa WHERE " + PessoaDaoUtil.USUARIO_ATRIBUTO_EXCLUIDO + "='N'";
         super.getCon();
         try {
             stmt = con.prepareStatement(sql);
