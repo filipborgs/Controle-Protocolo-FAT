@@ -32,4 +32,18 @@ public class ControllerPessoa extends Controller {
     public List<Pessoa> getAllPessoa() throws Exception {
         return pdao.selectAllPessoa();
     }
+    
+    
+    public void removePessoa(int idPessoa) throws Exception {
+        if (idPessoa <= 0) {
+            throw new Exception();
+        } else {
+            pdao.deletePessoa (idPessoa);
+        }
+    }
+
+    public void editPessoa(String jsonPessoa) throws Exception {
+        Pessoa p = gson.fromJson(jsonPessoa, Pessoa.class);
+        pdao.updatePessoa(p);
+    }
 }

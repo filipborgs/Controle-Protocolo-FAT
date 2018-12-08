@@ -12,10 +12,13 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 
 /**
  *
@@ -53,4 +56,34 @@ public class PessoaRest {
             return g.toJson(ex.getMessage());
         }
     }
+    
+    @DELETE
+    @Path("/deletarPessoa")
+    public String deletarPessoa(@QueryParam("idPessoa") int idPessoa) {
+        Gson g = new Gson();
+        try {
+            control.removePessoa(idPessoa);
+            return g.toJson("Pessoa deletado com sucesso");
+        } catch (Exception ex) {
+            Logger.getLogger(LivroRest.class.getName()).log(Level.SEVERE, null, ex);
+            return g.toJson("Erro");
+        }
+    }
+
+    @PUT
+    @Path("/editarPessoa")
+    @Consumes("application/json")
+    public String editarLivro(String json) {
+        Gson g = new Gson();
+        try {
+            control.editPessoa(json);
+            return g.toJson("Pessoa editado com sucesso");
+
+        } catch (Exception ex) {
+            Logger.getLogger(LivroRest.class.getName()).log(Level.SEVERE, null, ex);
+            return g.toJson("Erro");
+
+        }
+    }
+
 }

@@ -88,7 +88,7 @@ public class PessoaDAO extends DatabaseUtil {
         }
     }
     
-    public void deletePessoao(int id) throws Exception {
+    public void deletePessoa(int id) throws Exception {
         String sql = "UPDATE pessoa SET " + PessoaDaoUtil.USUARIO_ATRIBUTO_EXCLUIDO + " = 'S' WHERE "
                 + PessoaDaoUtil.PESSOA_ATRIBUTO_ID + "= ?";
         super.getCon();

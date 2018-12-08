@@ -13,9 +13,9 @@ import java.util.List;
  *
  * @author Filipe Borges
  */
-public class ControllerMotivo {
+public class ControllerMotivo extends Controller {
 
-    private MotivoDAO mdao = new MotivoDAO();
+    private final MotivoDAO mdao = new MotivoDAO();
 
     public Motivo createMotivo(Motivo m) throws Exception {
         if (m.getMotivo().equals("")) {
@@ -27,5 +27,18 @@ public class ControllerMotivo {
 
     public List<Motivo> getAllMotivo() throws Exception {
         return mdao.selectAllMotivo();
+    }
+    
+    public void removeMotivo(int idMotivo) throws Exception {
+        if (idMotivo <= 0) {
+            throw new Exception();
+        } else {
+            mdao.deleteMotivo(idMotivo);
+        }
+    }
+
+    public void editMotivo(String jsonMotivo) throws Exception {
+        Motivo m = gson.fromJson(jsonMotivo, Motivo.class);
+        mdao.updateMotivo(m);
     }
 }

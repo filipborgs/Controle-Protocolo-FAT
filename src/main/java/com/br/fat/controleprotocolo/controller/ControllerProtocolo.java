@@ -13,11 +13,10 @@ import java.util.List;
  *
  * @author Filipe Borges
  */
-public class ControllerProtocolo {
+public class ControllerProtocolo extends Controller {
 
-    private ProtocoloDAO pdao = new ProtocoloDAO();
+    private final ProtocoloDAO pdao = new ProtocoloDAO();
 
-    
     public Protocolo createProtocolo(Protocolo p) throws Exception {
         if (p.getLivro() == null
                 || p.getDestinatario() == null
@@ -42,8 +41,21 @@ public class ControllerProtocolo {
             return pdao.insertProtocolo(p);
         }
     }
-    
-     public List<Protocolo> getAllMotivo() throws Exception {
+
+    public List<Protocolo> getAllMotivo() throws Exception {
         return pdao.selectAllProtocolo();
+    }
+
+    public void removeProtocolo(int idProtocolo) throws Exception {
+        if (idProtocolo <= 0) {
+            throw new Exception();
+        } else {
+            pdao.deleteProtocolo(idProtocolo);
+        }
+    }
+
+    public void editProtocolo(String jsonProtocolo) throws Exception {
+        Protocolo p = gson.fromJson(jsonProtocolo, Protocolo.class);
+        pdao.updateProtocolo(p);
     }
 }
