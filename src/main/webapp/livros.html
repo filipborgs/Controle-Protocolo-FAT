@@ -67,7 +67,7 @@
 
             function SalveEdition() {
 
-                alert("Salvar edição");
+                AlertModal("Salvar edição");
 
                 cleanInputs();
 
@@ -95,30 +95,32 @@
                 var metodo = "livro/deletarLivro";
                 tokin = getToken();
                 
+                id = parseInt(id);
+                
                  $.ajax
                         ({
-                            url: uri + metodo,
+                            url: uri + metodo + "?idLivro="+id,
                             type: 'DELETE',
-                            data:
-                                    {
-                                        tokin: tokin,
-                                        idLivro: id
-                                    },
+                            data: {'':''},
                             beforeSend: function () {
-                                //alert("ENTRANDO...");
+                                //AlertModal("ENTRANDO...");
                             }
                         })
                         .done(function (returnJson) {
 
-                            // ITERA O JSON (LINHA A LINHA) E CHAMA O METODO QUE PREENCHE A TABELA
+                            console.log(returnJson);
                             
-                                console.log(returnJson);
-                               
+                            if(returnJson === "\"Erro\""){
+                                AlertModal("Não foi possível realizar a exclusão!");
+                            }else{
+                                 AlertModal("Exclusão realizada com sucesso!");
+                                 GetListLivros();
+                            }
 
                         })
                         .fail(function (msg) {
                             
-                            AlertModal("Falha ao tentar obter a lista de livros");
+                            AlertModal("Falha ao solicitar a operação");
                             
                             console.log(msg);
                         });
@@ -139,7 +141,12 @@
                 sendMensage = document.getElementById("sendMensage");
                 $("#sendMensage").empty();
 
-                sendMensage.append("Tem certeza que deseja excuir?");
+                div = document.createElement("div");
+                div.setAttribute("style", "");
+                
+                div.append("Tem certeza que deseja excuir?");
+                
+                sendMensage.appendChild(div);
         
                 confirm = document.createElement("input");
                 confirm.setAttribute("type", "submit");
@@ -201,7 +208,7 @@
                                         tokin: tokin
                                     },
                             beforeSend: function () {
-                                //alert("ENTRANDO...");
+                                //AlertModal("ENTRANDO...");
                             }
                         })
                         .done(function (returnJson) {
@@ -225,7 +232,7 @@
                             }
                         })
                         .fail(function (msg) {
-                            alert("Falha ao tentar obter a lista de livros");
+                            AlertModal("Falha ao tentar obter a lista de livros");
                             console.log(msg);
                         });
 
@@ -243,7 +250,14 @@
 
                 sendMensage = document.getElementById("sendMensage");
                 $("#sendMensage").empty();
-
+                
+                div = document.createElement("div");
+                div.setAttribute("style", "");
+                
+                div.append("Selecione o que deseja fazer:");
+                
+                sendMensage.appendChild(div);
+                
                 excluir = document.createElement("input");
                 excluir.setAttribute("type", "submit");
                 excluir.setAttribute("value", "excluir");
@@ -274,52 +288,60 @@
 
             function SendInputForm() {
 
-                numero = document.getElementById("numero").value;
-                nome = document.getElementById("nome").value;
-                folhas = document.getElementById("folhas").value;
-                cor = document.getElementById("cor").value;
-                dtinicio = document.getElementById("dtinicio").value;
-                detalhes = document.getElementById("detalhes").value;
+                var tokin = getToken();
+                
+                if( verifiquePermissaoInserir() === true ){
+                
+                    numero = document.getElementById("numero").value;
+                    nome = document.getElementById("nome").value;
+                    folhas = document.getElementById("folhas").value;
+                    cor = document.getElementById("cor").value;
+                    dtinicio = document.getElementById("dtinicio").value;
+                    detalhes = document.getElementById("detalhes").value;
 
-                var metodo = "livro/cadastrarLivro";
-                var tokin = localStorage.getItem("Dw33&121#$%8\z|^");
+                    var metodo = "livro/cadastrarLivro";
 
-                $.ajax
-                        ({
-                            url: uri + metodo,
-                            type: 'POST',
-                            data: JSON.stringify(
-                                    {
-                                        folhas: folhas,
-                                        numero: numero,
-                                        nome: nome,
-                                        detalhes: detalhes,
-                                        cor: cor,
-                                        dataInicio: dtinicio
-                                    }),
-                            contentType: 'application/json',
-                            beforeSend: function () {
-                                //alert("ENTRANDO...");
-                            }
-                        })
-                        .done(function (returnJson) {
+                    $.ajax
+                            ({
+                                url: uri + metodo,
+                                type: 'POST',
+                                data: JSON.stringify(
+                                        {
+                                            folhas: folhas,
+                                            numero: numero,
+                                            nome: nome,
+                                            detalhes: detalhes,
+                                            cor: cor,
+                                            dataInicio: dtinicio
+                                        }),
+                                contentType: 'application/json',
+                                beforeSend: function () {
+                                    //AlertModal("ENTRANDO...");
+                                }
+                            })
+                            .done(function (returnJson) {
 
-                            if (returnJson.numero === parent(numero)) {
-                                
-                                AlertModal("Sucesso!");
-                               
-                                cleanInputs();
-                            } else {
+                                if (returnJson.numero === parseInt(numero)) {
 
+                                    AlertModal("Sucesso!");
+
+                                    cleanInputs();
+                                } else {
 
 
-                            }
 
-                        })
-                        .fail(function (msg) {
-                            alert("Falha ao tentar cadastrar livro");
-                            console.log(msg);
-                        });
+                                }
+
+                            })
+                            .fail(function (msg) {
+                                AlertModal("Falha ao tentar cadastrar livro");
+                                console.log(msg);
+                            });
+                }else{
+                    
+                    AlertModal("Usuário sem permissão!");
+                    
+                }
             }
 
             /* 
@@ -396,7 +418,7 @@
                                         tokin: tokin
                                     },
                             beforeSend: function () {
-                                //alert("ENTRANDO...");
+                                //AlertModal("ENTRANDO...");
                             }
                         })
                         .done(function (returnJson) {
@@ -474,7 +496,7 @@
                                 // CRIA A LINHA
                                 trow = document.createElement("tr");
                                 if ((localStorage.getItem('sdw3354SD&@!5231') === 'S') || (localStorage.getItem('zXGT*&&!3YHRU+|D') === 'S')) {
-                                    trow.setAttribute("onclick", "chamaModal(" + livro.numero + ")");
+                                    trow.setAttribute("onclick", "chamaModal(" + livro.id + ")");
                                 }
 
                                 trow.setAttribute("id", "line" + i);
@@ -525,7 +547,7 @@
 
                         })
                         .fail(function (msg) {
-                            alert("Falha ao tentar obter a lista de livros");
+                            AlertModal("Falha ao tentar obter a lista de livros");
                             console.log(msg);
                         });
 
