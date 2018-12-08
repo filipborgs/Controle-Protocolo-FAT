@@ -1,3 +1,49 @@
+/////////////////////////////////////////
+Novas urls
+
+http://localhost:8080/ControleProtocolo/rest/livro/deletarLivro
+
+tipo: DELETE
+paramentro recebido: idLivro
+retorna uma mensagem de sucesso ou erro
+
+http://localhost:8080/ControleProtocolo/rest/motivo/editarLivro
+tipo: PUT
+paramentro recebido: json do objeto livro
+retorna uma mensagem de sucesso ou erro
+
+http://localhost:8080/ControleProtocolo/rest/motivo/deletarMotivo
+tipo: DELETE
+paramentro recebido: idMotivo
+retorna uma mensagem de sucesso ou erro
+
+http://localhost:8080/ControleProtocolo/rest/motivo/editarLivro
+tipo: PUT
+paramentro recebido: json do objeto motivo
+retorna uma mensagem de sucesso ou erro
+
+http://localhost:8080/ControleProtocolo/rest/pessoa/deletarPessoa
+tipo: DELETE
+paramentro recebido: idPessoa
+retorna uma mensagem de sucesso ou erro
+
+http://localhost:8080/ControleProtocolo/rest/pessoa/editarPessoa
+tipo: PUT
+paramentro recebido: json do objeto pessoa
+retorna uma mensagem de sucesso ou erro
+
+http://localhost:8080/ControleProtocolo/rest/protocolo/editarProtocolo
+tipo: PUT
+paramentro recebido: json do objeto protocolo
+retorna uma mensagem de sucesso ou erro
+
+http://localhost:8080/ControleProtocolo/rest/protocolo/deletarProtocolo
+tipo: DELETE
+paramentro recebido: idProtocolo
+retorna uma mensagem de sucesso ou erro
+
+////////////////////////////////////
+
 http://localhost:8080/ControleProtocolo/rest/pessoa/listarPessoa POST
 listar Pessoas
 

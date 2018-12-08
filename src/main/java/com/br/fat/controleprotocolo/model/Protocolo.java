@@ -18,7 +18,7 @@ public class Protocolo {
     private LivroRegistros livro;
     private Usuario usuario;
     private Pessoa remetente, destinatario;
-    private String solicitante, observacoes, dataCadastro;
+    private String solicitante, observacoes;
     private Situacao situacao;
     private Motivo motivo;
     private Date dataPrevisao, dataRecebido, dataCadastral, dataDevolvido;
@@ -141,14 +141,6 @@ public class Protocolo {
 
     public void setObservacoes(String observacoes) {
         this.observacoes = observacoes;
-    }
-
-    public String getDataCadastro() {
-        return dataCadastro;
-    }
-
-    public void setDataCadastro(String dataCadastro) {
-        this.dataCadastro = dataCadastro;
     }
 
     public Situacao getSituacao() {

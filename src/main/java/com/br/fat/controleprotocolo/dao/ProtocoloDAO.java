@@ -46,6 +46,10 @@ public class ProtocoloDAO extends DatabaseUtil {
         p.setSolicitante(rs.getString(ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_SOLICITANTE));
         p.setSituacao(new Situacao());
         p.getSituacao().setId(rs.getInt(ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_SITUACAO));
+        p.setDataCadastral(rs.getDate(ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_DATA_LANCAMENTO));
+        p.setDataDevolvido(rs.getDate(ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_DATA_DEVOLUCAO));
+        p.setDataPrevisao(rs.getDate(ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_DATA_PREVISAO));
+        p.setDataRecebido(rs.getDate(ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_DATA_RECEBIMENTO));
 
         return p;
     }
@@ -58,8 +62,8 @@ public class ProtocoloDAO extends DatabaseUtil {
                 + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_PAGINA + "," + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_REMETENTE + ","
                 + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_SITUACAO + "," + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_SOLICITANTE + ","
                 + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_DATA_LANCAMENTO + "," + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_DATA_RECEBIMENTO + ","
-                + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_DATA_PREVISAO + "," + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_DATA_DEVOLUCAO
-                + ") VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_DATA_PREVISAO + "," + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_DATA_DEVOLUCAO + ","
+                + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_EXCLUIDO + ") VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         super.getCon();
         try {
             stmt = con.prepareStatement(sql);
@@ -78,16 +82,17 @@ public class ProtocoloDAO extends DatabaseUtil {
             stmt.setDate(13, p.getDataRecebido());
             stmt.setDate(14, p.getDataPrevisao());
             stmt.setDate(15, p.getDataDevolvido());
+            stmt.setString(16, "N");
             stmt.executeUpdate();
-            return p;
         } catch (SQLException ex) {
             Logger.getLogger(ProtocoloDAO.class.getName()).log(Level.SEVERE, null, ex);
             throw new Exception(ex.getMessage());
         }
+        return p;
     }
 
     public List<Protocolo> selectAllProtocolo() throws Exception {
-        String sql = "SELECT * FROM protocolo";
+        String sql = "SELECT * FROM protocolo WHERE " + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_EXCLUIDO + " = 'N'";
         super.getCon();
         try {
             stmt = con.prepareStatement(sql);
@@ -118,14 +123,15 @@ public class ProtocoloDAO extends DatabaseUtil {
     }
 
     public void updateProtocolo(Protocolo p) throws Exception {
-        String sql = "UPDATE motivo SET " + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_USUARIO + "=?,"
+        String sql = "UPDATE protocolo SET " + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_USUARIO + "=?,"
                 + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_ASSINADO + "=?," + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_DESTINATARIO + "=?,"
                 + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_LIVRO + "=?," + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_MOTIVO + "=?,"
                 + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_NUM + "=?," + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_OBSERVACOES + "=?,"
                 + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_PAGINA + "=?," + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_REMETENTE + "=?,"
-                + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_SITUACAO + "=?," + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_DATA_LANCAMENTO + "=?,"
-                + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_DATA_RECEBIMENTO + "=?," + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_DATA_PREVISAO + "=?,"
-                + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_DATA_DEVOLUCAO + "=? WHERE " + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_ID + "= ?";
+                + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_SITUACAO + "=?," + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_SOLICITANTE + "=?,"
+                + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_DATA_LANCAMENTO + "=?," + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_DATA_RECEBIMENTO + "=?,"
+                + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_DATA_PREVISAO + "=?," + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_DATA_DEVOLUCAO
+                + "=? WHERE " + ProtocoloDaoUtil.PROTOCOLO_ATRIBUTO_ID + "= ?";
         super.getCon();
         try {
             stmt = con.prepareStatement(sql);

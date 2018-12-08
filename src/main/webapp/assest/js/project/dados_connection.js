@@ -1,6 +1,6 @@
 
 // # login : http://localhost:8080/ControleProtocolo/rest/usuario/login
-
+ 
  //-- CONFIGURAÇÕES PARA O SERVIDOR JAVA --//
 
  var protocolo = "http";
