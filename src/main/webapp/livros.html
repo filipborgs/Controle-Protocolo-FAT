@@ -34,11 +34,32 @@
         <!-- ===== TABLE RESPONSIVE ===== -->
         <link rel="stylesheet" href="assest/css/style.css">
         <link rel="stylesheet" href="assest/css/styles.css">
-        
-        
+
+
         <!-- \/\/\/\/\/\/\/\/ SCRIPTS JS \/\/\/\/\/\/\/\/ -->
         <script>
             
+            /* 
+             *  **********   IDENTIFICA O ATO DE ENTRAR NA LINHA COM O MOUSE
+             *  ********** E ALTERA O ESTILO NA LINHA PARA DAR DESTAQUE 
+             */
+            
+            function linhaI(id) {
+                tr1 = document.getElementById(id);
+               
+                tr1.setAttribute("style", "background-color:#999;cursor:pointer;");
+            }
+            
+            /* 
+             *  **********   IDENTIFICA O ATO DE SAIR DA LINHA COM O MOUSE
+             *  ********** E REMOVE O ESTILO DA LINHA PARA TIRAR O DESTAQUE 
+             */
+            
+            function linhaO(id) {
+                tr1 = document.getElementById(id);
+                tr1.removeAttribute("style");
+            }
+
             /* 
              *  **********   FUNÇÃO PARA SALVAR EDIAÇÃO DO LIVRO E 
              *  ********** REALIZAR ENVIO DO JSON PARA FAZER O UPDATE 
@@ -47,11 +68,11 @@
             function SalveEdition() {
 
                 alert("Salvar edição");
-                
+
                 cleanInputs();
 
             }
-            
+
             /* 
              *  **********   FUNÇÃO PARA VALIDAR OS CAMPOS DE INPUT 
              *  **********       ANTES DE ENVIAR O FORMULÁRIO 
@@ -63,15 +84,93 @@
 
             }
             
+            
             /* 
-             *  **********   FUNÇÃO PARA EXCLUIR UM LIVRO, 
+             *  **********   FUNÇÃO PARA CONFIRMAR A EXCLUIR UM LIVRO, 
              *  ********** REALIZAR ENVIO DO JSON COM O ID PARA FAZER O UPDATE 
              */
 
             function RemoveItem(id) {
-                alert("Remover");
+                
+                var metodo = "livro/deletarLivro";
+                tokin = getToken();
+                
+                 $.ajax
+                        ({
+                            url: uri + metodo,
+                            type: 'DELETE',
+                            data:
+                                    {
+                                        tokin: tokin,
+                                        idLivro: id
+                                    },
+                            beforeSend: function () {
+                                //alert("ENTRANDO...");
+                            }
+                        })
+                        .done(function (returnJson) {
+
+                            // ITERA O JSON (LINHA A LINHA) E CHAMA O METODO QUE PREENCHE A TABELA
+                            
+                                console.log(returnJson);
+                               
+
+                        })
+                        .fail(function (msg) {
+                            
+                            AlertModal("Falha ao tentar obter a lista de livros");
+                            
+                            console.log(msg);
+                        });
+
+                
             }
             
+
+            /* 
+             *  **********   FUNÇÃO PARA CONFIRMAR A EXCLUIR UM LIVRO, 
+             *  ********** REALIZAR A PERGUNTA SE DESEJA REALMENTE EXCLUIR 
+             */
+
+            function ConfirmExclusao(id) {
+                
+                CloseModal();
+                
+                sendMensage = document.getElementById("sendMensage");
+                $("#sendMensage").empty();
+
+                sendMensage.append("Tem certeza que deseja excuir?");
+        
+                confirm = document.createElement("input");
+                confirm.setAttribute("type", "submit");
+                confirm.setAttribute("value", "Confirmar");
+                confirm.setAttribute("class", "btn-danger");
+                confirm.setAttribute("onclick", "RemoveItem(" + id + ")");
+
+                cancelar = document.createElement("input");
+                cancelar.setAttribute("type", "submit");
+                cancelar.setAttribute("value", "Cancelar");
+                cancelar.setAttribute("style", "margin-right: 10px; margin-top: 10px;");
+                cancelar.setAttribute("onclick", "CloseModal();");
+
+                    sendMensage.appendChild(cancelar);
+                    sendMensage.appendChild(confirm);
+
+                window.location.href = "#popup1";
+               
+            }
+            
+            /* 
+             *  **********   FUNÇÃO PARA FECHAR O MODAL 
+             */
+
+            function CloseModal() {
+                
+                window.location.href = "#";
+                
+            }
+            
+
             /* 
              *  **********   FUNÇÃO PARA OBTER OS CAMPOS DE INPUT E 
              *  ********** REALIZAR ENVIO DO JSON PARA FAZER O UPDATE 
@@ -91,7 +190,7 @@
                 btn_save.setAttribute("onclick", "SalveEdition()");
 
                 var metodo = "livro/listarLivros";
-                var tokin = localStorage.getItem("Dw33&121#$%8\z|^");
+                var tokin = getToken();
 
                 $.ajax
                         ({
@@ -111,7 +210,7 @@
                             for (var i = 0; i < livros.length; i++) {
 
                                 if (livros[i].numero === parseInt(id)) {
-                                    
+
                                     console.log(livros[i]);
 
                                     document.getElementById("numero").value = livros[i].numero;
@@ -134,7 +233,7 @@
 
 
             }
-            
+
             /* 
              *  **********   FUNÇÃO PARA CHAMAR A EXIBIÇÃO DO MODAL 
              *  ********** QUE APRESENTA AS OPÇÕES DE EXCLUIR E EDITAR
@@ -149,7 +248,7 @@
                 excluir.setAttribute("type", "submit");
                 excluir.setAttribute("value", "excluir");
                 excluir.setAttribute("class", "btn-danger");
-                excluir.setAttribute("onclick", "RemoveItem(" + id + ")");
+                excluir.setAttribute("onclick", "ConfirmExclusao(" + id + ")");
 
                 editar = document.createElement("input");
                 editar.setAttribute("type", "submit");
@@ -205,11 +304,10 @@
                         })
                         .done(function (returnJson) {
 
-                            if (returnJson.numero == numero) {
-                                sendMensage = document.getElementById("sendMensage");
-                                $("#sendMensage").empty();
-                                sendMensage.append("Sucesso!");
-                                window.location.href = "#popup1";
+                            if (returnJson.numero === parent(numero)) {
+                                
+                                AlertModal("Sucesso!");
+                               
                                 cleanInputs();
                             } else {
 
@@ -244,7 +342,7 @@
              *  **********   FUNÇÃO PARA CHAMAR O FORMULÁRIO DE CADASTRO DE LIVRO 
              *  **********          E REMOVER A TABELA DE LIVROS DA TELA
              */
-            
+
             function CallForm() {
 
                 $("#div-protocols").empty();
@@ -259,7 +357,7 @@
                 btn_save.setAttribute("onclick", "SendInputForm()");
 
             }
-            
+
             /* 
              *  **********       CHAMADO ATRAVES DO BOTÃO CANCELAR CADASTRO 
              *  ********** FUNÇÃO QUE OCULTA O FORMULÁRIO E CHAMA A TABELA DE LIVROS 
@@ -277,7 +375,7 @@
                 GetListLivros();
 
             }
-            
+
             /* 
              *  **********   FUNÇÃO PARA EXIBIR TODOS OS LIVROS CADASTRADOS 
              *  **********  REALIZAR UMA CHAMADA JSON PARA RECEBER OS DADOS
@@ -304,7 +402,7 @@
                         .done(function (returnJson) {
 
                             //var livros = JSON.parse(returnJson);
-                    
+
                             livros = returnJson;
                             console.log(livros);
                             // PEGA A DIV PAI E ESVAZIA ELA
@@ -367,19 +465,22 @@
                             // ITERA O JSON (LINHA A LINHA) E CHAMA O METODO QUE PREENCHE A TABELA
                             for (var i = 0; i < livros.length; i++) {
 
-                                PreencheTboby(livros[i]);
+                                PreencheTboby(livros[i], i);
 
                             }
 
-                            function PreencheTboby(livro) {
+                            function PreencheTboby(livro, i) {
 
                                 // CRIA A LINHA
                                 trow = document.createElement("tr");
                                 if ((localStorage.getItem('sdw3354SD&@!5231') === 'S') || (localStorage.getItem('zXGT*&&!3YHRU+|D') === 'S')) {
                                     trow.setAttribute("onclick", "chamaModal(" + livro.numero + ")");
                                 }
-                                //trow.setAttribute("","");
-                                //trow.setAttribute("","");
+
+                                trow.setAttribute("id", "line" + i);
+
+                                trow.setAttribute("onmouseover", "linhaI('line" + i + "')");
+                                trow.setAttribute("onmouseout", "linhaO('line" + i + "')");
 
                                 // CRIA AS COLUNAS
                                 tcolNumero = document.createElement("td");
@@ -430,6 +531,14 @@
 
             }
 
+            function AlertModal(msg){
+                
+                sendMensage = document.getElementById("sendMensage");
+                $("#sendMensage").empty();
+                sendMensage.append(msg);
+                window.location.href = "#popup1";
+
+            }
         </script>
 
         <style>
