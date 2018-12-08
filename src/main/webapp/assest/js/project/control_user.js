@@ -22,7 +22,9 @@
         
         function getToken(){
             
-            return '';
+            var tokin = localStorage.getItem("Dw33&121#$%8\z|^");
+            
+            return tokin;
         }
         
         function verifiquePermissaoExcluir(){
