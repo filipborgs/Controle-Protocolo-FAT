@@ -480,19 +480,17 @@
                             .done(function (returnJson) {
 
                                 // PREENCHE O FORM
-                                for (var i = 0; i < livros.length; i++) {
+                                for (var i = 0; i < returnJson.length; i++) {
 
-                                    if (livros[i].id === parseInt(id)) {
+                                    if (returnJson[i].id === parseInt(id)) {
 
-
-
-                                        document.getElementById("numero").value = livros[i].numero;
-                                        document.getElementById("nome").value = livros[i].nome;
-                                        document.getElementById("folhas").value = livros[i].folhas;
-                                        document.getElementById("cor").value = livros[i].cor;
-                                        document.getElementById("dtinicio").value = livros[i].dataIni;
-                                        document.getElementById("dtfim").value = livros[i].dataFi;
-                                        document.getElementById("detalhes").append(livros[i].detalhes);
+                                        document.getElementById("numero").value = returnJson[i].numero;
+                                        document.getElementById("nome").value = returnJson[i].nome;
+                                        document.getElementById("folhas").value = returnJson[i].folhas;
+                                        document.getElementById("cor").value = returnJson[i].cor;
+                                        document.getElementById("dtinicio").value = returnJson[i].dataIni;
+                                        document.getElementById("dtfim").value = returnJson[i].dataFi;
+                                        document.getElementById("detalhes").append(returnJson[i].detalhes);
 
                                     }
 
@@ -537,11 +535,11 @@
                 editar.setAttribute("style", "margin-right: 10px; margin-top: 10px;");
                 editar.setAttribute("onclick", "CallFormEditar(" + id + ")");
 
-                if (localStorage.getItem('sdw3354SD&@!5231') === 'S') {
+                if ( verifiquePermissaoExcluir() === true ) {
                     sendMensage.appendChild(excluir);
                 }
 
-                if (localStorage.getItem('zXGT*&&!3YHRU+|D') === 'S') {
+                if ( verifiquePermissaoEditar() === true ) {
                     sendMensage.appendChild(editar);
                 }
 

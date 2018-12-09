@@ -97,22 +97,17 @@
              *  ********** REALIZAR ENVIO DO JSON PARA FAZER O UPDATE 
              */
 
-            function SalveEdition() {
+            function SalveEdition(id) {
 
                 if (verifiquePermissaoEditar() === true) {
 
                     if (ValidaCampos() === true) {
 
-
-                        numero = document.getElementById("numero").value;
                         nome = document.getElementById("nome").value;
-                        folhas = document.getElementById("folhas").value;
-                        cor = document.getElementById("cor").value;
-                        dtinicio = document.getElementById("dtinicio").value;
-                        dtfim = document.getElementById("dtfim").value;
-                        detalhes = document.getElementById("detalhes").value;
+                        setor = document.getElementById("setor").value;
+                        descricao = document.getElementById("descricao").value;
 
-                        var metodo = "livro/editarLivro";
+                        var metodo = "pessoa/editarPessoa";
 
                         $.ajax
                                 ({
@@ -120,13 +115,10 @@
                                     type: 'PUT',
                                     data: JSON.stringify(
                                             {
-                                                "folhas": folhas,
-                                                "numero": numero,
-                                                "nome": nome,
-                                                "detalhes": detalhes,
-                                                "cor": cor,
-                                                "dataInicio": dtinicio,
-                                                "dataFim": dtfim
+                                                id: id,
+                                                nome: nome,
+                                                setor: setor,
+                                                descricao: descricao
                                             }),
                                     contentType: 'application/json',
                                     beforeSend: function () {
@@ -149,7 +141,7 @@
 
                                 })
                                 .fail(function (msg) {
-                                    AlertModal("Falha ao tentar editar livro");
+                                    AlertModal("Falha ao tentar editar a pessoa");
                                     console.log(msg);
                                 });
 
@@ -179,14 +171,14 @@
                 if (nome.value === "") {
                     noerros = false;
                     nome.setAttribute("style", "background: palegoldenrod;");
-                }else{
+                } else {
                     nome.removeAttribute("style");
                 }
-                
+
                 if (setor.value === "") {
                     noerros = false;
                     setor.setAttribute("style", "background: palegoldenrod;");
-                }else{
+                } else {
                     setor.removeAttribute("style");
                 }
 
@@ -201,16 +193,16 @@
 
             function RemoveItem(id) {
 
-                var metodo = "livro/deletarLivro";
+                var metodo = "pessoa/deletarPessoa";
                 tokin = getToken();
 
                 id = parseInt(id);
 
                 $.ajax
                         ({
-                            url: uri + metodo + "?idLivro=" + id,
+                            url: uri + metodo + "?idPessoa=" + id,
                             type: 'DELETE',
-                            data: {'': ''},
+                            data: {},
                             beforeSend: function () {
                                 //AlertModal("ENTRANDO...");
                             }
@@ -294,8 +286,6 @@
 
                 if (verifiquePermissaoEditar() === true) {
 
-
-
                     $("#div-protocols").empty();
 
                     $("#div-row-inputs").empty();
@@ -304,75 +294,37 @@
 
                     div_row_inputs = document.getElementById("div-row-inputs");
 
-                    divLabelNumero = document.createElement("div");
                     divLabelNome = document.createElement("div");
-                    divLabelFolhas = document.createElement("div");
-                    divLabelCor = document.createElement("div");
-                    divLabelInicio = document.createElement("div");
-                    divLabelFim = document.createElement("div");
-                    divLabelDetalhes = document.createElement("div");
+                    divLabelSetor = document.createElement("div");
+                    divLabelDescricao = document.createElement("div");
 
-                    divLabelNumero.setAttribute("class", "col-25");
                     divLabelNome.setAttribute("class", "col-25");
-                    divLabelFolhas.setAttribute("class", "col-25");
-                    divLabelCor.setAttribute("class", "col-25");
-                    divLabelInicio.setAttribute("class", "col-25");
-                    divLabelFim.setAttribute("class", "col-25");
-                    divLabelDetalhes.setAttribute("class", "col-25");
+                    divLabelSetor.setAttribute("class", "col-25");
+                    divLabelDescricao.setAttribute("class", "col-25");
 
-                    labelNumero = document.createElement("label");
                     labelNome = document.createElement("label");
-                    labelFolhas = document.createElement("label");
-                    labelCor = document.createElement("label");
-                    labelInicio = document.createElement("label");
-                    labelFim = document.createElement("label");
-                    labelDetalhes = document.createElement("label");
+                    labelSetor = document.createElement("label");
+                    labelDescricao = document.createElement("label");
 
-                    labelNumero.setAttribute("for", "numero");
                     labelNome.setAttribute("for", "nome");
-                    labelFolhas.setAttribute("for", "folhas");
-                    labelCor.setAttribute("for", "cor");
-                    labelInicio.setAttribute("for", "dtinicio");
-                    labelFim.setAttribute("for", "dtfim");
-                    labelDetalhes.setAttribute("for", "detalhes");
+                    labelSetor.setAttribute("for", "setor");
+                    labelDescricao.setAttribute("for", "descricao");
 
-                    labelNumero.append("Número");
                     labelNome.append("Nome");
-                    labelFolhas.append("N° Folhas");
-                    labelCor.append("Cor");
-                    labelInicio.append("Data Início");
-                    labelFim.append("Data Término");
-                    labelDetalhes.append("Detalhes");
+                    labelSetor.append("Setor");
+                    labelDescricao.append("Descrição");
 
-                    divInputNumero = document.createElement("div");
                     divInputNome = document.createElement("div");
-                    divInputFolhas = document.createElement("div");
-                    divInputCor = document.createElement("div");
-                    divInputInicio = document.createElement("div");
-                    divInputFim = document.createElement("div");
-                    divInputDetalhes = document.createElement("div");
+                    divInputSetor = document.createElement("div");
+                    divInputDescricao = document.createElement("div");
 
-                    divInputNumero.setAttribute("class", "col-75");
                     divInputNome.setAttribute("class", "col-75");
-                    divInputFolhas.setAttribute("class", "col-75");
-                    divInputCor.setAttribute("class", "col-75");
-                    divInputInicio.setAttribute("class", "col-75");
-                    divInputFim.setAttribute("class", "col-75");
-                    divInputDetalhes.setAttribute("class", "col-75");
+                    divInputSetor.setAttribute("class", "col-75");
+                    divInputDescricao.setAttribute("class", "col-75");
 
-                    inputNumero = document.createElement("input");
                     inputNome = document.createElement("input");
-                    inputFolhas = document.createElement("input");
-                    inputCor = document.createElement("input");
-                    inputInicio = document.createElement("input");
-                    inputFim = document.createElement("input");
-                    inputDetalhes = document.createElement("textarea");
-
-                    inputNumero.setAttribute("type", "number");
-                    inputNumero.setAttribute("required", "required");
-                    inputNumero.setAttribute("id", "numero");
-                    inputNumero.setAttribute("name", "numero");
-                    inputNumero.setAttribute("placeholder", "obrigatório");
+                    inputSetor = document.createElement("input");
+                    inputDescricao = document.createElement("textarea");
 
                     inputNome.setAttribute("type", "text");
                     inputNome.setAttribute("required", "required");
@@ -380,27 +332,14 @@
                     inputNome.setAttribute("name", "nome");
                     inputNome.setAttribute("placeholder", "obrigatório");
 
-                    inputFolhas.setAttribute("type", "number");
-                    inputFolhas.setAttribute("required", "required");
-                    inputFolhas.setAttribute("id", "folhas");
-                    inputFolhas.setAttribute("name", "folhas");
-                    inputFolhas.setAttribute("placeholder", "obrigatório");
+                    inputSetor.setAttribute("type", "text");
+                    inputSetor.setAttribute("id", "setor");
+                    inputSetor.setAttribute("name", "setor");
+                    inputSetor.setAttribute("placeholder", "obrigatório");
 
-                    inputCor.setAttribute("type", "text");
-                    inputCor.setAttribute("id", "cor");
-                    inputCor.setAttribute("name", "cor");
-
-                    inputInicio.setAttribute("type", "date");
-                    inputInicio.setAttribute("id", "dtinicio");
-                    inputInicio.setAttribute("name", "dtinicio");
-
-                    inputFim.setAttribute("type", "date");
-                    inputFim.setAttribute("id", "dtfim");
-                    inputFim.setAttribute("name", "dtfim");
-
-                    inputDetalhes.setAttribute("style", "height:100px;");
-                    inputDetalhes.setAttribute("id", "detalhes");
-                    inputDetalhes.setAttribute("name", "detalhes");
+                    inputDescricao.setAttribute("style", "height:100px;");
+                    inputDescricao.setAttribute("id", "descricao");
+                    inputDescricao.setAttribute("name", "descricao");
 
                     br = document.createElement("br");
 
@@ -410,7 +349,7 @@
                     inputSubmitSalvar.setAttribute("type", "submit");
                     inputSubmitSalvar.setAttribute("style", "margin-top: 10px;");
                     inputSubmitSalvar.setAttribute("id", "btn_save");
-                    inputSubmitSalvar.setAttribute("onclick", "SalveEdition();");
+                    inputSubmitSalvar.setAttribute("onclick", "SalveEdition("+id+");");
                     inputSubmitSalvar.setAttribute("value", "Salvar");
 
                     inputSubmitCancelar.setAttribute("type", "submit");
@@ -418,41 +357,25 @@
                     inputSubmitCancelar.setAttribute("onclick", "RemoveForm();");
                     inputSubmitCancelar.setAttribute("value", "Cancelar");
 
-                    divLabelNumero.appendChild(labelNumero);
                     divLabelNome.appendChild(labelNome);
-                    divLabelFolhas.appendChild(labelFolhas);
-                    divLabelCor.appendChild(labelCor);
-                    divLabelInicio.appendChild(labelInicio);
-                    divLabelFim.appendChild(labelFim);
-                    divLabelDetalhes.appendChild(labelDetalhes);
+                    divLabelSetor.appendChild(labelSetor);
+                    divLabelDescricao.appendChild(labelDescricao);
 
-                    divInputNumero.appendChild(inputNumero);
                     divInputNome.appendChild(inputNome);
-                    divInputFolhas.appendChild(inputFolhas);
-                    divInputCor.appendChild(inputCor);
-                    divInputInicio.appendChild(inputInicio);
-                    divInputFim.appendChild(inputFim);
-                    divInputDetalhes.appendChild(inputDetalhes);
+                    divInputSetor.appendChild(inputSetor);
+                    divInputDescricao.appendChild(inputDescricao);
 
-                    div_row_inputs.appendChild(divLabelNumero);
-                    div_row_inputs.appendChild(divInputNumero);
                     div_row_inputs.appendChild(divLabelNome);
                     div_row_inputs.appendChild(divInputNome);
-                    div_row_inputs.appendChild(divLabelFolhas);
-                    div_row_inputs.appendChild(divInputFolhas);
-                    div_row_inputs.appendChild(divLabelCor);
-                    div_row_inputs.appendChild(divInputCor);
-                    div_row_inputs.appendChild(divLabelInicio);
-                    div_row_inputs.appendChild(divInputInicio);
-                    div_row_inputs.appendChild(divLabelFim);
-                    div_row_inputs.appendChild(divInputFim);
-                    div_row_inputs.appendChild(divLabelDetalhes);
-                    div_row_inputs.appendChild(divInputDetalhes);
+                    div_row_inputs.appendChild(divLabelSetor);
+                    div_row_inputs.appendChild(divInputSetor);
+                    div_row_inputs.appendChild(divLabelDescricao);
+                    div_row_inputs.appendChild(divInputDescricao);
                     div_row_inputs.appendChild(br);
                     div_row_inputs.appendChild(inputSubmitSalvar);
                     div_row_inputs.appendChild(inputSubmitCancelar);
 
-                    var metodo = "livro/listarLivros";
+                    var metodo = "pessoa/listarPessoas";
 
                     $.ajax
                             ({
@@ -466,19 +389,13 @@
                             .done(function (returnJson) {
 
                                 // PREENCHE O FORM
-                                for (var i = 0; i < livros.length; i++) {
+                                for (var i = 0; i < returnJson.length; i++) {
 
-                                    if (livros[i].id === parseInt(id)) {
+                                    if (returnJson[i].id === parseInt(id)) {
 
-
-
-                                        document.getElementById("numero").value = livros[i].numero;
-                                        document.getElementById("nome").value = livros[i].nome;
-                                        document.getElementById("folhas").value = livros[i].folhas;
-                                        document.getElementById("cor").value = livros[i].cor;
-                                        document.getElementById("dtinicio").value = livros[i].dataIni;
-                                        document.getElementById("dtfim").value = livros[i].dataFi;
-                                        document.getElementById("detalhes").append(livros[i].detalhes);
+                                        document.getElementById("nome").value = returnJson[i].nome;
+                                        document.getElementById("setor").value = returnJson[i].setor;
+                                        document.getElementById("descricao").value = returnJson[i].descricao;
 
                                     }
 
@@ -523,11 +440,11 @@
                 editar.setAttribute("style", "margin-right: 10px; margin-top: 10px;");
                 editar.setAttribute("onclick", "CallFormEditar(" + id + ")");
 
-                if (localStorage.getItem('sdw3354SD&@!5231') === 'S') {
+                if (verifiquePermissaoExcluir() === true) {
                     sendMensage.appendChild(excluir);
                 }
 
-                if (localStorage.getItem('zXGT*&&!3YHRU+|D') === 'S') {
+                if (verifiquePermissaoEditar() === true) {
                     sendMensage.appendChild(editar);
                 }
 
@@ -567,7 +484,7 @@
                                     }
                                 })
                                 .done(function (returnJson) {
-                                    
+
                                     var returnJson = JSON.parse(returnJson);
 
                                     if (returnJson.id) {
