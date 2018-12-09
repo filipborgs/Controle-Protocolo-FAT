@@ -37,6 +37,7 @@
              *  **********   FUNÇÃO PARA EXIBIR O BOTÃO DE INSERIR
              *  **********      APENAS DE USUÁRIO TIVER PERMISSÃO
              */
+
             function exibeButtonInserir() {
 
                 if (verifiquePermissaoInserir() === true) {
@@ -98,9 +99,68 @@
 
             function SalveEdition() {
 
-                AlertModal("Salvar edição");
+                if (verifiquePermissaoEditar() === true) {
 
-                cleanInputs();
+                    if (ValidaCampos() === true) {
+
+
+                        numero = document.getElementById("numero").value;
+                        nome = document.getElementById("nome").value;
+                        folhas = document.getElementById("folhas").value;
+                        cor = document.getElementById("cor").value;
+                        dtinicio = document.getElementById("dtinicio").value;
+                        dtfim = document.getElementById("dtfim").value;
+                        detalhes = document.getElementById("detalhes").value;
+
+                        var metodo = "livro/editarLivro";
+
+                        $.ajax
+                                ({
+                                    url: uri + metodo,
+                                    type: 'PUT',
+                                    data: JSON.stringify(
+                                            {
+                                                "folhas": folhas,
+                                                "numero": numero,
+                                                "nome": nome,
+                                                "detalhes": detalhes,
+                                                "cor": cor,
+                                                "dataInicio": dtinicio,
+                                                "dataFim": dtfim
+                                            }),
+                                    contentType: 'application/json',
+                                    beforeSend: function () {
+                                        //AlertModal("ENTRANDO...");
+                                    }
+                                })
+                                .done(function (returnJson) {
+
+                                    if (returnJson === "\"Erro\"") {
+
+                                        AlertModal("O servidor retornou um erro inesperado!");
+
+                                    } else {
+                                        
+                                        AlertModal("Sucesso!");
+                                        RemoveForm();
+                                        GetListLivros();
+
+                                    }
+
+                                })
+                                .fail(function (msg) {
+                                    AlertModal("Falha ao tentar editar livro");
+                                    console.log(msg);
+                                });
+
+
+                    } else {
+                        AlertModal("Exitem campos com preenchimento inválido!");
+                    }
+
+                } else {
+                    AlertModal("Usuário sem permissão!");
+                }
 
             }
 
@@ -113,24 +173,31 @@
 
                 noerros = true;
 
-                numero = document.getElementById("numero").value;
-                nome = document.getElementById("nome").value;
-                folhas = document.getElementById("folhas").value;
+                numero = document.getElementById("numero");
+                nome = document.getElementById("nome");
+                folhas = document.getElementById("folhas");
+                dtinicio = document.getElementById("dtinicio");
 
-                if ((numero === "") || (parseInt(numero) < 1)) {
+                if ((numero.value === "") || (parseInt(numero.value) < 1)) {
                     noerros = false;
+                    numero.setAttribute("style", "background: palegoldenrod;");
                 }
-                if (nome === "") {
+                if (nome.value === "") {
                     noerros = false;
+                    nome.setAttribute("style", "background: palegoldenrod;");
                 }
-                if ((numero === "") || (parseInt(numero) < 1)) {
+                if ((folhas.value === "") || (parseInt(folhas.value) < 1)) {
                     noerros = false;
+                    folhas.setAttribute("style", "background: palegoldenrod;");
+                }
+                if (dtinicio.value === "") {
+                    noerros = false;
+                    dtinicio.setAttribute("style", "background: palegoldenrod;");
                 }
 
                 return noerros;
 
             }
-
 
             /* 
              *  **********   FUNÇÃO PARA CONFIRMAR A EXCLUIR UM LIVRO, 
@@ -174,7 +241,6 @@
 
 
             }
-
 
             /* 
              *  **********   FUNÇÃO PARA CONFIRMAR A EXCLUIR UM LIVRO, 
@@ -224,7 +290,6 @@
 
             }
 
-
             /* 
              *  **********   FUNÇÃO PARA OBTER OS CAMPOS DE INPUT E 
              *  ********** REALIZAR ENVIO DO JSON PARA FAZER O UPDATE 
@@ -232,198 +297,206 @@
 
             function CallFormEditar(id) {
 
-                $("#div-protocols").empty();
-
-                $("#div-row-inputs").empty();
-
-                div_row_inputs = document.getElementById("div-row-inputs");
-
-                divLabelNumero = document.createElement("div");
-                divLabelNome = document.createElement("div");
-                divLabelFolhas = document.createElement("div");
-                divLabelCor = document.createElement("div");
-                divLabelInicio = document.createElement("div");
-                divLabelFim = document.createElement("div");
-                divLabelDetalhes = document.createElement("div");
-
-                divLabelNumero.setAttribute("class", "col-25");
-                divLabelNome.setAttribute("class", "col-25");
-                divLabelFolhas.setAttribute("class", "col-25");
-                divLabelCor.setAttribute("class", "col-25");
-                divLabelInicio.setAttribute("class", "col-25");
-                divLabelFim.setAttribute("class", "col-25");
-                divLabelDetalhes.setAttribute("class", "col-25");
-
-                labelNumero = document.createElement("label");
-                labelNome = document.createElement("label");
-                labelFolhas = document.createElement("label");
-                labelCor = document.createElement("label");
-                labelInicio = document.createElement("label");
-                labelFim = document.createElement("label");
-                labelDetalhes = document.createElement("label");
-
-                labelNumero.setAttribute("for", "numero");
-                labelNome.setAttribute("for", "nome");
-                labelFolhas.setAttribute("for", "folhas");
-                labelCor.setAttribute("for", "cor");
-                labelInicio.setAttribute("for", "dtinicio");
-                labelFim.setAttribute("for", "dtfim");
-                labelDetalhes.setAttribute("for", "detalhes");
-
-                labelNumero.append("Número");
-                labelNome.append("Nome");
-                labelFolhas.append("N° Folhas");
-                labelCor.append("Cor");
-                labelInicio.append("Data Início");
-                labelFim.append("Data Término");
-                labelDetalhes.append("Detalhes");
-
-                divInputNumero = document.createElement("div");
-                divInputNome = document.createElement("div");
-                divInputFolhas = document.createElement("div");
-                divInputCor = document.createElement("div");
-                divInputInicio = document.createElement("div");
-                divInputFim = document.createElement("div");
-                divInputDetalhes = document.createElement("div");
-
-                divInputNumero.setAttribute("class", "col-75");
-                divInputNome.setAttribute("class", "col-75");
-                divInputFolhas.setAttribute("class", "col-75");
-                divInputCor.setAttribute("class", "col-75");
-                divInputInicio.setAttribute("class", "col-75");
-                divInputFim.setAttribute("class", "col-75");
-                divInputDetalhes.setAttribute("class", "col-75");
-
-                inputNumero = document.createElement("input");
-                inputNome = document.createElement("input");
-                inputFolhas = document.createElement("input");
-                inputCor = document.createElement("input");
-                inputInicio = document.createElement("input");
-                inputFim = document.createElement("input");
-                inputDetalhes = document.createElement("textarea");
-
-                inputNumero.setAttribute("type", "number");
-                inputNumero.setAttribute("required", "required");
-                inputNumero.setAttribute("id", "numero");
-                inputNumero.setAttribute("name", "numero");
-                inputNumero.setAttribute("placeholder", "obrigatório");
-
-                inputNome.setAttribute("type", "text");
-                inputNome.setAttribute("required", "required");
-                inputNome.setAttribute("id", "nome");
-                inputNome.setAttribute("name", "nome");
-                inputNome.setAttribute("placeholder", "obrigatório");
-
-                inputFolhas.setAttribute("type", "number");
-                inputFolhas.setAttribute("required", "required");
-                inputFolhas.setAttribute("id", "folhas");
-                inputFolhas.setAttribute("name", "folhas");
-                inputFolhas.setAttribute("placeholder", "obrigatório");
-
-                inputCor.setAttribute("type", "text");
-                inputCor.setAttribute("id", "cor");
-                inputCor.setAttribute("name", "cor");
-
-                inputInicio.setAttribute("type", "date");
-                inputInicio.setAttribute("id", "dtinicio");
-                inputInicio.setAttribute("name", "dtinicio");
-
-                inputFim.setAttribute("type", "date");
-                inputFim.setAttribute("id", "dtfim");
-                inputFim.setAttribute("name", "dtfim");
-
-                inputDetalhes.setAttribute("style", "height:100px;");
-                inputDetalhes.setAttribute("id", "detalhes");
-                inputDetalhes.setAttribute("name", "detalhes");
-
-                br = document.createElement("br");
-
-                inputSubmitSalvar = document.createElement("input");
-                inputSubmitCancelar = document.createElement("input");
-
-                inputSubmitSalvar.setAttribute("type", "submit");
-                inputSubmitSalvar.setAttribute("style", "margin-top: 10px;");
-                inputSubmitSalvar.setAttribute("id", "btn_save");
-                inputSubmitSalvar.setAttribute("onclick", "SendFormCadastrar();");
-                inputSubmitSalvar.setAttribute("value", "Salvar");
-
-                inputSubmitCancelar.setAttribute("type", "submit");
-                inputSubmitCancelar.setAttribute("class", "btn-danger");
-                inputSubmitCancelar.setAttribute("onclick", "RemoveForm();");
-                inputSubmitCancelar.setAttribute("value", "Cancelar");
-
-                divLabelNumero.appendChild(labelNumero);
-                divLabelNome.appendChild(labelNome);
-                divLabelFolhas.appendChild(labelFolhas);
-                divLabelCor.appendChild(labelCor);
-                divLabelInicio.appendChild(labelInicio);
-                divLabelFim.appendChild(labelFim);
-                divLabelDetalhes.appendChild(labelDetalhes);
-
-                divInputNumero.appendChild(inputNumero);
-                divInputNome.appendChild(inputNome);
-                divInputFolhas.appendChild(inputFolhas);
-                divInputCor.appendChild(inputCor);
-                divInputInicio.appendChild(inputInicio);
-                divInputFim.appendChild(inputFim);
-                divInputDetalhes.appendChild(inputDetalhes);
-
-                div_row_inputs.appendChild(divLabelNumero);
-                div_row_inputs.appendChild(divInputNumero);
-                div_row_inputs.appendChild(divLabelNome);
-                div_row_inputs.appendChild(divInputNome);
-                div_row_inputs.appendChild(divLabelFolhas);
-                div_row_inputs.appendChild(divInputFolhas);
-                div_row_inputs.appendChild(divLabelCor);
-                div_row_inputs.appendChild(divInputCor);
-                div_row_inputs.appendChild(divLabelInicio);
-                div_row_inputs.appendChild(divInputInicio);
-                div_row_inputs.appendChild(divLabelFim);
-                div_row_inputs.appendChild(divInputFim);
-                div_row_inputs.appendChild(divLabelDetalhes);
-                div_row_inputs.appendChild(divInputDetalhes);
-                div_row_inputs.appendChild(br);
-                div_row_inputs.appendChild(inputSubmitSalvar);
-                div_row_inputs.appendChild(inputSubmitCancelar);
-
-                var metodo = "livro/listarLivros";
-
-                $.ajax
-                ({
-                    url: uri + metodo,
-                    type: 'GET',
-                    data: {},
-                    beforeSend: function () {
-                        //AlertModal("ENTRANDO...");
-                    }
-                })
-                .done(function (returnJson) {
-
-                    // ITERA O JSON (LINHA A LINHA) E CHAMA O METODO QUE PREENCHE A TABELA
-                    for (var i = 0; i < livros.length; i++) {
-
-                        if (livros[i].idLivro === parseInt(id)) {
-
-                            console.log(livros[i]);
-
-                            document.getElementById("numero").value = livros[i].numero;
-                            document.getElementById("nome").value = livros[i].nome;
-                            document.getElementById("folhas").value = livros[i].folhas;
-                            document.getElementById("cor").value = livros[i].cor;
-                            document.getElementById("dtinicio").value = livros[i].dataInicio;
-                            document.getElementById("dtfim").value = livros[i].dataFim;
-                            document.getElementById("detalhes").append(livros[i].detalhes);
-
-                        }
-
-                    }
-                })
-                .fail(function (msg) {
-                    AlertModal("Falha ao tentar obter o livro escolhido");
-                    console.log(msg);
-                });
+                if (verifiquePermissaoEditar() === true) {
 
 
+
+                    $("#div-protocols").empty();
+
+                    $("#div-row-inputs").empty();
+
+                    window.location.href = "#";
+
+                    div_row_inputs = document.getElementById("div-row-inputs");
+
+                    divLabelNumero = document.createElement("div");
+                    divLabelNome = document.createElement("div");
+                    divLabelFolhas = document.createElement("div");
+                    divLabelCor = document.createElement("div");
+                    divLabelInicio = document.createElement("div");
+                    divLabelFim = document.createElement("div");
+                    divLabelDetalhes = document.createElement("div");
+
+                    divLabelNumero.setAttribute("class", "col-25");
+                    divLabelNome.setAttribute("class", "col-25");
+                    divLabelFolhas.setAttribute("class", "col-25");
+                    divLabelCor.setAttribute("class", "col-25");
+                    divLabelInicio.setAttribute("class", "col-25");
+                    divLabelFim.setAttribute("class", "col-25");
+                    divLabelDetalhes.setAttribute("class", "col-25");
+
+                    labelNumero = document.createElement("label");
+                    labelNome = document.createElement("label");
+                    labelFolhas = document.createElement("label");
+                    labelCor = document.createElement("label");
+                    labelInicio = document.createElement("label");
+                    labelFim = document.createElement("label");
+                    labelDetalhes = document.createElement("label");
+
+                    labelNumero.setAttribute("for", "numero");
+                    labelNome.setAttribute("for", "nome");
+                    labelFolhas.setAttribute("for", "folhas");
+                    labelCor.setAttribute("for", "cor");
+                    labelInicio.setAttribute("for", "dtinicio");
+                    labelFim.setAttribute("for", "dtfim");
+                    labelDetalhes.setAttribute("for", "detalhes");
+
+                    labelNumero.append("Número");
+                    labelNome.append("Nome");
+                    labelFolhas.append("N° Folhas");
+                    labelCor.append("Cor");
+                    labelInicio.append("Data Início");
+                    labelFim.append("Data Término");
+                    labelDetalhes.append("Detalhes");
+
+                    divInputNumero = document.createElement("div");
+                    divInputNome = document.createElement("div");
+                    divInputFolhas = document.createElement("div");
+                    divInputCor = document.createElement("div");
+                    divInputInicio = document.createElement("div");
+                    divInputFim = document.createElement("div");
+                    divInputDetalhes = document.createElement("div");
+
+                    divInputNumero.setAttribute("class", "col-75");
+                    divInputNome.setAttribute("class", "col-75");
+                    divInputFolhas.setAttribute("class", "col-75");
+                    divInputCor.setAttribute("class", "col-75");
+                    divInputInicio.setAttribute("class", "col-75");
+                    divInputFim.setAttribute("class", "col-75");
+                    divInputDetalhes.setAttribute("class", "col-75");
+
+                    inputNumero = document.createElement("input");
+                    inputNome = document.createElement("input");
+                    inputFolhas = document.createElement("input");
+                    inputCor = document.createElement("input");
+                    inputInicio = document.createElement("input");
+                    inputFim = document.createElement("input");
+                    inputDetalhes = document.createElement("textarea");
+
+                    inputNumero.setAttribute("type", "number");
+                    inputNumero.setAttribute("required", "required");
+                    inputNumero.setAttribute("id", "numero");
+                    inputNumero.setAttribute("name", "numero");
+                    inputNumero.setAttribute("placeholder", "obrigatório");
+
+                    inputNome.setAttribute("type", "text");
+                    inputNome.setAttribute("required", "required");
+                    inputNome.setAttribute("id", "nome");
+                    inputNome.setAttribute("name", "nome");
+                    inputNome.setAttribute("placeholder", "obrigatório");
+
+                    inputFolhas.setAttribute("type", "number");
+                    inputFolhas.setAttribute("required", "required");
+                    inputFolhas.setAttribute("id", "folhas");
+                    inputFolhas.setAttribute("name", "folhas");
+                    inputFolhas.setAttribute("placeholder", "obrigatório");
+
+                    inputCor.setAttribute("type", "text");
+                    inputCor.setAttribute("id", "cor");
+                    inputCor.setAttribute("name", "cor");
+
+                    inputInicio.setAttribute("type", "date");
+                    inputInicio.setAttribute("id", "dtinicio");
+                    inputInicio.setAttribute("name", "dtinicio");
+
+                    inputFim.setAttribute("type", "date");
+                    inputFim.setAttribute("id", "dtfim");
+                    inputFim.setAttribute("name", "dtfim");
+
+                    inputDetalhes.setAttribute("style", "height:100px;");
+                    inputDetalhes.setAttribute("id", "detalhes");
+                    inputDetalhes.setAttribute("name", "detalhes");
+
+                    br = document.createElement("br");
+
+                    inputSubmitSalvar = document.createElement("input");
+                    inputSubmitCancelar = document.createElement("input");
+
+                    inputSubmitSalvar.setAttribute("type", "submit");
+                    inputSubmitSalvar.setAttribute("style", "margin-top: 10px;");
+                    inputSubmitSalvar.setAttribute("id", "btn_save");
+                    inputSubmitSalvar.setAttribute("onclick", "SalveEdition();");
+                    inputSubmitSalvar.setAttribute("value", "Salvar");
+
+                    inputSubmitCancelar.setAttribute("type", "submit");
+                    inputSubmitCancelar.setAttribute("class", "btn-danger");
+                    inputSubmitCancelar.setAttribute("onclick", "RemoveForm();");
+                    inputSubmitCancelar.setAttribute("value", "Cancelar");
+
+                    divLabelNumero.appendChild(labelNumero);
+                    divLabelNome.appendChild(labelNome);
+                    divLabelFolhas.appendChild(labelFolhas);
+                    divLabelCor.appendChild(labelCor);
+                    divLabelInicio.appendChild(labelInicio);
+                    divLabelFim.appendChild(labelFim);
+                    divLabelDetalhes.appendChild(labelDetalhes);
+
+                    divInputNumero.appendChild(inputNumero);
+                    divInputNome.appendChild(inputNome);
+                    divInputFolhas.appendChild(inputFolhas);
+                    divInputCor.appendChild(inputCor);
+                    divInputInicio.appendChild(inputInicio);
+                    divInputFim.appendChild(inputFim);
+                    divInputDetalhes.appendChild(inputDetalhes);
+
+                    div_row_inputs.appendChild(divLabelNumero);
+                    div_row_inputs.appendChild(divInputNumero);
+                    div_row_inputs.appendChild(divLabelNome);
+                    div_row_inputs.appendChild(divInputNome);
+                    div_row_inputs.appendChild(divLabelFolhas);
+                    div_row_inputs.appendChild(divInputFolhas);
+                    div_row_inputs.appendChild(divLabelCor);
+                    div_row_inputs.appendChild(divInputCor);
+                    div_row_inputs.appendChild(divLabelInicio);
+                    div_row_inputs.appendChild(divInputInicio);
+                    div_row_inputs.appendChild(divLabelFim);
+                    div_row_inputs.appendChild(divInputFim);
+                    div_row_inputs.appendChild(divLabelDetalhes);
+                    div_row_inputs.appendChild(divInputDetalhes);
+                    div_row_inputs.appendChild(br);
+                    div_row_inputs.appendChild(inputSubmitSalvar);
+                    div_row_inputs.appendChild(inputSubmitCancelar);
+
+                    var metodo = "livro/listarLivros";
+
+                    $.ajax
+                            ({
+                                url: uri + metodo,
+                                type: 'GET',
+                                data: {},
+                                beforeSend: function () {
+                                    //AlertModal("ENTRANDO...");
+                                }
+                            })
+                            .done(function (returnJson) {
+
+                                // PREENCHE O FORM
+                                for (var i = 0; i < livros.length; i++) {
+
+                                    if (livros[i].id === parseInt(id)) {
+
+
+
+                                        document.getElementById("numero").value = livros[i].numero;
+                                        document.getElementById("nome").value = livros[i].nome;
+                                        document.getElementById("folhas").value = livros[i].folhas;
+                                        document.getElementById("cor").value = livros[i].cor;
+                                        document.getElementById("dtinicio").value = livros[i].dataIni;
+                                        document.getElementById("dtfim").value = livros[i].dataFi;
+                                        document.getElementById("detalhes").append(livros[i].detalhes);
+
+                                    }
+
+                                }
+                            })
+                            .fail(function (msg) {
+                                AlertModal("Falha ao tentar obter o livro escolhido");
+                                console.log(msg);
+                            });
+
+                } else {
+                    AlertModal("Usuário sem permissão!");
+                }
             }
 
             /* 
@@ -496,8 +569,8 @@
                                                 "numero": numero,
                                                 "nome": nome,
                                                 "detalhes": detalhes,
-                                                "cor": cor
-                                                        //,"dataInicio": dtinicio
+                                                "cor": cor,
+                                                "dataInicio": dtinicio
                                             }),
                                     contentType: 'application/json',
                                     beforeSend: function () {
@@ -513,7 +586,7 @@
                                         cleanInputs();
                                     } else {
 
-
+                                        AlertModal("O servidor retornou um erro inesperado!");
 
                                     }
 
@@ -522,6 +595,8 @@
                                     AlertModal("Falha ao tentar cadastrar livro");
                                     console.log(msg);
                                 });
+                    } else {
+                        AlertModal("Exitem campos com preenchimento inválido!");
                     }
                 } else {
 
@@ -537,12 +612,12 @@
 
             function cleanInputs() {
 
-                document.getElementById("numero").value("");
-                document.getElementById("nome").value("");
-                document.getElementById("folhas").value("");
-                document.getElementById("cor").value("");
-                document.getElementById("dtinicio").value("");
-                document.getElementById("detalhes").value("");
+                document.getElementById("numero").value = "";
+                document.getElementById("nome").value = "";
+                document.getElementById("folhas").value = "";
+                document.getElementById("cor").value = "";
+                document.getElementById("dtinicio").value = "";
+                document.getElementById("detalhes").value = "";
 
 
             }
@@ -731,7 +806,7 @@
                             //var livros = JSON.parse(returnJson);
 
                             livros = returnJson;
-                            console.log(livros);
+
                             // PEGA A DIV PAI E ESVAZIA ELA
                             tdiv = document.getElementById("div-protocols");
                             $("#div-protocols").empty();
@@ -862,7 +937,8 @@
 
     </head>
 
-    <body onload="GetListLivros();exibeButtonInserir();">
+    <body onload="GetListLivros();
+            exibeButtonInserir();">
 
         <!-- \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ NAV MENU \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ -->
         <nav class="pushy pushy-left" data-focus="#first-link">

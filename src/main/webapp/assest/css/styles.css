@@ -163,3 +163,8 @@ body {
     padding-bottom:0px !important;
 
 }
+
+table{ 
+    margin-right:auto !important; 
+    margin-left:auto !important; 
+}
