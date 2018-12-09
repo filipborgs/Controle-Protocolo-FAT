@@ -6,8 +6,10 @@
 package com.br.fat.controleprotocolo.controller;
 
 import com.br.fat.controleprotocolo.model.Usuario;
+import com.google.gson.Gson;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -20,11 +22,22 @@ import javax.xml.bind.DatatypeConverter;
  */
 public class ControllerToken {
 
-    private SecretKey key;
+    private final SecretKey key;
 
     public ControllerToken() {
-        byte[] keyBytes = DatatypeConverter.parseBase64Binary("asdjaskdasjdaasdjaskdasjdaasdjaskdasjdaasdjaskdasjda");
+        byte[] keyBytes = DatatypeConverter.parseBase64Binary("*cMze7bgKnb5dWK!&7puK=6ZTPJ4#+QF?hHD-%4eN7kBDRfF$S#Jm4");
         this.key = Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    public String gerarToken(Usuario u) {
+
+        Gson g = new Gson();
+        String o = g.toJson(u);
+
+        JwtBuilder token = Jwts.builder().claim("user", o).setIssuer(u.getUser()).signWith(key);
+        String stoken = token.compact();
+
+        return stoken;
     }
 
     public Claims validarToken(String token) throws Exception {

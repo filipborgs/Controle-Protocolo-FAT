@@ -17,22 +17,26 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.SecurityContext;
 
 /**
  *
  * @author Filipe Borges
  */
 @Path("/motivo")
-public class MotivoRest {
+public class MotivoRest extends Autenticacao {
 
-    private final ControllerMotivo control = new ControllerMotivo();
+    private ControllerMotivo control;
     private final Gson g = new Gson();
 
     @POST
+    @Secured
     @Path("/cadastrarMotivo")
-    public String cadastrarMotivo(String json) {
-        Motivo m = g.fromJson(json, Motivo.class);
+    public String cadastrarMotivo(String json, @Context SecurityContext sc) {
         try {
+            control = new ControllerMotivo(super.criarUser(sc));
+            Motivo m = g.fromJson(json, Motivo.class);
             m = control.createMotivo(m);
             return g.toJson(m);
         } catch (Exception ex) {
@@ -42,9 +46,11 @@ public class MotivoRest {
     }
 
     @GET
+    @Secured
     @Path("/listarMotivo")
-    public String listarMotivos() {
+    public String listarMotivos(@Context SecurityContext sc) {
         try {
+            control = new ControllerMotivo(super.criarUser(sc));
             return g.toJson(control.getAllMotivo());
         } catch (Exception ex) {
             Logger.getLogger(MotivoRest.class.getName()).log(Level.SEVERE, null, ex);
@@ -53,10 +59,12 @@ public class MotivoRest {
     }
 
     @DELETE
+    @Secured
     @Path("/deletarMotivo")
-    public String deletarMotivo(@QueryParam("idMotivo") int idMotivo) {
+    public String deletarMotivo(@QueryParam("idMotivo") int idMotivo, @Context SecurityContext sc) {
         Gson g = new Gson();
         try {
+            control = new ControllerMotivo(super.criarUser(sc));
             control.removeMotivo(idMotivo);
             return g.toJson("Motivo deletado com sucesso");
         } catch (Exception ex) {
@@ -66,11 +74,13 @@ public class MotivoRest {
     }
 
     @PUT
+    @Secured
     @Path("/editarLivro")
     @Consumes("application/json")
-    public String editarMotivo(String json) {
+    public String editarMotivo(String json, @Context SecurityContext sc) {
         Gson g = new Gson();
         try {
+            control = new ControllerMotivo(super.criarUser(sc));
             control.editMotivo(json);
             return g.toJson("Motivo editado com sucesso");
 

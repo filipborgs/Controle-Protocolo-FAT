@@ -19,23 +19,27 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.SecurityContext;
 
 /**
  *
  * @author Filipe Borges
  */
 @Path("/protocolo")
-public class ProtocoloRest {
+public class ProtocoloRest extends Autenticacao {
 
     private Gson g = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 
-    private ControllerProtocolo control = new ControllerProtocolo();
+    private ControllerProtocolo control;
 
     @GET
+    @Secured
     @Path("/listarProtocolo")
     @Produces("application/json")
-    public String listarProtocolo() {
+    public String listarProtocolo(@Context SecurityContext sc) {
         try {
+            control = new ControllerProtocolo(super.criarUser(sc));
             return g.toJson(control.getAllMotivo());
         } catch (Exception ex) {
             Logger.getLogger(ProtocoloRest.class.getName()).log(Level.SEVERE, null, ex);
@@ -44,11 +48,13 @@ public class ProtocoloRest {
     }
 
     @POST
+    @Secured
     @Path("/cadastrarProtocolo")
     @Produces("application/json")
     @Consumes("application/json")
-    public String cadastrarProtocolo(String json) {
+    public String cadastrarProtocolo(String json, @Context SecurityContext sc) {
         try {
+            control = new ControllerProtocolo(super.criarUser(sc));
             Protocolo p = g.fromJson(json, Protocolo.class);
             p = control.createProtocolo(p);
             return g.toJson(p);
@@ -58,10 +64,12 @@ public class ProtocoloRest {
     }
 
     @DELETE
+    @Secured
     @Path("/deletarProtocolo")
-    public String deletarProtocolo(@QueryParam("idProtocolo") int idProtocolo) {
+    public String deletarProtocolo(@QueryParam("idProtocolo") int idProtocolo, @Context SecurityContext sc) {
         Gson g = new Gson();
         try {
+            control = new ControllerProtocolo(super.criarUser(sc));
             control.removeProtocolo(idProtocolo);
             return g.toJson("Protocolo deletado com sucesso");
         } catch (Exception ex) {
@@ -71,9 +79,10 @@ public class ProtocoloRest {
     }
 
     @PUT
+    @Secured
     @Path("/editarProtocolo")
     @Consumes("application/json")
-    public String editarProtocolo(String json) {
+    public String editarProtocolo(String json, @Context SecurityContext sc) {
         Gson g = new Gson();
         try {
             control.editProtocolo(json);

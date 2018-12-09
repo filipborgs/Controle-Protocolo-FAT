@@ -46,12 +46,12 @@ public class UsuarioDAO extends DatabaseUtil {
 
         user.setId(rs.getInt(UsuarioDaoUtil.USUARIO_ATRIBUTO_ID));
         user.setNome(rs.getString(UsuarioDaoUtil.USUARIO_ATRIBUTO_NOME));
-        user.setSenha(rs.getString(UsuarioDaoUtil.USUARIO_ATRIBUTO_SENHA));
         user.setStatus(rs.getString(UsuarioDaoUtil.USUARIO_ATRIBUTO_STATUS).charAt(0));
         user.setPermissao(new Permissao());
         user.getPermissao().setDelete(rs.getString(UsuarioDaoUtil.USUARIO_ATRIBUTO_DELETAR).charAt(0));
         user.getPermissao().setWrite(rs.getString(UsuarioDaoUtil.USUARIO_ATRIBUTO_INSERIR).charAt(0));
         user.getPermissao().setUpdate(rs.getString(UsuarioDaoUtil.USUARIO_ATRIBUTO_EDITAR).charAt(0));
+        user.getPermissao().setRead(rs.getString(UsuarioDaoUtil.USUARIO_ATRIBUTO_LER).charAt(0));
 
         return user;
     }

@@ -6,7 +6,6 @@
 package com.br.fat.controleprotocolo.view.services;
 
 import com.br.fat.controleprotocolo.controller.ControllerPessoa;
-import com.br.fat.controleprotocolo.model.Pessoa;
 import com.google.gson.Gson;
 import java.util.List;
 import java.util.logging.Level;
@@ -19,22 +18,26 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.SecurityContext;
 
 /**
  *
  * @author Filipe Borges
  */
 @Path("/pessoa")
-public class PessoaRest {
+public class PessoaRest extends Autenticacao {
 
-    private final ControllerPessoa control = new ControllerPessoa();
+    private ControllerPessoa control;
     private Gson g = new Gson();
 
     @POST
+    @Secured
     @Path("/cadastrarPessoa")
     @Consumes("application/json")
-    public String cadastrarPessoa(String json) {
+    public String cadastrarPessoa(String json, @Context SecurityContext sc) {
         try {
+            control = new ControllerPessoa(super.criarUser(sc));
             return control.createPessoa(json);
         } catch (Exception ex) {
             Logger.getLogger(PessoaRest.class.getName()).log(Level.SEVERE, null, ex);
@@ -43,12 +46,13 @@ public class PessoaRest {
     }
 
     @GET
+    @Secured
     @Path("/listarPessoas")
     @Produces("application/json")
-    public String listarLivros() {
-        Gson g = new Gson();
+    public String listarLivros(@Context SecurityContext sc) {
 
         try {
+            control = new ControllerPessoa(super.criarUser(sc));
             List lista = control.getAllPessoa();
             return g.toJson(lista);
         } catch (Exception ex) {
@@ -56,12 +60,13 @@ public class PessoaRest {
             return g.toJson(ex.getMessage());
         }
     }
-    
+
     @DELETE
+    @Secured
     @Path("/deletarPessoa")
-    public String deletarPessoa(@QueryParam("idPessoa") int idPessoa) {
-        Gson g = new Gson();
+    public String deletarPessoa(@QueryParam("idPessoa") int idPessoa, @Context SecurityContext sc) {
         try {
+            control = new ControllerPessoa(super.criarUser(sc));
             control.removePessoa(idPessoa);
             return g.toJson("Pessoa deletado com sucesso");
         } catch (Exception ex) {
@@ -71,10 +76,10 @@ public class PessoaRest {
     }
 
     @PUT
+    @Secured
     @Path("/editarPessoa")
     @Consumes("application/json")
     public String editarLivro(String json) {
-        Gson g = new Gson();
         try {
             control.editPessoa(json);
             return g.toJson("Pessoa editado com sucesso");
@@ -82,7 +87,6 @@ public class PessoaRest {
         } catch (Exception ex) {
             Logger.getLogger(LivroRest.class.getName()).log(Level.SEVERE, null, ex);
             return g.toJson("Erro");
-
         }
     }
 

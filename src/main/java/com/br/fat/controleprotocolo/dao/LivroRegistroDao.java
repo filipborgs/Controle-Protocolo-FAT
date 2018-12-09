@@ -72,7 +72,7 @@ public class LivroRegistroDao extends DatabaseUtil {
                 + LivroDaoUtil.LIVRO_ATRIBUTO_DATA_INICIO + "=? WHERE " + LivroDaoUtil.LIVRO_ATRIBUTO_ID + "= ?";
         super.getCon();
         try {
-            stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            stmt = con.prepareStatement(sql);
             stmt.setString(1, l.getNome());
             stmt.setInt(2, l.getNumero());
             stmt.setInt(3, l.getFolhas());

@@ -25,16 +25,18 @@ import javax.ws.rs.core.SecurityContext;
  * @author Filipe Borges
  */
 @Path("/livro")
-public class LivroRest {
+public class LivroRest extends Autenticacao {
 
-    private ControllerLivroRegistro control = new ControllerLivroRegistro();
+    private ControllerLivroRegistro control;
 
     @POST
+    @Secured
     @Path("/cadastrarLivro")
     @Produces("application/json")
     @Consumes("application/json")
-    public String cadastrarUsuario(String json) {
+    public String cadastrarUsuario(String json, @Context SecurityContext sc) {
         try {
+            control = new ControllerLivroRegistro(super.criarUser(sc));
             return control.insertLivro(json);
         } catch (Exception ex) {
             Logger.getLogger(LivroRest.class.getName()).log(Level.SEVERE, null, ex);
@@ -44,10 +46,13 @@ public class LivroRest {
     }
 
     @GET
+    @Secured
     @Path("/listarLivros")
     @Produces("application/json")
-    public String listarLivros() {
+    public String listarLivros(@Context SecurityContext sc) {
         try {
+            //cria instancia do controller passando como parametro o usuario
+            control = new ControllerLivroRegistro(super.criarUser(sc));
             return control.getAllLivros();
         } catch (Exception ex) {
             Logger.getLogger(LivroRest.class.getName()).log(Level.SEVERE, null, ex);
@@ -55,28 +60,15 @@ public class LivroRest {
             return g.toJson(ex.getMessage());
         }
     }
-//    @GET
-//    @Secured
-//    @Path("/listarLivros")
-//    @Produces("application/json")
-//    public String listarLivros(@Context SecurityContext sc) {
-//        try {
-//
-//            String s = sc.getUserPrincipal().getName();
-//            System.out.println(s);
-//            return control.getAllLivros();
-//        } catch (Exception ex) {
-//            Logger.getLogger(LivroRest.class.getName()).log(Level.SEVERE, null, ex);
-//            Gson g = new Gson();
-//            return g.toJson(ex.getMessage());
-//        }
-//    }
 
     @DELETE
+    @Secured
     @Path("/deletarLivro")
-    public String deletarLivro(@QueryParam("idLivro") int idLivro) {
+    public String deletarLivro(@QueryParam("idLivro") int idLivro, @Context SecurityContext sc) {
         Gson g = new Gson();
         try {
+            //cria instancia do controller passando como parametro o usuario
+            control = new ControllerLivroRegistro(super.criarUser(sc));
             control.removeLivro(idLivro);
             return g.toJson("Livro deletado com sucesso");
         } catch (Exception ex) {
@@ -88,9 +80,11 @@ public class LivroRest {
     @PUT
     @Path("/editarLivro")
     @Consumes("application/json")
-    public String editarLivro(String json) {
+    public String editarLivro(String json, @Context SecurityContext sc) {
         Gson g = new Gson();
         try {
+            //cria instancia do controller passando como parametro o usuario
+            control = new ControllerLivroRegistro(super.criarUser(sc));
             control.editLivro(json);
             return g.toJson("Livro editado com sucesso");
 

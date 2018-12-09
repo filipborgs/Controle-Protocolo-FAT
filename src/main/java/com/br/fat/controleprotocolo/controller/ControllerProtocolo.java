@@ -7,6 +7,7 @@ package com.br.fat.controleprotocolo.controller;
 
 import com.br.fat.controleprotocolo.dao.ProtocoloDAO;
 import com.br.fat.controleprotocolo.model.Protocolo;
+import com.br.fat.controleprotocolo.model.Usuario;
 import java.util.List;
 
 /**
@@ -17,7 +18,13 @@ public class ControllerProtocolo extends Controller {
 
     private final ProtocoloDAO pdao = new ProtocoloDAO();
 
+    public ControllerProtocolo(Usuario u) {
+        super(u);
+    }
+
     public Protocolo createProtocolo(Protocolo p) throws Exception {
+        this.verifyPermission(this.user.getPermissao().getWrite());
+
         if (p.getLivro() == null
                 || p.getDestinatario() == null
                 || p.getMotivo() == null
@@ -43,10 +50,14 @@ public class ControllerProtocolo extends Controller {
     }
 
     public List<Protocolo> getAllMotivo() throws Exception {
+        this.verifyPermission(this.user.getPermissao().getRead());
+
         return pdao.selectAllProtocolo();
     }
 
     public void removeProtocolo(int idProtocolo) throws Exception {
+        this.verifyPermission(this.user.getPermissao().getDelete());
+
         if (idProtocolo <= 0) {
             throw new Exception();
         } else {
@@ -55,7 +66,12 @@ public class ControllerProtocolo extends Controller {
     }
 
     public void editProtocolo(String jsonProtocolo) throws Exception {
+        this.verifyPermission(this.user.getPermissao().getUpdate());
         Protocolo p = gson.fromJson(jsonProtocolo, Protocolo.class);
+        if(p.getId() <= 0){
+            throw new Exception();
+        }
+
         pdao.updateProtocolo(p);
     }
 }
