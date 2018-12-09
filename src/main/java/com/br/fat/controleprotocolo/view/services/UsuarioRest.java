@@ -16,6 +16,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 
 /**
@@ -37,7 +38,7 @@ public class UsuarioRest {
             Usuario user = control.autenticacao(senha, login);
             String u = g.toJson(user);
             String token = control.gerarToken(user);
-            return Response.ok(u).header("token", token).build();
+            return Response.ok(u).header(HttpHeaders.AUTHORIZATION, token).build();
 //            return g.toJson(control.autenticacao(senha, login));
 
         } catch (Exception ex) {

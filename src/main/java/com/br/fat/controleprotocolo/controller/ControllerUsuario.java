@@ -62,23 +62,10 @@ public class ControllerUsuario {
         byte[] keyBytes = DatatypeConverter.parseBase64Binary("asdjaskdasjdaasdjaskdasjdaasdjaskdasjdaasdjaskdasjda");
         SecretKey key = Keys.hmacShaKeyFor(keyBytes);
 
-        JwtBuilder token = Jwts.builder().claim("obj", o).setIssuer(u.getUser()).signWith(key);
+        JwtBuilder token = Jwts.builder().claim("user", o).setIssuer(u.getUser()).signWith(key);
         String stoken = token.compact();
 
-        Jws<Claims> jws;
-
-        try {
-            jws = Jwts.parser() // (1)
-                    .setSigningKey(key) // (2)
-                    .parseClaimsJws(stoken); // (3)
-            System.out.println(jws.toString());
-            String a = (String) jws.getBody().get("obj");
-            Usuario as = g.fromJson(a, Usuario.class);
-            System.out.println("");
-        } catch (JwtException ex) {       // (4)
-
-            // we *cannot* use the JWT as intended by its creator
-        }
+     
 
         return stoken;
 

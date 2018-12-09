@@ -29,6 +29,7 @@ public class ApplicationConfig extends Application {
      * If required, comment out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
+        resources.add(com.br.fat.controleprotocolo.view.services.FilterAuthentication.class);
         resources.add(com.br.fat.controleprotocolo.view.services.LivroRest.class);
         resources.add(com.br.fat.controleprotocolo.view.services.MotivoRest.class);
         resources.add(com.br.fat.controleprotocolo.view.services.PessoaRest.class);

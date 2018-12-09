@@ -17,6 +17,8 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.SecurityContext;
 
 /**
  *
@@ -53,6 +55,22 @@ public class LivroRest {
             return g.toJson(ex.getMessage());
         }
     }
+//    @GET
+//    @Secured
+//    @Path("/listarLivros")
+//    @Produces("application/json")
+//    public String listarLivros(@Context SecurityContext sc) {
+//        try {
+//
+//            String s = sc.getUserPrincipal().getName();
+//            System.out.println(s);
+//            return control.getAllLivros();
+//        } catch (Exception ex) {
+//            Logger.getLogger(LivroRest.class.getName()).log(Level.SEVERE, null, ex);
+//            Gson g = new Gson();
+//            return g.toJson(ex.getMessage());
+//        }
+//    }
 
     @DELETE
     @Path("/deletarLivro")
