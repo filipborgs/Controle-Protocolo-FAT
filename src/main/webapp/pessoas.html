@@ -1,106 +1,840 @@
 <!DOCTYPE html>
 
-<html lang="en" >
+<html lang="br" >
 
-	<head>
-	
-		<meta charset="UTF-8">
-		
-		<!--====== TITLE TAG ======-->
-		<title>Gerenciador de Protocolos</title>
-		
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<script src="assest/js/vendor/jquery-1.12.4.min.js"></script>
-		
-		<!-- ===== TABLE RESPONSIVE ===== -->
-		<link rel="stylesheet" href="assest/css/style.css">
-		
-		 <!--====== FAVICON ICON =======-->
-		<link rel="shortcut icon" type="image/ico" href="assest/img/favicon.png" />
+    <head>
 
-		<!-- /\/\/\/\ TABLE RESPONSIVE /\/\/\/\ -->
-		
-		<link rel="stylesheet" href="assest/css/normalize.css">
+        <meta charset="UTF-8">
+
+        <!--====== TITLE TAG ======-->
+        <title>Gerenciador de Protocolos</title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="assest/js/vendor/jquery-1.12.4.min.js"></script>
+
+        <!--====== FAVICON ICON =======-->
+        <link rel="shortcut icon" type="image/ico" href="assest/img/favicon.png" />
+
+        <!-- /\/\/\/\ TABLE RESPONSIVE /\/\/\/\ -->
+
+        <link rel="stylesheet" href="assest/css/normalize.css">
         <link rel="stylesheet" href="assest/css/demo.css">
         <!-- Pushy CSS -->
         <link rel="stylesheet" href="assest/css/pushy.css">
-		
-		<script src="assest/js/project/dados_connection.js"></script>
-		<script src="assest/js/project/control_user.js"></script>
-		
-		<style>
-	
-			.footer {
-			
-			bottom:0;
-			width:100%;
-			padding-left:0px;
-			padding-top:10%;
-			padding-bottom:0px;
-			
-			}
 
-		</style>
-		 
-	</head>
+        <script src="assest/js/project/dados_connection.js"></script>
+        <script src="assest/js/project/control_user.js"></script>
+        <script src="assest/js/project/alertas.js"></script>
+        <!-- ===== TABLE RESPONSIVE ===== -->
+        <link rel="stylesheet" href="assest/css/style.css">
+        <link rel="stylesheet" href="assest/css/styles.css">
 
-	<body>
-		
-		<nav class="pushy pushy-left" data-focus="#first-link">
+
+        <!-- \/\/\/\/\/\/\/\/ SCRIPTS JS \/\/\/\/\/\/\/\/ -->
+        <script>
+
+            /* 
+             *  **********   FUNÇÃO PARA EXIBIR O BOTÃO DE INSERIR
+             *  **********      APENAS DE USUÁRIO TIVER PERMISSÃO
+             */
+
+            function exibeButtonInserir() {
+
+                if (verifiquePermissaoInserir() === true) {
+
+                    divImg = document.getElementById("img_option_cadastrar");
+
+                    image = document.createElement("img");
+                    image.setAttribute("src", "assest/img/new.png");
+                    image.setAttribute("height", "45");
+                    image.setAttribute("style", "cursor:pointer;");
+                    image.setAttribute("onclick", "CallFormCadastrar();");
+                    image.setAttribute("width", "47");
+                    image.setAttribute("title", "Adicionar");
+
+                    divImg.append(image);
+                }
+
+            }
+
+            /* 
+             *  **********   FUNÇÃO PARA EXIBIR QUALQUER MENSAGEM NA TELA 
+             *  **********  USANDO O MODAL QUE É CHAMADO PELA FUNÇÃO
+             */
+
+            function AlertModal(msg) {
+
+                sendMensage = document.getElementById("sendMensage");
+                $("#sendMensage").empty();
+                sendMensage.append(msg);
+                window.location.href = "#popup1";
+
+            }
+
+            /* 
+             *  **********   IDENTIFICA O ATO DE ENTRAR NA LINHA COM O MOUSE
+             *  ********** E ALTERA O ESTILO NA LINHA PARA DAR DESTAQUE 
+             */
+
+            function linhaI(id) {
+                tr1 = document.getElementById(id);
+
+                tr1.setAttribute("style", "background-color:#999;cursor:pointer;");
+            }
+
+            /* 
+             *  **********   IDENTIFICA O ATO DE SAIR DA LINHA COM O MOUSE
+             *  ********** E REMOVE O ESTILO DA LINHA PARA TIRAR O DESTAQUE 
+             */
+
+            function linhaO(id) {
+                tr1 = document.getElementById(id);
+                tr1.removeAttribute("style");
+            }
+
+            /* 
+             *  **********   FUNÇÃO PARA SALVAR EDIAÇÃO DO LIVRO E 
+             *  ********** REALIZAR ENVIO DO JSON PARA FAZER O UPDATE 
+             */
+
+            function SalveEdition(id) {
+
+                if (verifiquePermissaoEditar() === true) {
+
+                    if (ValidaCampos() === true) {
+
+                        nome = document.getElementById("nome").value;
+                        setor = document.getElementById("setor").value;
+                        descricao = document.getElementById("descricao").value;
+
+                        var metodo = "pessoa/editarPessoa";
+
+                        $.ajax
+                                ({
+                                    url: uri + metodo,
+                                    type: 'PUT',
+                                    data: JSON.stringify(
+                                            {
+                                                id: id,
+                                                nome: nome,
+                                                setor: setor,
+                                                descricao: descricao
+                                            }),
+                                    contentType: 'application/json',
+                                    beforeSend: function () {
+                                        //AlertModal("ENTRANDO...");
+                                    }
+                                })
+                                .done(function (returnJson) {
+
+                                    if (returnJson === "\"Erro\"") {
+
+                                        AlertModal("O servidor retornou um erro inesperado!");
+
+                                    } else {
+
+                                        AlertModal("Sucesso!");
+                                        RemoveForm();
+                                        GetListPessoas();
+
+                                    }
+
+                                })
+                                .fail(function (msg) {
+                                    AlertModal("Falha ao tentar editar a pessoa");
+                                    console.log(msg);
+                                });
+
+
+                    } else {
+                        AlertModal("Exitem campos com preenchimento inválido!");
+                    }
+
+                } else {
+                    AlertModal("Usuário sem permissão!");
+                }
+
+            }
+
+            /* 
+             *  **********   FUNÇÃO PARA VALIDAR OS CAMPOS DE INPUT 
+             *  **********       ANTES DE ENVIAR O FORMULÁRIO 
+             */
+
+            function ValidaCampos() {
+
+                noerros = true;
+
+                nome = document.getElementById("nome");
+                setor = document.getElementById("setor");
+
+                if (nome.value === "") {
+                    noerros = false;
+                    nome.setAttribute("style", "background: palegoldenrod;");
+                } else {
+                    nome.removeAttribute("style");
+                }
+
+                if (setor.value === "") {
+                    noerros = false;
+                    setor.setAttribute("style", "background: palegoldenrod;");
+                } else {
+                    setor.removeAttribute("style");
+                }
+
+                return noerros;
+
+            }
+
+            /* 
+             *  **********   FUNÇÃO PARA CONFIRMAR A EXCLUIR UM LIVRO, 
+             *  ********** REALIZAR ENVIO DO JSON COM O ID PARA FAZER O UPDATE 
+             */
+
+            function RemoveItem(id) {
+
+                var metodo = "pessoa/deletarPessoa";
+                tokin = getToken();
+
+                id = parseInt(id);
+
+                $.ajax
+                        ({
+                            url: uri + metodo + "?idPessoa=" + id,
+                            type: 'DELETE',
+                            data: {},
+                            beforeSend: function () {
+                                //AlertModal("ENTRANDO...");
+                            }
+                        })
+                        .done(function (returnJson) {
+
+                            console.log(returnJson);
+
+                            if (returnJson === "\"Erro\"") {
+                                AlertModal("Não foi possível realizar a exclusão!");
+                            } else {
+                                AlertModal("Exclusão realizada com sucesso!");
+                                GetListPessoas();
+                            }
+
+                        })
+                        .fail(function (msg) {
+
+                            AlertModal("Falha ao solicitar a operação");
+
+                            console.log(msg);
+                        });
+
+
+            }
+
+            /* 
+             *  **********   FUNÇÃO PARA CONFIRMAR A EXCLUIR UM LIVRO, 
+             *  ********** REALIZAR A PERGUNTA SE DESEJA REALMENTE EXCLUIR 
+             */
+
+            function ConfirmExclusao(id) {
+
+                CloseModal();
+
+                sendMensage = document.getElementById("sendMensage");
+                $("#sendMensage").empty();
+
+                div = document.createElement("div");
+                div.setAttribute("style", "");
+
+                div.append("Tem certeza que deseja excuir?");
+
+                sendMensage.appendChild(div);
+
+                confirm = document.createElement("input");
+                confirm.setAttribute("type", "submit");
+                confirm.setAttribute("value", "Confirmar");
+                confirm.setAttribute("class", "btn-danger");
+                confirm.setAttribute("onclick", "RemoveItem(" + id + ")");
+
+                cancelar = document.createElement("input");
+                cancelar.setAttribute("type", "submit");
+                cancelar.setAttribute("value", "Cancelar");
+                cancelar.setAttribute("style", "margin-right: 10px; margin-top: 10px;");
+                cancelar.setAttribute("onclick", "CloseModal();");
+
+                sendMensage.appendChild(cancelar);
+                sendMensage.appendChild(confirm);
+
+                window.location.href = "#popup1";
+
+            }
+
+            /* 
+             *  **********   FUNÇÃO PARA FECHAR O MODAL 
+             */
+
+            function CloseModal() {
+
+                window.location.href = "#";
+
+            }
+
+            /* 
+             *  **********   FUNÇÃO PARA OBTER OS CAMPOS DE INPUT E 
+             *  ********** REALIZAR ENVIO DO JSON PARA FAZER O UPDATE 
+             */
+
+            function CallFormEditar(id) {
+
+                if (verifiquePermissaoEditar() === true) {
+
+                    $("#div-protocols").empty();
+
+                    $("#div-row-inputs").empty();
+
+                    window.location.href = "#";
+
+                    div_row_inputs = document.getElementById("div-row-inputs");
+
+                    divLabelNome = document.createElement("div");
+                    divLabelSetor = document.createElement("div");
+                    divLabelDescricao = document.createElement("div");
+
+                    divLabelNome.setAttribute("class", "col-25");
+                    divLabelSetor.setAttribute("class", "col-25");
+                    divLabelDescricao.setAttribute("class", "col-25");
+
+                    labelNome = document.createElement("label");
+                    labelSetor = document.createElement("label");
+                    labelDescricao = document.createElement("label");
+
+                    labelNome.setAttribute("for", "nome");
+                    labelSetor.setAttribute("for", "setor");
+                    labelDescricao.setAttribute("for", "descricao");
+
+                    labelNome.append("Nome");
+                    labelSetor.append("Setor");
+                    labelDescricao.append("Descrição");
+
+                    divInputNome = document.createElement("div");
+                    divInputSetor = document.createElement("div");
+                    divInputDescricao = document.createElement("div");
+
+                    divInputNome.setAttribute("class", "col-75");
+                    divInputSetor.setAttribute("class", "col-75");
+                    divInputDescricao.setAttribute("class", "col-75");
+
+                    inputNome = document.createElement("input");
+                    inputSetor = document.createElement("input");
+                    inputDescricao = document.createElement("textarea");
+
+                    inputNome.setAttribute("type", "text");
+                    inputNome.setAttribute("required", "required");
+                    inputNome.setAttribute("id", "nome");
+                    inputNome.setAttribute("name", "nome");
+                    inputNome.setAttribute("placeholder", "obrigatório");
+
+                    inputSetor.setAttribute("type", "text");
+                    inputSetor.setAttribute("id", "setor");
+                    inputSetor.setAttribute("name", "setor");
+                    inputSetor.setAttribute("placeholder", "obrigatório");
+
+                    inputDescricao.setAttribute("style", "height:100px;");
+                    inputDescricao.setAttribute("id", "descricao");
+                    inputDescricao.setAttribute("name", "descricao");
+
+                    br = document.createElement("br");
+
+                    inputSubmitSalvar = document.createElement("input");
+                    inputSubmitCancelar = document.createElement("input");
+
+                    inputSubmitSalvar.setAttribute("type", "submit");
+                    inputSubmitSalvar.setAttribute("style", "margin-top: 10px;");
+                    inputSubmitSalvar.setAttribute("id", "btn_save");
+                    inputSubmitSalvar.setAttribute("onclick", "SalveEdition("+id+");");
+                    inputSubmitSalvar.setAttribute("value", "Salvar");
+
+                    inputSubmitCancelar.setAttribute("type", "submit");
+                    inputSubmitCancelar.setAttribute("class", "btn-danger");
+                    inputSubmitCancelar.setAttribute("onclick", "RemoveForm();");
+                    inputSubmitCancelar.setAttribute("value", "Cancelar");
+
+                    divLabelNome.appendChild(labelNome);
+                    divLabelSetor.appendChild(labelSetor);
+                    divLabelDescricao.appendChild(labelDescricao);
+
+                    divInputNome.appendChild(inputNome);
+                    divInputSetor.appendChild(inputSetor);
+                    divInputDescricao.appendChild(inputDescricao);
+
+                    div_row_inputs.appendChild(divLabelNome);
+                    div_row_inputs.appendChild(divInputNome);
+                    div_row_inputs.appendChild(divLabelSetor);
+                    div_row_inputs.appendChild(divInputSetor);
+                    div_row_inputs.appendChild(divLabelDescricao);
+                    div_row_inputs.appendChild(divInputDescricao);
+                    div_row_inputs.appendChild(br);
+                    div_row_inputs.appendChild(inputSubmitSalvar);
+                    div_row_inputs.appendChild(inputSubmitCancelar);
+
+                    var metodo = "pessoa/listarPessoas";
+
+                    $.ajax
+                            ({
+                                url: uri + metodo,
+                                type: 'GET',
+                                data: {},
+                                beforeSend: function () {
+                                    //AlertModal("ENTRANDO...");
+                                }
+                            })
+                            .done(function (returnJson) {
+
+                                // PREENCHE O FORM
+                                for (var i = 0; i < returnJson.length; i++) {
+
+                                    if (returnJson[i].id === parseInt(id)) {
+
+                                        document.getElementById("nome").value = returnJson[i].nome;
+                                        document.getElementById("setor").value = returnJson[i].setor;
+                                        document.getElementById("descricao").value = returnJson[i].descricao;
+
+                                    }
+
+                                }
+                            })
+                            .fail(function (msg) {
+                                AlertModal("Falha ao tentar obter o livro escolhido");
+                                console.log(msg);
+                            });
+
+                } else {
+                    AlertModal("Usuário sem permissão!");
+                }
+            }
+
+            /* 
+             *  **********   FUNÇÃO PARA CHAMAR A EXIBIÇÃO DO MODAL 
+             *  ********** QUE APRESENTA AS OPÇÕES DE EXCLUIR E EDITAR
+             */
+
+            function chamaModal(id) {
+
+                sendMensage = document.getElementById("sendMensage");
+                $("#sendMensage").empty();
+
+                div = document.createElement("div");
+                div.setAttribute("style", "");
+
+                div.append("Selecione o que deseja fazer:");
+
+                sendMensage.appendChild(div);
+
+                excluir = document.createElement("input");
+                excluir.setAttribute("type", "submit");
+                excluir.setAttribute("value", "excluir");
+                excluir.setAttribute("class", "btn-danger");
+                excluir.setAttribute("onclick", "ConfirmExclusao(" + id + ")");
+
+                editar = document.createElement("input");
+                editar.setAttribute("type", "submit");
+                editar.setAttribute("value", "editar");
+                editar.setAttribute("style", "margin-right: 10px; margin-top: 10px;");
+                editar.setAttribute("onclick", "CallFormEditar(" + id + ")");
+
+                if (verifiquePermissaoExcluir() === true) {
+                    sendMensage.appendChild(excluir);
+                }
+
+                if (verifiquePermissaoEditar() === true) {
+                    sendMensage.appendChild(editar);
+                }
+
+                window.location.href = "#popup1";
+            }
+
+            /* 
+             *  **********   FUNÇÃO PARA OBTER OS CAMPOS DO INPUT E 
+             *  ********** REALIZAR ENVIO DO JSON PARA FAZER O INSERT (CADASTRAR LIVRO) 
+             */
+
+            function SendFormCadastrar() {
+
+                if (verifiquePermissaoInserir() === true) {
+
+                    if (ValidaCampos() === true) {
+
+                        nome = document.getElementById("nome").value;
+                        setor = document.getElementById("setor").value;
+                        descricao = document.getElementById("descricao").value;
+
+                        var metodo = "pessoa/cadastrarPessoa";
+
+                        $.ajax
+                                ({
+                                    url: uri + metodo,
+                                    type: 'POST',
+                                    data: JSON.stringify(
+                                            {
+                                                nome: nome,
+                                                setor: setor,
+                                                descricao: descricao
+                                            }),
+                                    contentType: 'application/json',
+                                    beforeSend: function () {
+                                        //AlertModal("ENTRANDO...");
+                                    }
+                                })
+                                .done(function (returnJson) {
+
+                                    var returnJson = JSON.parse(returnJson);
+
+                                    if (returnJson.id) {
+
+                                        AlertModal("Sucesso!");
+
+                                        cleanInputs();
+
+                                    } else {
+
+                                        AlertModal("O servidor retornou um erro inesperado!");
+                                        //console.log(returnJson);
+                                    }
+
+                                })
+                                .fail(function (msg) {
+                                    AlertModal("Falha ao tentar cadastrar pessoa");
+                                    console.log(msg);
+                                });
+                    } else {
+                        AlertModal("Exitem campos com preenchimento inválido!");
+                    }
+                } else {
+
+                    AlertModal("Usuário sem permissão!");
+
+                }
+
+            }
+
+            /* 
+             *  **********   FUNÇÃO PARA LIMPAR TODOS OS CAMPOS DA TELA 
+             */
+
+            function cleanInputs() {
+
+                document.getElementById("nome").value = "";
+                document.getElementById("setor").value = "";
+                document.getElementById("descricao").value = "";
+
+            }
+
+            /* 
+             *  **********   FUNÇÃO PARA CHAMAR O FORMULÁRIO DE CADASTRO DE LIVRO 
+             *  **********          E REMOVER A TABELA DE LIVROS DA TELA
+             */
+
+            function CallFormCadastrar() {
+
+                $("#div-protocols").empty();
+
+                div_row_inputs = document.getElementById("div-row-inputs");
+
+                divLabelNome = document.createElement("div");
+                divLabelSetor = document.createElement("div");
+                divLabelDescricao = document.createElement("div");
+
+                divLabelNome.setAttribute("class", "col-25");
+                divLabelSetor.setAttribute("class", "col-25");
+                divLabelDescricao.setAttribute("class", "col-25");
+
+                labelNome = document.createElement("label");
+                labelSetor = document.createElement("label");
+                labelDescricao = document.createElement("label");
+
+                labelNome.setAttribute("for", "nome");
+                labelSetor.setAttribute("for", "setor");
+                labelDescricao.setAttribute("for", "descricao");
+
+                labelNome.append("Nome");
+                labelSetor.append("Setor");
+                labelDescricao.append("Descrição");
+
+                divInputNome = document.createElement("div");
+                divInputSetor = document.createElement("div");
+                divInputDescricao = document.createElement("div");
+
+                divInputNome.setAttribute("class", "col-75");
+                divInputSetor.setAttribute("class", "col-75");
+                divInputDescricao.setAttribute("class", "col-75");
+
+                inputNome = document.createElement("input");
+                inputSetor = document.createElement("input");
+                inputDescricao = document.createElement("textarea");
+
+                inputNome.setAttribute("type", "text");
+                inputNome.setAttribute("required", "required");
+                inputNome.setAttribute("id", "nome");
+                inputNome.setAttribute("name", "nome");
+                inputNome.setAttribute("placeholder", "obrigatório");
+
+                inputSetor.setAttribute("type", "text");
+                inputSetor.setAttribute("id", "setor");
+                inputSetor.setAttribute("name", "setor");
+                inputSetor.setAttribute("placeholder", "obrigatório");
+
+                inputDescricao.setAttribute("style", "height:100px;");
+                inputDescricao.setAttribute("id", "descricao");
+                inputDescricao.setAttribute("name", "descricao");
+
+                br = document.createElement("br");
+
+                inputSubmitSalvar = document.createElement("input");
+                inputSubmitCancelar = document.createElement("input");
+
+                inputSubmitSalvar.setAttribute("type", "submit");
+                inputSubmitSalvar.setAttribute("style", "margin-top: 10px;");
+                inputSubmitSalvar.setAttribute("id", "btn_save");
+                inputSubmitSalvar.setAttribute("onclick", "SendFormCadastrar();");
+                inputSubmitSalvar.setAttribute("value", "Salvar");
+
+                inputSubmitCancelar.setAttribute("type", "submit");
+                inputSubmitCancelar.setAttribute("class", "btn-danger");
+                inputSubmitCancelar.setAttribute("onclick", "RemoveForm();");
+                inputSubmitCancelar.setAttribute("value", "Cancelar");
+
+                divLabelNome.appendChild(labelNome);
+                divLabelSetor.appendChild(labelSetor);
+                divLabelDescricao.appendChild(labelDescricao);
+
+                divInputNome.appendChild(inputNome);
+                divInputSetor.appendChild(inputSetor);
+                divInputDescricao.appendChild(inputDescricao);
+
+                div_row_inputs.appendChild(divLabelNome);
+                div_row_inputs.appendChild(divInputNome);
+                div_row_inputs.appendChild(divLabelSetor);
+                div_row_inputs.appendChild(divInputSetor);
+                div_row_inputs.appendChild(divLabelDescricao);
+                div_row_inputs.appendChild(divInputDescricao);
+                div_row_inputs.appendChild(br);
+                div_row_inputs.appendChild(inputSubmitSalvar);
+                div_row_inputs.appendChild(inputSubmitCancelar);
+
+
+            }
+
+            /* 
+             *  **********       CHAMADO ATRAVES DO BOTÃO CANCELAR CADASTRO 
+             *  ********** FUNÇÃO QUE OCULTA O FORMULÁRIO E CHAMA A TABELA DE LIVROS 
+             */
+
+            function RemoveForm() {
+
+                $("#div-protocols").empty();
+
+                $("#div-row-inputs").empty();
+
+                GetListPessoas();
+
+            }
+
+            /* 
+             *  **********   FUNÇÃO PARA EXIBIR TODOS OS LIVROS CADASTRADOS 
+             *  **********  REALIZAR UMA CHAMADA JSON PARA RECEBER OS DADOS
+             *  **********           CRIAR UMA TABELA E PREENCHER 
+             */
+
+            function GetListPessoas() {
+
+                var metodo = "pessoa/listarPessoas";
+
+                $.ajax
+                        ({
+                            url: uri + metodo,
+                            type: 'GET',
+                            data: {},
+                            beforeSend: function () {
+                                //AlertModal("ENTRANDO...");
+                            }
+                        })
+                        .done(function (returnJson) {
+
+                            //var pessoas = JSON.parse(returnJson);
+
+                            pessoas = returnJson;
+                            console.log(pessoas);
+                            // PEGA A DIV PAI E ESVAZIA ELA
+                            tdiv = document.getElementById("div-protocols");
+                            $("#div-protocols").empty();
+
+
+
+                            // CRIA A TABELA E SETA OS ATRIBUTOS
+                            ttable = document.createElement("table");
+                            ttable.setAttribute("class", "rwd-table");
+                            ttable.setAttribute("id", "table-protocols");
+
+                            // CRIA O THEAD E O TBODY E SETA OS ATRIBUTOS
+                            tthead = document.createElement("thead");
+                            ttbody = document.createElement("tbody");
+                            ttbody.setAttribute("id", "tboby-protocols");
+
+                            // CRIA A LINHA DO TÍTULO E AS COLUNAS E INSERI AS STRINGS
+                            trowhead = document.createElement("tr");
+
+                            tcolNomeHead = document.createElement("th");
+                            tcolSetorHead = document.createElement("th");
+                            tcolDescricaoHead = document.createElement("th");
+
+                            tcolNomeHead.append("Nome");
+                            tcolSetorHead.append("Setor");
+                            tcolDescricaoHead.append("Descrição");
+
+                            // INSERI AS COLUNAS DO TÍTULO NA LINHA DO TÍTULO
+                            trowhead.appendChild(tcolNomeHead);
+                            trowhead.appendChild(tcolSetorHead);
+                            trowhead.appendChild(tcolDescricaoHead);
+
+                            // INSERI A LINHA DO TÍTULO NO THEAD
+                            tthead.appendChild(trowhead);
+
+                            // INSERI O THEAD E O TBODY DENTRO DA TABELA
+                            ttable.appendChild(tthead);
+                            ttable.appendChild(ttbody);
+
+                            // INSERI A TABELA DENTRO DA DIV
+                            tdiv.appendChild(ttable);
+
+                            // /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+                            // \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+
+                            // ITERA O JSON (LINHA A LINHA) E CHAMA O METODO QUE PREENCHE A TABELA
+                            for (var i = 0; i < pessoas.length; i++) {
+
+                                PreencheTboby(pessoas[i], i);
+
+                            }
+
+                            function PreencheTboby(pessoa, i) {
+
+                                // CRIA A LINHA
+                                trow = document.createElement("tr");
+                                if ((verifiquePermissaoEditar() === true) || (verifiquePermissaoExcluir() === true)) {
+                                    trow.setAttribute("onclick", "chamaModal(" + pessoa.id + ")");
+                                }
+
+                                trow.setAttribute("id", "line" + i);
+
+                                trow.setAttribute("onmouseover", "linhaI('line" + i + "')");
+                                trow.setAttribute("onmouseout", "linhaO('line" + i + "')");
+
+                                // CRIA AS COLUNAS
+                                tcolNome = document.createElement("td");
+                                tcolSetor = document.createElement("td");
+                                tcolDescricao = document.createElement("td");
+
+                                // ADICIONA ATRIBUTOS A COLUNA QUE GARANTE O TITULO NA RESPONSIVIDADE
+                                tcolNome.setAttribute("data-th", "Nome");
+                                tcolSetor.setAttribute("data-th", "Setor");
+                                tcolDescricao.setAttribute("data-th", "Descrição");
+
+                                // INSERI O CONTEUDO DO JSON NA COLUNA DO CORPO DA TABELA
+                                tcolNome.append(pessoa.nome);
+                                tcolSetor.append(pessoa.setor);
+                                tcolDescricao.append(pessoa.descricao);
+
+                                // INSERI AS COLUNAS DENTRO DA LINHA
+                                trow.appendChild(tcolNome);
+                                trow.appendChild(tcolSetor);
+                                trow.appendChild(tcolDescricao);
+
+                                // INSERI O CORPO DENTRO DA TABELA
+                                ttbody.appendChild(trow);
+
+                            }
+
+                        })
+                        .fail(function (msg) {
+                            AlertModal("Falha ao tentar obter a lista de pessoas");
+                            console.log(msg);
+                        });
+
+            }
+
+        </script>
+
+    </head>
+
+    <body onload="GetListPessoas();
+            exibeButtonInserir();">
+
+        <!-- \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ NAV MENU \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ -->
+        <nav class="pushy pushy-left" data-focus="#first-link">
             <div class="pushy-content">
                 <ul>
                     <li class="pushy-link"><a href="protocolos.html">Protocolos</a></li>
                     <li class="pushy-link"><a href="livros.html">Livros</a></li>
                     <li class="pushy-link"><a href="pessoas.html">Pessoas</a></li>
                     <li class="pushy-link"><a href="motivos.html">Motivos</a></li>
-					<li class="pushy-link"><a href="situacoes.html">Situações</a></li>
-					<li class="pushy-link"><a href="javascript:logout();">Sair</a></li>
+                    <li class="pushy-link"><a href="situacoes.html">Situações</a></li>
+                    <li class="pushy-link"><a href="javascript:logout();">Sair</a></li>
                 </ul>
             </div>
         </nav>
-		
-		 <!-- Your Content -->
+
+        <!-- \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ DIV MENU \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ -->
         <div id="container" style="padding-left:0px;padding-top:40px;padding-bottom:0px;height:50px;">
             <!-- Menu Button -->
             <button class="menu-btn">&#9776; Menu</button>
+            <div id="img_option_cadastrar" >
+            </div>
         </div>
-
-        
 
         <!-- Pushy JS -->
         <script src="assest/js/pushy.min.js"></script>
 
+        <!-- \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ TÍTULO \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ -->
 
-		<h1 align="center" >Pessoas</h1>
-		<div>
-			<table class="rwd-table" id="table-protocols" >
-				<thead>
-					<tr>
-						<th>Movie Title</th>
-						<th>Genre</th>
-						<th>Year</th>
-						<th>Gross</th>
-					</tr>
-				</thead>
-				<tbody id="tboby-protocols">
-					<tr>
-						<td data-th="Movie Title">Star Wars</td>
-						<td data-th="Genre">Adventure, Sci-fi</td>
-						<td data-th="Year">1977</td>
-						<td data-th="Gross">$460,935,665</td>
-					</tr>
-					
-				</tbody>
-			</table>
-		</div>
-		
-		<div>
-			<footer class="footer">
-				<!--FOOER AREA END-->
-				<p align="center">Desenvolvido pela turma de Sistemas para Internet</br> Faculdade Anísio Teixeira - 2018.2</p>
-			</footer>
-		</div>
-		
-	</body>
+        <h1 style="color: floralwhite; text-align: center; text-shadow:#000 1px -1px, #000 -1px 1px, #000 1px 1px, #000 -1px -1px" >
+            Pessoas
+        </h1>
+
+        <br/>
+        <!-- \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ DIV TABELA \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ -->
+        <div id="div-protocols" >
+
+        </div>
+
+
+        <div id="popup1" class="overlay">
+            <div class="popup">
+                <h2 style="text-align: center;">Mensagem:</h2>
+                <a class="close" href="#">&times;</a>
+                <div class="content" id="sendMensage">
+                </div>
+            </div>
+        </div>
+
+        <!-- \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ DIV FORM \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ -->
+        <div id="div-create-protocol" >
+
+            <div class="container">
+
+                <div class="row" id="div-row-inputs" >
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ DIV RODAPE \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ -->
+        <div>
+            <footer class="footer" style="color: floralwhite; text-align: center; text-shadow:#000 1px -1px, #000 -1px 1px, #000 1px 1px, #000 -1px -1px" >
+                <!--FOOER AREA END-->
+                <p>Desenvolvido pela turma de Sistemas para Internet<br/> Faculdade Anísio Teixeira - 2018.2</p>
+            </footer>
+        </div>
+
+    </body>
 
 </html>
