@@ -79,8 +79,24 @@
              */
 
             function ValidaCampos() {
-
-                return true;
+                
+                noerros = true;
+                
+                numero = document.getElementById("numero").value;
+                nome = document.getElementById("nome").value;
+                folhas = document.getElementById("folhas").value;
+                
+                if(( numero === "") || ( parseInt(numero) < 1)){
+                    noerros = false;
+                } 
+                if( nome === ""){
+                    noerros = false;
+                }
+                if(( numero === "") || ( parseInt(numero) < 1)){
+                    noerros = false;
+                }
+                
+                return noerros;
 
             }
             
@@ -291,52 +307,55 @@
                 var tokin = getToken();
                 
                 if( verifiquePermissaoInserir() === true ){
+                    
+                    if(ValidaCampos() === true){
                 
-                    numero = document.getElementById("numero").value;
-                    nome = document.getElementById("nome").value;
-                    folhas = document.getElementById("folhas").value;
-                    cor = document.getElementById("cor").value;
-                    dtinicio = document.getElementById("dtinicio").value;
-                    detalhes = document.getElementById("detalhes").value;
+                        numero = document.getElementById("numero").value;
+                        nome = document.getElementById("nome").value;
+                        folhas = document.getElementById("folhas").value;
+                        cor = document.getElementById("cor").value;
+                        dtinicio = document.getElementById("dtinicio").value;
+                        detalhes = document.getElementById("detalhes").value;
 
-                    var metodo = "livro/cadastrarLivro";
+                        var metodo = "livro/cadastrarLivro";
 
-                    $.ajax
-                            ({
-                                url: uri + metodo,
-                                type: 'POST',
-                                data: JSON.stringify(
-                                        {
-                                            folhas: folhas,
-                                            numero: numero,
-                                            nome: nome,
-                                            detalhes: detalhes,
-                                            cor: cor,
-                                            dataInicio: dtinicio
-                                        }),
-                                contentType: 'application/json',
-                                beforeSend: function () {
-                                    //AlertModal("ENTRANDO...");
-                                }
-                            })
-                            .done(function (returnJson) {
+                        $.ajax
+                                ({
+                                    url: uri + metodo,
+                                    type: 'POST',
+                                    data: JSON.stringify(
+                                            {
+                                                folhas: folhas,
+                                                numero: numero,
+                                                nome: nome,
+                                                detalhes: detalhes,
+                                                cor: cor,
+                                                dataInicio: dtinicio
+                                            }),
+                                    contentType: 'application/json',
+                                    beforeSend: function () {
+                                        //AlertModal("ENTRANDO...");
+                                    }
+                                })
+                                .done(function (returnJson) {
 
-                                if (returnJson.numero === parseInt(numero)) {
+                                    if (returnJson.numero === parseInt(numero)) {
 
-                                    AlertModal("Sucesso!");
+                                        AlertModal("Sucesso!");
 
-                                    cleanInputs();
-                                } else {
+                                        cleanInputs();
+                                    } else {
 
 
 
-                                }
+                                    }
 
-                            })
-                            .fail(function (msg) {
-                                AlertModal("Falha ao tentar cadastrar livro");
-                                console.log(msg);
-                            });
+                                })
+                                .fail(function (msg) {
+                                    AlertModal("Falha ao tentar cadastrar livro");
+                                    console.log(msg);
+                                });
+                    }
                 }else{
                     
                     AlertModal("Usuário sem permissão!");
