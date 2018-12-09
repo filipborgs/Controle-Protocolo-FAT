@@ -49,7 +49,7 @@ public class UsuarioDAO extends DatabaseUtil {
         user.setSenha(rs.getString(UsuarioDaoUtil.USUARIO_ATRIBUTO_SENHA));
         user.setStatus(rs.getString(UsuarioDaoUtil.USUARIO_ATRIBUTO_STATUS).charAt(0));
         user.setPermissao(new Permissao());
-//        user.getPermissao().setDelete((UsuarioDaoUtil.USUARIO_ATRIBUTO_DELETAR).charAt(0));
+        user.getPermissao().setDelete(rs.getString(UsuarioDaoUtil.USUARIO_ATRIBUTO_DELETAR).charAt(0));
         user.getPermissao().setWrite(rs.getString(UsuarioDaoUtil.USUARIO_ATRIBUTO_INSERIR).charAt(0));
         user.getPermissao().setUpdate(rs.getString(UsuarioDaoUtil.USUARIO_ATRIBUTO_EDITAR).charAt(0));
 
@@ -59,8 +59,8 @@ public class UsuarioDAO extends DatabaseUtil {
     public Usuario createUsuario(Usuario u) throws Exception {
         String sql = "INSERT INTO usuario (" + UsuarioDaoUtil.USUARIO_ATRIBUTO_NOME + "," + UsuarioDaoUtil.USUARIO_ATRIBUTO_USER
                 + "," + UsuarioDaoUtil.USUARIO_ATRIBUTO_SENHA + "," + UsuarioDaoUtil.USUARIO_ATRIBUTO_EDITAR + ","
-                + UsuarioDaoUtil.USUARIO_ATRIBUTO_INSERIR + "," + UsuarioDaoUtil.USUARIO_ATRIBUTO_STATUS + ")"
-                + " VALUES (?, ?, ?, ?, ?, ?)";
+                + UsuarioDaoUtil.USUARIO_ATRIBUTO_INSERIR + "," + UsuarioDaoUtil.USUARIO_ATRIBUTO_DELETAR + ","
+                + UsuarioDaoUtil.USUARIO_ATRIBUTO_STATUS + ")" + " VALUES (?, ?, ?, ?, ?, ?, ?)";
         try {
             stmt = con.prepareStatement(sql);
             stmt.setString(1, u.getNome());
@@ -68,7 +68,8 @@ public class UsuarioDAO extends DatabaseUtil {
             stmt.setString(3, u.getSenha());
             stmt.setString(4, String.valueOf(u.getPermissao().getUpdate()));
             stmt.setString(5, String.valueOf(u.getPermissao().getWrite()));
-            stmt.setString(6, String.valueOf(u.getStatus()));
+            stmt.setString(6, String.valueOf(u.getPermissao().getDelete()));
+            stmt.setString(7, String.valueOf(u.getStatus()));
 
             stmt.executeUpdate();
             rs = stmt.getGeneratedKeys();

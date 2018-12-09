@@ -17,7 +17,7 @@ public class UsuarioDaoUtil {
     public static final String USUARIO_ATRIBUTO_USER = "user";
     public static final String USUARIO_ATRIBUTO_STATUS = "status";
     public static final String USUARIO_ATRIBUTO_INSERIR = "inserir";
-    public static final String USUARIO_ATRIBUTO_DELETAR = "deletar";
+    public static final String USUARIO_ATRIBUTO_DELETAR = "excluir";
     public static final String USUARIO_ATRIBUTO_EDITAR = "editar";
 
 }
