@@ -8,7 +8,6 @@ package com.br.fat.controleprotocolo.model;
 import java.sql.Date;
 import java.text.DateFormat;
 
-
 /**
  *
  * @author Filipe Borges
@@ -16,7 +15,7 @@ import java.text.DateFormat;
 public class LivroRegistros {
 
     private int id, folhas, numero;
-    private String nome, detalhes, cor, dtIni, dtFim;
+    private String nome, detalhes, cor, dtIni, dtFim, dataIni, dataFi;
     private Date dataInicio, dataFim;
 
     public String getDtIni() {
@@ -40,7 +39,11 @@ public class LivroRegistros {
     }
 
     public void setDataFim(Date dataFim) {
-
+        if (dataFim == null) {
+            this.dataFi = "";
+        } else {
+            this.dataFi = dataFim.toString();
+        }
         this.dataFim = dataFim;
     }
 
@@ -49,6 +52,11 @@ public class LivroRegistros {
     }
 
     public void setDataInicio(Date dataInicio) {
+        if (dataInicio == null) {
+            this.dataIni = "";
+        } else {
+            this.dataIni = dataInicio.toString();
+        }
         this.dataInicio = dataInicio;
     }
 

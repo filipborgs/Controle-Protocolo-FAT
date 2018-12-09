@@ -16,6 +16,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Response;
 
 /**
  *
@@ -30,16 +31,18 @@ public class UsuarioRest {
     @Path("/login")
     @Produces("application/json")
     @Consumes("application/x-www-form-urlencoded")
-    public String login(@FormParam("user") String login, @FormParam("senha") String senha) {
+    public Response login(@FormParam("user") String login, @FormParam("senha") String senha) {
         Gson g = new Gson();
         try {
-//            Usuario user = control.autenticacao(senha, login);
-//            String u = g.toJson(user);
-
-            return g.toJson(control.autenticacao(senha, login));
+            Usuario user = control.autenticacao(senha, login);
+            String u = g.toJson(user);
+            String token = control.gerarToken(user);
+            return Response.ok(u).header("token", token).build();
+//            return g.toJson(control.autenticacao(senha, login));
 
         } catch (Exception ex) {
-            return g.toJson(ex.getMessage());
+//            return g.toJson(ex.getMessage());
+            return Response.serverError().build();
         }
     }
 

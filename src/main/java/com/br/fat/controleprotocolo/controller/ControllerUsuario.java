@@ -12,9 +12,23 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseToken;
+import com.google.gson.Gson;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.JwtBuilder;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import java.io.FileInputStream;
+import java.security.Key;
+import java.util.Date;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+import javax.xml.bind.DatatypeConverter;
 
 /**
  *
@@ -49,8 +63,65 @@ public class ControllerUsuario {
 //
 //            String customToken = FirebaseAuth.getInstance().createCustomToken(uid);
 //            return customToken;
+//            gerarToken(user);
             return user;
         }
+    }
+
+    public String gerarToken(Usuario u) {
+
+        Gson g = new Gson();
+        String o = g.toJson(u);
+        byte[] keyBytes = DatatypeConverter.parseBase64Binary("asdjaskdasjdaasdjaskdasjdaasdjaskdasjdaasdjaskdasjda");
+        SecretKey key = Keys.hmacShaKeyFor(keyBytes);
+
+        JwtBuilder token = Jwts.builder().claim("obj", o).setIssuer(u.getUser()).signWith(key);
+        String stoken = token.compact();
+
+        Jws<Claims> jws;
+
+        try {
+            jws = Jwts.parser() // (1)
+                    .setSigningKey(key) // (2)
+                    .parseClaimsJws(stoken); // (3)
+            System.out.println(jws.toString());
+            String a = (String) jws.getBody().get("obj");
+            Usuario as = g.fromJson(a, Usuario.class);
+            System.out.println("");
+        } catch (JwtException ex) {       // (4)
+
+            // we *cannot* use the JWT as intended by its creator
+        }
+
+        return stoken;
+
+//Defini qual vai ser o algoritmo da assinatura no caso vai ser o HMAC SHA512
+//        SignatureAlgorithm algoritimoAssinatura = SignatureAlgorithm.HS256;
+//
+//        //Data atual que data que o token foi gerado
+//        Date agora = new Date();
+//
+//        //Define até que data o token é pelo quantidade de dias que foi passo pelo parâmetro expiraEmDias
+//        Calendar expira = Calendar.getInstance();
+//
+//        expira.add(Calendar.DAY_OF_MONTH, 2);
+//
+//        //Encoda a frase segredo pra base64 pra ser usada na geração do token 
+//        byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary("testetestetestetestetestetestetestetestetestetestetestetestetest");
+//
+//        SecretKeySpec key = new SecretKeySpec(apiKeySecretBytes, algoritimoAssinatura.getJcaName());
+//
+//        //E finalmente utiliza o JWT builder pra gerar o token
+//        JwtBuilder construtor = Jwts.builder()
+//                .setIssuedAt(agora)//Data que o token foi gerado
+//
+//                .setIssuer(u.getUser())//Coloca o login do usuário mais podia qualquer outra informação
+//
+//                .signWith(algoritimoAssinatura, key)//coloca o algoritmo de assinatura e frase segredo já encodada
+//
+//                .setExpiration(expira.getTime());// coloca até que data que o token é valido
+//
+//        return construtor.compact();//Constrói o token retornando ele como uma String
     }
 
     public Usuario createUsuario(Usuario u) throws Exception {
