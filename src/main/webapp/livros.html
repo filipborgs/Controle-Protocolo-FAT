@@ -325,12 +325,12 @@
                                     type: 'POST',
                                     data: JSON.stringify(
                                             {
-                                                folhas: folhas,
-                                                numero: numero,
-                                                nome: nome,
-                                                detalhes: detalhes,
-                                                cor: cor,
-                                                dataInicio: dtinicio
+                                                "folhas": folhas,
+                                                "numero": numero,
+                                                "nome": nome,
+                                                "detalhes": detalhes,
+                                                "cor": cor,
+                                                "dataInicio": dtinicio
                                             }),
                                     contentType: 'application/json',
                                     beforeSend: function () {
@@ -426,7 +426,6 @@
             function GetListLivros() {
 
                 var metodo = "livro/listarLivros";
-                var tokin = localStorage.getItem("Dw33&121#$%8\z|^");
 
                 $.ajax
                         ({
@@ -504,7 +503,7 @@
                             for (var i = 0; i < livros.length; i++) {
 
                                 PreencheTboby(livros[i], i);
-console.log(livros[i]);
+
                             }
                             
                             function PreencheTboby(livro, i) {
