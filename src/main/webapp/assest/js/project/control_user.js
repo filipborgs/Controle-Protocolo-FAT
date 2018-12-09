@@ -37,7 +37,7 @@
             return true;
         }
         
-         function verifiquePermissaoInserir(){
+        function verifiquePermissaoInserir(){
             
             return true;
         }
