@@ -7,27 +7,14 @@ package com.br.fat.controleprotocolo.controller;
 
 import com.br.fat.controleprotocolo.dao.UsuarioDAO;
 import com.br.fat.controleprotocolo.model.Usuario;
-import com.google.auth.oauth2.GoogleCredentials;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.FirebaseOptions;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseToken;
 import com.google.gson.Gson;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import java.io.FileInputStream;
-import java.security.Key;
-import java.util.Date;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
 import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 
 /**

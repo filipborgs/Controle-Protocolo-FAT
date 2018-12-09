@@ -34,7 +34,6 @@ public class ApplicationConfig extends Application {
         resources.add(com.br.fat.controleprotocolo.view.services.PessoaRest.class);
         resources.add(com.br.fat.controleprotocolo.view.services.ProtocoloRest.class);
         resources.add(com.br.fat.controleprotocolo.view.services.UsuarioRest.class);
-        resources.add(org.netbeans.rest.application.config.FilterCorsFeature.class);
     }
     
 }
