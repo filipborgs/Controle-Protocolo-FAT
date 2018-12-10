@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="br" >
+<html lang="pt-br" >
 
     <head>
 
@@ -93,7 +93,7 @@
             }
 
             /* 
-             *  **********   FUNÇÃO PARA SALVAR EDIAÇÃO DO LIVRO E 
+             *  **********   FUNÇÃO PARA SALVAR EDIAÇÃO E 
              *  ********** REALIZAR ENVIO DO JSON PARA FAZER O UPDATE 
              */
 
@@ -187,7 +187,7 @@
             }
 
             /* 
-             *  **********   FUNÇÃO PARA CONFIRMAR A EXCLUIR UM LIVRO, 
+             *  **********   FUNÇÃO PARA CONFIRMAR A EXCLUIR, 
              *  ********** REALIZAR ENVIO DO JSON COM O ID PARA FAZER O UPDATE 
              */
 
@@ -230,7 +230,7 @@
             }
 
             /* 
-             *  **********   FUNÇÃO PARA CONFIRMAR A EXCLUIR UM LIVRO, 
+             *  **********   FUNÇÃO PARA CONFIRMAR A EXCLUISÃO. 
              *  ********** REALIZAR A PERGUNTA SE DESEJA REALMENTE EXCLUIR 
              */
 
@@ -402,7 +402,7 @@
                                 }
                             })
                             .fail(function (msg) {
-                                AlertModal("Falha ao tentar obter o livro escolhido");
+                                AlertModal("Falha ao tentar obter a pessoa escolhida");
                                 console.log(msg);
                             });
 
@@ -453,7 +453,7 @@
 
             /* 
              *  **********   FUNÇÃO PARA OBTER OS CAMPOS DO INPUT E 
-             *  ********** REALIZAR ENVIO DO JSON PARA FAZER O INSERT (CADASTRAR LIVRO) 
+             *  ********** REALIZAR ENVIO DO JSON PARA FAZER O INSERT (CADASTRAR) 
              */
 
             function SendFormCadastrar() {
@@ -528,8 +528,8 @@
             }
 
             /* 
-             *  **********   FUNÇÃO PARA CHAMAR O FORMULÁRIO DE CADASTRO DE LIVRO 
-             *  **********          E REMOVER A TABELA DE LIVROS DA TELA
+             *  **********   FUNÇÃO PARA CHAMAR O FORMULÁRIO DE CADASTRO
+             *  **********          E REMOVER A TABELA DA TELA
              */
 
             function CallFormCadastrar() {
@@ -624,7 +624,7 @@
 
             /* 
              *  **********       CHAMADO ATRAVES DO BOTÃO CANCELAR CADASTRO 
-             *  ********** FUNÇÃO QUE OCULTA O FORMULÁRIO E CHAMA A TABELA DE LIVROS 
+             *  ********** FUNÇÃO QUE OCULTA O FORMULÁRIO E CHAMA A TABELA
              */
 
             function RemoveForm() {
@@ -638,7 +638,7 @@
             }
 
             /* 
-             *  **********   FUNÇÃO PARA EXIBIR TODOS OS LIVROS CADASTRADOS 
+             *  **********   FUNÇÃO PARA EXIBIR TODOS OS OBJETOS CADASTRADOS 
              *  **********  REALIZAR UMA CHAMADA JSON PARA RECEBER OS DADOS
              *  **********           CRIAR UMA TABELA E PREENCHER 
              */
@@ -776,6 +776,7 @@
                     <li class="pushy-link"><a href="pessoas.html">Pessoas</a></li>
                     <li class="pushy-link"><a href="motivos.html">Motivos</a></li>
                     <li class="pushy-link"><a href="situacoes.html">Situações</a></li>
+                    <li class="pushy-link"><a href="usuarios.html">Usuários</a></li>
                     <li class="pushy-link"><a href="javascript:logout();">Sair</a></li>
                 </ul>
             </div>

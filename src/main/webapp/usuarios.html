@@ -93,7 +93,7 @@
             }
 
             /* 
-             *  **********   FUNÇÃO PARA SALVAR EDIAÇÃO DO LIVRO E 
+             *  **********   FUNÇÃO PARA SALVAR EDIAÇÃO E 
              *  ********** REALIZAR ENVIO DO JSON PARA FAZER O UPDATE 
              */
 
@@ -103,16 +103,10 @@
 
                     if (ValidaCampos() === true) {
 
+                        motivo = document.getElementById("motivo").value;
+                        descricao = document.getElementById("descricao").value;
 
-                        numero = document.getElementById("numero").value;
-                        nome = document.getElementById("nome").value;
-                        folhas = document.getElementById("folhas").value;
-                        cor = document.getElementById("cor").value;
-                        dtinicio = document.getElementById("dtinicio").value;
-                        dtfim = document.getElementById("dtfim").value;
-                        detalhes = document.getElementById("detalhes").value;
-
-                        var metodo = "livro/editarLivro";
+                        var metodo = "motivo/editarMotivo";
 
                         $.ajax
                                 ({
@@ -121,13 +115,8 @@
                                     data: JSON.stringify(
                                             {
                                                 id: id,
-                                                folhas: folhas,
-                                                numero: numero,
-                                                nome: nome,
-                                                detalhes: detalhes,
-                                                cor: cor,
-                                                dataInicio: dtinicio,
-                                                dataFim: dtfim
+                                                motivo: motivo,
+                                                descricao: descricao
                                             }),
                                     contentType: 'application/json',
                                     beforeSend: function () {
@@ -141,16 +130,16 @@
                                         AlertModal("O servidor retornou um erro inesperado!");
 
                                     } else {
-                                        
+
                                         AlertModal("Sucesso!");
                                         RemoveForm();
-                                        GetListLivros();
+                                        GetListUsuarios();
 
                                     }
 
                                 })
                                 .fail(function (msg) {
-                                    AlertModal("Falha ao tentar editar livro");
+                                    AlertModal("Falha ao tentar editar o motivo");
                                     console.log(msg);
                                 });
 
@@ -174,34 +163,49 @@
 
                 noerros = true;
 
-                numero = document.getElementById("numero");
                 nome = document.getElementById("nome");
-                folhas = document.getElementById("folhas");
-                dtinicio = document.getElementById("dtinicio");
+                usuario = document.getElementById("user");
+                senha = document.getElementById("senha");
+                repete = document.getElementById("repete");
 
-                if ((numero.value === "") || (parseInt(numero.value) < 1)) {
-                    noerros = false;
-                    numero.setAttribute("style", "background: palegoldenrod;");
-                }else{
-                    numero.removeAttribute("style");
-                }
                 if (nome.value === "") {
                     noerros = false;
                     nome.setAttribute("style", "background: palegoldenrod;");
-                }else{
+                } else {
                     nome.removeAttribute("style");
                 }
-                if ((folhas.value === "") || (parseInt(folhas.value) < 1)) {
+
+                if (usuario.value === "") {
                     noerros = false;
-                    folhas.setAttribute("style", "background: palegoldenrod;");
-                }else{
-                    folhas.removeAttribute("style");
+                    usuario.setAttribute("style", "background: palegoldenrod;");
+                } else {
+                    usuario.removeAttribute("style");
                 }
-                if (dtinicio.value === "") {
+
+                if (senha.value === "") {
                     noerros = false;
-                    dtinicio.setAttribute("style", "background: palegoldenrod;");
-                }else{
-                    dtinicio.removeAttribute("style");
+                    senha.setAttribute("style", "background: palegoldenrod;");
+                } else {
+                    senha.removeAttribute("style");
+                }
+
+                if (repete.value === "") {
+                    noerros = false;
+                    repete.setAttribute("style", "background: palegoldenrod;");
+                } else {
+                    repete.removeAttribute("style");
+                }
+
+                if (noerros === true) {
+
+                    if (repete.value !== senha.value) {
+                        repete.setAttribute("style", "background: palegoldenrod;");
+                        senha.setAttribute("style", "background: palegoldenrod;");
+                        AlertModal("Senhas não conferem!");
+                    } else {
+                        repete.removeAttribute("style");
+                        senha.removeAttribute("style");
+                    }
                 }
 
                 return noerros;
@@ -209,22 +213,22 @@
             }
 
             /* 
-             *  **********   FUNÇÃO PARA CONFIRMAR A EXCLUIR UM LIVRO, 
+             *  **********   FUNÇÃO PARA CONFIRMAR A EXCLUIR, 
              *  ********** REALIZAR ENVIO DO JSON COM O ID PARA FAZER O UPDATE 
              */
 
             function RemoveItem(id) {
 
-                var metodo = "livro/deletarLivro";
+                var metodo = "usuario/deletarUsuario";
                 tokin = getToken();
 
                 id = parseInt(id);
 
                 $.ajax
                         ({
-                            url: uri + metodo + "?idLivro=" + id,
+                            url: uri + metodo + "?idUsuario=" + id,
                             type: 'DELETE',
-                            data: {'': ''},
+                            data: {},
                             beforeSend: function () {
                                 //AlertModal("ENTRANDO...");
                             }
@@ -237,7 +241,7 @@
                                 AlertModal("Não foi possível realizar a exclusão!");
                             } else {
                                 AlertModal("Exclusão realizada com sucesso!");
-                                GetListLivros();
+                                GetListUsuarios();
                             }
 
                         })
@@ -252,7 +256,7 @@
             }
 
             /* 
-             *  **********   FUNÇÃO PARA CONFIRMAR A EXCLUIR UM LIVRO, 
+             *  **********   FUNÇÃO PARA CONFIRMAR A EXCLUISÃO. 
              *  ********** REALIZAR A PERGUNTA SE DESEJA REALMENTE EXCLUIR 
              */
 
@@ -308,8 +312,6 @@
 
                 if (verifiquePermissaoEditar() === true) {
 
-
-
                     $("#div-protocols").empty();
 
                     $("#div-row-inputs").empty();
@@ -318,103 +320,39 @@
 
                     div_row_inputs = document.getElementById("div-row-inputs");
 
-                    divLabelNumero = document.createElement("div");
-                    divLabelNome = document.createElement("div");
-                    divLabelFolhas = document.createElement("div");
-                    divLabelCor = document.createElement("div");
-                    divLabelInicio = document.createElement("div");
-                    divLabelFim = document.createElement("div");
-                    divLabelDetalhes = document.createElement("div");
+                    divLabelMotivo = document.createElement("div");
+                    divLabelDescricao = document.createElement("div");
 
-                    divLabelNumero.setAttribute("class", "col-25");
-                    divLabelNome.setAttribute("class", "col-25");
-                    divLabelFolhas.setAttribute("class", "col-25");
-                    divLabelCor.setAttribute("class", "col-25");
-                    divLabelInicio.setAttribute("class", "col-25");
-                    divLabelFim.setAttribute("class", "col-25");
-                    divLabelDetalhes.setAttribute("class", "col-25");
+                    divLabelMotivo.setAttribute("class", "col-25");
+                    divLabelDescricao.setAttribute("class", "col-25");
 
-                    labelNumero = document.createElement("label");
-                    labelNome = document.createElement("label");
-                    labelFolhas = document.createElement("label");
-                    labelCor = document.createElement("label");
-                    labelInicio = document.createElement("label");
-                    labelFim = document.createElement("label");
-                    labelDetalhes = document.createElement("label");
+                    labelMotivo = document.createElement("label");
+                    labelDescricao = document.createElement("label");
 
-                    labelNumero.setAttribute("for", "numero");
-                    labelNome.setAttribute("for", "nome");
-                    labelFolhas.setAttribute("for", "folhas");
-                    labelCor.setAttribute("for", "cor");
-                    labelInicio.setAttribute("for", "dtinicio");
-                    labelFim.setAttribute("for", "dtfim");
-                    labelDetalhes.setAttribute("for", "detalhes");
+                    labelMotivo.setAttribute("for", "motivo");
+                    labelDescricao.setAttribute("for", "descricao");
 
-                    labelNumero.append("Número");
-                    labelNome.append("Nome");
-                    labelFolhas.append("N° Folhas");
-                    labelCor.append("Cor");
-                    labelInicio.append("Data Início");
-                    labelFim.append("Data Término");
-                    labelDetalhes.append("Detalhes");
+                    labelMotivo.append("Motivo");
+                    labelDescricao.append("Descrição");
 
-                    divInputNumero = document.createElement("div");
-                    divInputNome = document.createElement("div");
-                    divInputFolhas = document.createElement("div");
-                    divInputCor = document.createElement("div");
-                    divInputInicio = document.createElement("div");
-                    divInputFim = document.createElement("div");
-                    divInputDetalhes = document.createElement("div");
+                    divInputMotivo = document.createElement("div");
+                    divInputDescricao = document.createElement("div");
 
-                    divInputNumero.setAttribute("class", "col-75");
-                    divInputNome.setAttribute("class", "col-75");
-                    divInputFolhas.setAttribute("class", "col-75");
-                    divInputCor.setAttribute("class", "col-75");
-                    divInputInicio.setAttribute("class", "col-75");
-                    divInputFim.setAttribute("class", "col-75");
-                    divInputDetalhes.setAttribute("class", "col-75");
+                    divInputMotivo.setAttribute("class", "col-75");
+                    divInputDescricao.setAttribute("class", "col-75");
 
-                    inputNumero = document.createElement("input");
-                    inputNome = document.createElement("input");
-                    inputFolhas = document.createElement("input");
-                    inputCor = document.createElement("input");
-                    inputInicio = document.createElement("input");
-                    inputFim = document.createElement("input");
-                    inputDetalhes = document.createElement("textarea");
+                    inputMotivo = document.createElement("input");
+                    inputDescricao = document.createElement("textarea");
 
-                    inputNumero.setAttribute("type", "number");
-                    inputNumero.setAttribute("required", "required");
-                    inputNumero.setAttribute("id", "numero");
-                    inputNumero.setAttribute("name", "numero");
-                    inputNumero.setAttribute("placeholder", "obrigatório");
+                    inputMotivo.setAttribute("type", "text");
+                    inputMotivo.setAttribute("required", "required");
+                    inputMotivo.setAttribute("id", "motivo");
+                    inputMotivo.setAttribute("name", "motivo");
+                    inputMotivo.setAttribute("placeholder", "obrigatório");
 
-                    inputNome.setAttribute("type", "text");
-                    inputNome.setAttribute("required", "required");
-                    inputNome.setAttribute("id", "nome");
-                    inputNome.setAttribute("name", "nome");
-                    inputNome.setAttribute("placeholder", "obrigatório");
-
-                    inputFolhas.setAttribute("type", "number");
-                    inputFolhas.setAttribute("required", "required");
-                    inputFolhas.setAttribute("id", "folhas");
-                    inputFolhas.setAttribute("name", "folhas");
-                    inputFolhas.setAttribute("placeholder", "obrigatório");
-
-                    inputCor.setAttribute("type", "text");
-                    inputCor.setAttribute("id", "cor");
-                    inputCor.setAttribute("name", "cor");
-
-                    inputInicio.setAttribute("type", "date");
-                    inputInicio.setAttribute("id", "dtinicio");
-                    inputInicio.setAttribute("name", "dtinicio");
-
-                    inputFim.setAttribute("type", "date");
-                    inputFim.setAttribute("id", "dtfim");
-                    inputFim.setAttribute("name", "dtfim");
-
-                    inputDetalhes.setAttribute("style", "height:100px;");
-                    inputDetalhes.setAttribute("id", "detalhes");
-                    inputDetalhes.setAttribute("name", "detalhes");
+                    inputDescricao.setAttribute("style", "height:100px;");
+                    inputDescricao.setAttribute("id", "descricao");
+                    inputDescricao.setAttribute("name", "descricao");
 
                     br = document.createElement("br");
 
@@ -424,7 +362,7 @@
                     inputSubmitSalvar.setAttribute("type", "submit");
                     inputSubmitSalvar.setAttribute("style", "margin-top: 10px;");
                     inputSubmitSalvar.setAttribute("id", "btn_save");
-                    inputSubmitSalvar.setAttribute("onclick", "SalveEdition("+id+");");
+                    inputSubmitSalvar.setAttribute("onclick", "SalveEdition(" + id + ");");
                     inputSubmitSalvar.setAttribute("value", "Salvar");
 
                     inputSubmitCancelar.setAttribute("type", "submit");
@@ -432,41 +370,21 @@
                     inputSubmitCancelar.setAttribute("onclick", "RemoveForm();");
                     inputSubmitCancelar.setAttribute("value", "Cancelar");
 
-                    divLabelNumero.appendChild(labelNumero);
-                    divLabelNome.appendChild(labelNome);
-                    divLabelFolhas.appendChild(labelFolhas);
-                    divLabelCor.appendChild(labelCor);
-                    divLabelInicio.appendChild(labelInicio);
-                    divLabelFim.appendChild(labelFim);
-                    divLabelDetalhes.appendChild(labelDetalhes);
+                    divLabelMotivo.appendChild(labelMotivo);
+                    divLabelDescricao.appendChild(labelDescricao);
 
-                    divInputNumero.appendChild(inputNumero);
-                    divInputNome.appendChild(inputNome);
-                    divInputFolhas.appendChild(inputFolhas);
-                    divInputCor.appendChild(inputCor);
-                    divInputInicio.appendChild(inputInicio);
-                    divInputFim.appendChild(inputFim);
-                    divInputDetalhes.appendChild(inputDetalhes);
+                    divInputMotivo.appendChild(inputMotivo);
+                    divInputDescricao.appendChild(inputDescricao);
 
-                    div_row_inputs.appendChild(divLabelNumero);
-                    div_row_inputs.appendChild(divInputNumero);
-                    div_row_inputs.appendChild(divLabelNome);
-                    div_row_inputs.appendChild(divInputNome);
-                    div_row_inputs.appendChild(divLabelFolhas);
-                    div_row_inputs.appendChild(divInputFolhas);
-                    div_row_inputs.appendChild(divLabelCor);
-                    div_row_inputs.appendChild(divInputCor);
-                    div_row_inputs.appendChild(divLabelInicio);
-                    div_row_inputs.appendChild(divInputInicio);
-                    div_row_inputs.appendChild(divLabelFim);
-                    div_row_inputs.appendChild(divInputFim);
-                    div_row_inputs.appendChild(divLabelDetalhes);
-                    div_row_inputs.appendChild(divInputDetalhes);
+                    div_row_inputs.appendChild(divLabelMotivo);
+                    div_row_inputs.appendChild(divInputMotivo);
+                    div_row_inputs.appendChild(divLabelDescricao);
+                    div_row_inputs.appendChild(divInputDescricao);
                     div_row_inputs.appendChild(br);
                     div_row_inputs.appendChild(inputSubmitSalvar);
                     div_row_inputs.appendChild(inputSubmitCancelar);
 
-                    var metodo = "livro/listarLivros";
+                    var metodo = "motivo/listarMotivo";
 
                     $.ajax
                             ({
@@ -479,25 +397,24 @@
                             })
                             .done(function (returnJson) {
 
+                                var returnJson = JSON.parse(returnJson);
+
                                 // PREENCHE O FORM
                                 for (var i = 0; i < returnJson.length; i++) {
 
                                     if (returnJson[i].id === parseInt(id)) {
 
-                                        document.getElementById("numero").value = returnJson[i].numero;
-                                        document.getElementById("nome").value = returnJson[i].nome;
-                                        document.getElementById("folhas").value = returnJson[i].folhas;
-                                        document.getElementById("cor").value = returnJson[i].cor;
-                                        document.getElementById("dtinicio").value = returnJson[i].dataIni;
-                                        document.getElementById("dtfim").value = returnJson[i].dataFi;
-                                        document.getElementById("detalhes").append(returnJson[i].detalhes);
+                                        document.getElementById("motivo").value = returnJson[i].motivo;
+                                        if (returnJson[i].descricao) {
+                                            document.getElementById("descricao").value = returnJson[i].descricao;
+                                        }
 
                                     }
 
                                 }
                             })
                             .fail(function (msg) {
-                                AlertModal("Falha ao tentar obter o livro escolhido");
+                                AlertModal("Falha ao tentar obter o motivo escolhido");
                                 console.log(msg);
                             });
 
@@ -535,11 +452,11 @@
                 editar.setAttribute("style", "margin-right: 10px; margin-top: 10px;");
                 editar.setAttribute("onclick", "CallFormEditar(" + id + ")");
 
-                if ( verifiquePermissaoExcluir() === true ) {
+                if (verifiquePermissaoExcluir() === true) {
                     sendMensage.appendChild(excluir);
                 }
 
-                if ( verifiquePermissaoEditar() === true ) {
+                if (verifiquePermissaoEditar() === true) {
                     sendMensage.appendChild(editar);
                 }
 
@@ -548,7 +465,7 @@
 
             /* 
              *  **********   FUNÇÃO PARA OBTER OS CAMPOS DO INPUT E 
-             *  ********** REALIZAR ENVIO DO JSON PARA FAZER O INSERT (CADASTRAR LIVRO) 
+             *  ********** REALIZAR ENVIO DO JSON PARA FAZER O INSERT (CADASTRAR) 
              */
 
             function SendFormCadastrar() {
@@ -557,14 +474,39 @@
 
                     if (ValidaCampos() === true) {
 
-                        numero = document.getElementById("numero").value;
                         nome = document.getElementById("nome").value;
-                        folhas = document.getElementById("folhas").value;
-                        cor = document.getElementById("cor").value;
-                        dtinicio = document.getElementById("dtinicio").value;
-                        detalhes = document.getElementById("detalhes").value;
+                        user = document.getElementById("user").value;
+                        senha = document.getElementById("senha").value;
 
-                        var metodo = "livro/cadastrarLivro";
+                        //ler = document.getElementById("ler").checked;
+                        inserir = document.getElementById("inserir").checked;
+                        editar = document.getElementById("editar").checked;
+                        excluir = document.getElementById("excluir").checked;
+
+                        /*
+                         if (ler === true) {
+                         ler = 'S';
+                         } else {
+                         ler = 'N';
+                         }
+                         */
+                        if (inserir === true) {
+                            inserir = 'S';
+                        } else {
+                            inserir = 'N';
+                        }
+                        if (editar === true) {
+                            editar = 'S';
+                        } else {
+                            editar = 'N';
+                        }
+                        if (excluir === true) {
+                            excluir = 'S';
+                        } else {
+                            excluir = 'N';
+                        }
+
+                        var metodo = "usuario/cadastrarUsuario";
 
                         $.ajax
                                 ({
@@ -572,12 +514,15 @@
                                     type: 'POST',
                                     data: JSON.stringify(
                                             {
-                                                folhas: folhas,
-                                                numero: numero,
                                                 nome: nome,
-                                                detalhes: detalhes,
-                                                cor: cor,
-                                                dataInicio: dtinicio
+                                                user: user,
+                                                senha: senha,
+                                                permissao: {
+                                                    write: inserir,
+                                                    delete: excluir,
+                                                    update: editar,
+                                                    ler: 'S'
+                                                }
                                             }),
                                     contentType: 'application/json',
                                     beforeSend: function () {
@@ -585,25 +530,29 @@
                                     }
                                 })
                                 .done(function (returnJson) {
+                                    
+                                    //var returnJson = JSON.parse(returnJson);
 
-                                    if (returnJson.numero === parseInt(numero)) {
+                                    if (returnJson.id) {
 
                                         AlertModal("Sucesso!");
 
                                         cleanInputs();
+
                                     } else {
 
                                         AlertModal("O servidor retornou um erro inesperado!");
-
+                                        console.log(returnJson);
                                     }
 
                                 })
                                 .fail(function (msg) {
-                                    AlertModal("Falha ao tentar cadastrar livro");
+                                    AlertModal("Falha ao tentar cadastrar motivo");
                                     console.log(msg);
                                 });
                     } else {
                         AlertModal("Exitem campos com preenchimento inválido!");
+                        console.log(returnJson);
                     }
                 } else {
 
@@ -619,19 +568,21 @@
 
             function cleanInputs() {
 
-                document.getElementById("numero").value = "";
                 document.getElementById("nome").value = "";
-                document.getElementById("folhas").value = "";
-                document.getElementById("cor").value = "";
-                document.getElementById("dtinicio").value = "";
-                document.getElementById("detalhes").value = "";
+                document.getElementById("user").value = "";
+                document.getElementById("senha").value = "";
+                document.getElementById("repete").value = "";
 
+                //document.getElementById("ler").checked = true;
+                document.getElementById("inserir").checked = false;
+                document.getElementById("editar").checked = false;
+                document.getElementById("excluir").checked = false;
 
             }
 
             /* 
-             *  **********   FUNÇÃO PARA CHAMAR O FORMULÁRIO DE CADASTRO DE LIVRO 
-             *  **********          E REMOVER A TABELA DE LIVROS DA TELA
+             *  **********   FUNÇÃO PARA CHAMAR O FORMULÁRIO DE CADASTRO
+             *  **********          E REMOVER A TABELA DA TELA
              */
 
             function CallFormCadastrar() {
@@ -640,67 +591,84 @@
 
                 div_row_inputs = document.getElementById("div-row-inputs");
 
-                divLabelNumero = document.createElement("div");
                 divLabelNome = document.createElement("div");
-                divLabelFolhas = document.createElement("div");
-                divLabelCor = document.createElement("div");
-                divLabelInicio = document.createElement("div");
-                divLabelDetalhes = document.createElement("div");
+                divLabelUser = document.createElement("div");
+                divLabelSenha = document.createElement("div");
+                divLabelRepete = document.createElement("div");
+                divLabelStatus = document.createElement("div");
+                divLabelPermissoes = document.createElement("div");
 
-                divLabelNumero.setAttribute("class", "col-25");
                 divLabelNome.setAttribute("class", "col-25");
-                divLabelFolhas.setAttribute("class", "col-25");
-                divLabelCor.setAttribute("class", "col-25");
-                divLabelInicio.setAttribute("class", "col-25");
-                divLabelDetalhes.setAttribute("class", "col-25");
+                divLabelUser.setAttribute("class", "col-25");
+                divLabelSenha.setAttribute("class", "col-25");
+                divLabelRepete.setAttribute("class", "col-25");
+                divLabelStatus.setAttribute("class", "col-25");
+                divLabelPermissoes.setAttribute("class", "col-25");
 
-                labelNumero = document.createElement("label");
                 labelNome = document.createElement("label");
-                labelFolhas = document.createElement("label");
-                labelCor = document.createElement("label");
-                labelInicio = document.createElement("label");
-                labelDetalhes = document.createElement("label");
+                labelUser = document.createElement("label");
+                labelSenha = document.createElement("label");
+                labelRepete = document.createElement("label");
+                labelStatus = document.createElement("label");
+                labelPermissoes = document.createElement("label");
+                labelLer = document.createElement("label");
+                labelInserir = document.createElement("label");
+                labelEditar = document.createElement("label");
+                labelExcluir = document.createElement("label");
 
-                labelNumero.setAttribute("for", "numero");
                 labelNome.setAttribute("for", "nome");
-                labelFolhas.setAttribute("for", "folhas");
-                labelCor.setAttribute("for", "cor");
-                labelInicio.setAttribute("for", "dtinicio");
-                labelDetalhes.setAttribute("for", "detalhes");
+                labelUser.setAttribute("for", "user");
+                labelSenha.setAttribute("for", "senha");
+                labelRepete.setAttribute("for", "repete");
+                labelStatus.setAttribute("for", "status");
+                labelPermissoes.setAttribute("for", "permissoes");
+                labelLer.setAttribute("for", "ler");
+                labelInserir.setAttribute("for", "inserir");
+                labelEditar.setAttribute("for", "editar");
+                labelExcluir.setAttribute("for", "excluir");
 
-                labelNumero.append("Número");
-                labelNome.append("Nome");
-                labelFolhas.append("N° Folhas");
-                labelCor.append("Cor");
-                labelInicio.append("Data Início");
-                labelDetalhes.append("Detalhes");
+                labelNome.append("nome");
+                labelUser.append("Usuário");
+                labelSenha.append("Senha");
+                labelRepete.append("Repetir Senha");
+                labelStatus.append("Status");
+                labelPermissoes.append("Permissões");
+                labelLer.append("Ler");
+                labelInserir.append("Inserir");
+                labelEditar.append("Editar");
+                labelExcluir.append("Excluir");
 
-                divInputNumero = document.createElement("div");
                 divInputNome = document.createElement("div");
-                divInputFolhas = document.createElement("div");
-                divInputCor = document.createElement("div");
-                divInputInicio = document.createElement("div");
-                divInputDetalhes = document.createElement("div");
+                divInputUser = document.createElement("div");
+                divInputSenha = document.createElement("div");
+                divInputRepete = document.createElement("div");
+                divInputStatus = document.createElement("div");
+                divInputPermissoes = document.createElement("div");
 
-                divInputNumero.setAttribute("class", "col-75");
                 divInputNome.setAttribute("class", "col-75");
-                divInputFolhas.setAttribute("class", "col-75");
-                divInputCor.setAttribute("class", "col-75");
-                divInputInicio.setAttribute("class", "col-75");
-                divInputDetalhes.setAttribute("class", "col-75");
+                divInputUser.setAttribute("class", "col-75");
+                divInputSenha.setAttribute("class", "col-75");
+                divInputRepete.setAttribute("class", "col-75");
+                divInputStatus.setAttribute("class", "col-75");
+                divInputPermissoes.setAttribute("class", "col-75");
 
-                inputNumero = document.createElement("input");
                 inputNome = document.createElement("input");
-                inputFolhas = document.createElement("input");
-                inputCor = document.createElement("input");
-                inputInicio = document.createElement("input");
-                inputDetalhes = document.createElement("textarea");
+                inputUser = document.createElement("input");
+                inputSenha = document.createElement("input");
+                inputRepete = document.createElement("input");
+                inputStatus = document.createElement("select");
+                inputLer = document.createElement("input");
+                inputInserir = document.createElement("input");
+                inputEditar = document.createElement("input");
+                inputExcluir = document.createElement("input");
+                optionAtivado = document.createElement("option");
+                optionDesativado = document.createElement("option");
 
-                inputNumero.setAttribute("type", "number");
-                inputNumero.setAttribute("required", "required");
-                inputNumero.setAttribute("id", "numero");
-                inputNumero.setAttribute("name", "numero");
-                inputNumero.setAttribute("placeholder", "obrigatório");
+                optionAtivado.append("Ativado");
+                optionDesativado.append("Desativado");
+
+                optionAtivado.setAttribute("value", "A");
+                optionDesativado.setAttribute("value", "D");
 
                 inputNome.setAttribute("type", "text");
                 inputNome.setAttribute("required", "required");
@@ -708,23 +676,39 @@
                 inputNome.setAttribute("name", "nome");
                 inputNome.setAttribute("placeholder", "obrigatório");
 
-                inputFolhas.setAttribute("type", "number");
-                inputFolhas.setAttribute("required", "required");
-                inputFolhas.setAttribute("id", "folhas");
-                inputFolhas.setAttribute("name", "folhas");
-                inputFolhas.setAttribute("placeholder", "obrigatório");
+                inputUser.setAttribute("type", "text");
+                inputUser.setAttribute("required", "required");
+                inputUser.setAttribute("id", "user");
+                inputUser.setAttribute("name", "user");
+                inputUser.setAttribute("placeholder", "obrigatório");
 
-                inputCor.setAttribute("type", "text");
-                inputCor.setAttribute("id", "cor");
-                inputCor.setAttribute("name", "cor");
+                inputSenha.setAttribute("type", "password");
+                inputSenha.setAttribute("required", "required");
+                inputSenha.setAttribute("id", "senha");
+                inputSenha.setAttribute("name", "senha");
+                inputSenha.setAttribute("placeholder", "obrigatório");
 
-                inputInicio.setAttribute("type", "date");
-                inputInicio.setAttribute("id", "dtinicio");
-                inputInicio.setAttribute("name", "dtinicio");
+                inputRepete.setAttribute("type", "password");
+                inputRepete.setAttribute("required", "required");
+                inputRepete.setAttribute("id", "repete");
+                inputRepete.setAttribute("name", "repete");
+                inputRepete.setAttribute("placeholder", "obrigatório");
 
-                inputDetalhes.setAttribute("style", "height:100px;");
-                inputDetalhes.setAttribute("id", "detalhes");
-                inputDetalhes.setAttribute("name", "detalhes");
+                inputStatus.setAttribute("id", "status");
+                inputRepete.setAttribute("name", "status");
+
+                inputLer.setAttribute("type", "checkbox");
+                inputLer.setAttribute("id", "ler");
+                inputLer.setAttribute("checked", "checked");
+
+                inputInserir.setAttribute("type", "checkbox");
+                inputInserir.setAttribute("id", "inserir");
+
+                inputEditar.setAttribute("type", "checkbox");
+                inputEditar.setAttribute("id", "editar");
+
+                inputExcluir.setAttribute("type", "checkbox");
+                inputExcluir.setAttribute("id", "excluir");
 
                 br = document.createElement("br");
 
@@ -742,41 +726,53 @@
                 inputSubmitCancelar.setAttribute("onclick", "RemoveForm();");
                 inputSubmitCancelar.setAttribute("value", "Cancelar");
 
-                divLabelNumero.appendChild(labelNumero);
+                inputStatus.appendChild(optionAtivado);
+                inputStatus.appendChild(optionDesativado);
+
                 divLabelNome.appendChild(labelNome);
-                divLabelFolhas.appendChild(labelFolhas);
-                divLabelCor.appendChild(labelCor);
-                divLabelInicio.appendChild(labelInicio);
-                divLabelDetalhes.appendChild(labelDetalhes);
+                divLabelUser.appendChild(labelUser);
+                divLabelSenha.appendChild(labelSenha);
+                divLabelRepete.appendChild(labelRepete);
+                divLabelStatus.appendChild(labelStatus);
+                divLabelPermissoes.appendChild(labelPermissoes);
 
-                divInputNumero.appendChild(inputNumero);
                 divInputNome.appendChild(inputNome);
-                divInputFolhas.appendChild(inputFolhas);
-                divInputCor.appendChild(inputCor);
-                divInputInicio.appendChild(inputInicio);
-                divInputDetalhes.appendChild(inputDetalhes);
+                divInputUser.appendChild(inputUser);
+                divInputSenha.appendChild(inputSenha);
+                divInputRepete.appendChild(inputRepete);
+                divInputStatus.appendChild(inputStatus);
 
-                div_row_inputs.appendChild(divLabelNumero);
-                div_row_inputs.appendChild(divInputNumero);
+                //divInputPermissoes.appendChild(labelLer);
+                //divInputPermissoes.appendChild(inputLer);
+                divInputPermissoes.appendChild(labelInserir);
+                divInputPermissoes.appendChild(inputInserir);
+                divInputPermissoes.appendChild(labelEditar);
+                divInputPermissoes.appendChild(inputEditar);
+                divInputPermissoes.appendChild(labelExcluir);
+                divInputPermissoes.appendChild(inputExcluir);
+
                 div_row_inputs.appendChild(divLabelNome);
                 div_row_inputs.appendChild(divInputNome);
-                div_row_inputs.appendChild(divLabelFolhas);
-                div_row_inputs.appendChild(divInputFolhas);
-                div_row_inputs.appendChild(divLabelCor);
-                div_row_inputs.appendChild(divInputCor);
-                div_row_inputs.appendChild(divLabelInicio);
-                div_row_inputs.appendChild(divInputInicio);
-                div_row_inputs.appendChild(divLabelDetalhes);
-                div_row_inputs.appendChild(divInputDetalhes);
+                div_row_inputs.appendChild(divLabelUser);
+                div_row_inputs.appendChild(divInputUser);
+                div_row_inputs.appendChild(divLabelSenha);
+                div_row_inputs.appendChild(divInputSenha);
+                div_row_inputs.appendChild(divLabelRepete);
+                div_row_inputs.appendChild(divInputRepete);
+                //div_row_inputs.appendChild(divLabelStatus);
+                //div_row_inputs.appendChild(divInputStatus);
+                div_row_inputs.appendChild(divLabelPermissoes);
+                div_row_inputs.appendChild(divInputPermissoes);
                 div_row_inputs.appendChild(br);
                 div_row_inputs.appendChild(inputSubmitSalvar);
                 div_row_inputs.appendChild(inputSubmitCancelar);
+
 
             }
 
             /* 
              *  **********       CHAMADO ATRAVES DO BOTÃO CANCELAR CADASTRO 
-             *  ********** FUNÇÃO QUE OCULTA O FORMULÁRIO E CHAMA A TABELA DE LIVROS 
+             *  ********** FUNÇÃO QUE OCULTA O FORMULÁRIO E CHAMA A TABELA
              */
 
             function RemoveForm() {
@@ -785,19 +781,19 @@
 
                 $("#div-row-inputs").empty();
 
-                GetListLivros();
+                GetListUsuarios();
 
             }
 
             /* 
-             *  **********   FUNÇÃO PARA EXIBIR TODOS OS LIVROS CADASTRADOS 
+             *  **********   FUNÇÃO PARA EXIBIR TODOS OS OBJETOS CADASTRADOS 
              *  **********  REALIZAR UMA CHAMADA JSON PARA RECEBER OS DADOS
              *  **********           CRIAR UMA TABELA E PREENCHER 
              */
 
-            function GetListLivros() {
+            function GetListUsuarios() {
 
-                var metodo = "livro/listarLivros";
+                var metodo = "usuario/listarUsuario";
 
                 $.ajax
                         ({
@@ -810,14 +806,11 @@
                         })
                         .done(function (returnJson) {
 
-                            //var livros = JSON.parse(returnJson);
-
-                            livros = returnJson;
+                            var usuarios = JSON.parse(returnJson);
 
                             // PEGA A DIV PAI E ESVAZIA ELA
                             tdiv = document.getElementById("div-protocols");
                             $("#div-protocols").empty();
-
 
 
                             // CRIA A TABELA E SETA OS ATRIBUTOS
@@ -833,30 +826,30 @@
                             // CRIA A LINHA DO TÍTULO E AS COLUNAS E INSERI AS STRINGS
                             trowhead = document.createElement("tr");
 
-                            tcolNumerohead = document.createElement("th");
-                            tcolNomehead = document.createElement("th");
-                            tcolFolhashead = document.createElement("th");
-                            tcolCorhead = document.createElement("th");
-                            tcolIniciohead = document.createElement("th");
-                            tcolFimhead = document.createElement("th");
-                            tcolDetalheshead = document.createElement("th");
+                            tcolNomeHead = document.createElement("th");
+                            tcolUserHead = document.createElement("th");
+                            tcolStatusHead = document.createElement("th");
+                            tcolLerHead = document.createElement("th");
+                            tcolinserirHead = document.createElement("th");
+                            tcolEditarHead = document.createElement("th");
+                            tcolExcluirHead = document.createElement("th");
 
-                            tcolNumerohead.append("Número");
-                            tcolNomehead.append("Nome");
-                            tcolFolhashead.append("Folhas");
-                            tcolCorhead.append("Cor");
-                            tcolIniciohead.append("Abertura");
-                            tcolFimhead.append("Término");
-                            tcolDetalheshead.append("Detalhes");
+                            tcolNomeHead.append("Nome");
+                            tcolUserHead.append("Usuário");
+                            tcolStatusHead.append("Situação");
+                            tcolLerHead.append("Ler");
+                            tcolinserirHead.append("Inserir");
+                            tcolEditarHead.append("Editar");
+                            tcolExcluirHead.append("Excluir");
 
                             // INSERI AS COLUNAS DO TÍTULO NA LINHA DO TÍTULO
-                            trowhead.appendChild(tcolNumerohead);
-                            trowhead.appendChild(tcolNomehead);
-                            trowhead.appendChild(tcolFolhashead);
-                            trowhead.appendChild(tcolCorhead);
-                            trowhead.appendChild(tcolIniciohead);
-                            trowhead.appendChild(tcolFimhead);
-                            trowhead.appendChild(tcolDetalheshead);
+                            trowhead.appendChild(tcolNomeHead);
+                            trowhead.appendChild(tcolUserHead);
+                            trowhead.appendChild(tcolStatusHead);
+                            trowhead.appendChild(tcolLerHead);
+                            trowhead.appendChild(tcolinserirHead);
+                            trowhead.appendChild(tcolEditarHead);
+                            trowhead.appendChild(tcolExcluirHead);
 
                             // INSERI A LINHA DO TÍTULO NO THEAD
                             tthead.appendChild(trowhead);
@@ -872,18 +865,18 @@
                             // \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
 
                             // ITERA O JSON (LINHA A LINHA) E CHAMA O METODO QUE PREENCHE A TABELA
-                            for (var i = 0; i < livros.length; i++) {
+                            for (var i = 0; i < usuarios.length; i++) {
 
-                                PreencheTboby(livros[i], i);
+                                PreencheTboby(usuarios[i], i);
 
                             }
 
-                            function PreencheTboby(livro, i) {
+                            function PreencheTboby(usuario, i) {
 
                                 // CRIA A LINHA
                                 trow = document.createElement("tr");
                                 if ((verifiquePermissaoEditar() === true) || (verifiquePermissaoExcluir() === true)) {
-                                    trow.setAttribute("onclick", "chamaModal(" + livro.id + ")");
+                                    trow.setAttribute("onclick", "chamaModal(" + usuario.id + ")");
                                 }
 
                                 trow.setAttribute("id", "line" + i);
@@ -892,40 +885,54 @@
                                 trow.setAttribute("onmouseout", "linhaO('line" + i + "')");
 
                                 // CRIA AS COLUNAS
-                                tcolNumero = document.createElement("td");
                                 tcolNome = document.createElement("td");
-                                tcolFolhas = document.createElement("td");
-                                tcolCor = document.createElement("td");
-                                tcolInicio = document.createElement("td");
-                                tcolFim = document.createElement("td");
-                                tcolDetalhes = document.createElement("td");
+                                tcolUser = document.createElement("td");
+                                tcolStatus = document.createElement("td");
+                                tcolLer = document.createElement("td");
+                                tcolinserir = document.createElement("td");
+                                tcolEditar = document.createElement("td");
+                                tcolExcluir = document.createElement("td");
 
                                 // ADICIONA ATRIBUTOS A COLUNA QUE GARANTE O TITULO NA RESPONSIVIDADE
-                                tcolNumero.setAttribute("data-th", "Número");
                                 tcolNome.setAttribute("data-th", "Nome");
-                                tcolFolhas.setAttribute("data-th", "Folhas");
-                                tcolCor.setAttribute("data-th", "Cor");
-                                tcolInicio.setAttribute("data-th", "Abertura");
-                                tcolFim.setAttribute("data-th", "Término");
-                                tcolDetalhes.setAttribute("data-th", "Detalhes");
+                                tcolUser.setAttribute("data-th", "Usuário");
+                                tcolStatus.setAttribute("data-th", "Situação");
+                                tcolLer.setAttribute("data-th", "Ler");
+                                tcolinserir.setAttribute("data-th", "Inserir");
+                                tcolEditar.setAttribute("data-th", "Editar");
+                                tcolExcluir.setAttribute("data-th", "Excluir");
 
                                 // INSERI O CONTEUDO DO JSON NA COLUNA DO CORPO DA TABELA
-                                tcolNumero.append(livro.numero);
-                                tcolNome.append(livro.nome);
-                                tcolFolhas.append(livro.folhas);
-                                tcolCor.append(livro.cor);
-                                tcolInicio.append(livro.dtIni);
-                                tcolFim.append(livro.dtFim);
-                                tcolDetalhes.append(livro.detalhes);
+                                if (usuario.nome) {
+                                    tcolNome.append(usuario.nome);
+                                }
+                                if (usuario.user) {
+                                    tcolUser.append(usuario.user);
+                                }
+                                if (usuario.status) {
+                                    tcolStatus.append(usuario.status);
+                                }
+                                if (usuario.permissao.read) {
+                                    tcolLer.append(usuario.permissao.read);
+                                }
+                                if (usuario.permissao.write) {
+                                    tcolinserir.append(usuario.permissao.write);
+                                }
+                                if (usuario.permissao.update) {
+                                    tcolEditar.append(usuario.permissao.update);
+                                }
+                                if (usuario.permissao.delete) {
+                                    tcolExcluir.append(usuario.permissao.delete);
+                                }
 
                                 // INSERI AS COLUNAS DENTRO DA LINHA
-                                trow.appendChild(tcolNumero);
                                 trow.appendChild(tcolNome);
-                                trow.appendChild(tcolFolhas);
-                                trow.appendChild(tcolCor);
-                                trow.appendChild(tcolInicio);
-                                trow.appendChild(tcolFim);
-                                trow.appendChild(tcolDetalhes);
+                                trow.appendChild(tcolUser);
+                                trow.appendChild(tcolStatus);
+                                trow.appendChild(tcolLer);
+                                trow.appendChild(tcolinserir);
+                                trow.appendChild(tcolEditar);
+                                trow.appendChild(tcolExcluir);
 
                                 // INSERI O CORPO DENTRO DA TABELA
                                 ttbody.appendChild(trow);
@@ -934,7 +941,7 @@
 
                         })
                         .fail(function (msg) {
-                            AlertModal("Falha ao tentar obter a lista de livros");
+                            AlertModal("Falha ao tentar obter a lista de usuários");
                             console.log(msg);
                         });
 
@@ -944,7 +951,7 @@
 
     </head>
 
-    <body onload="GetListLivros();
+    <body onload="GetListUsuarios();
             exibeButtonInserir();">
 
         <!-- \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ NAV MENU \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ -->
@@ -976,7 +983,7 @@
         <!-- \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ TÍTULO \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ -->
 
         <h1 style="color: floralwhite; text-align: center; text-shadow:#000 1px -1px, #000 -1px 1px, #000 1px 1px, #000 -1px -1px" >
-            Livros
+            Usuários
         </h1>
 
         <br/>

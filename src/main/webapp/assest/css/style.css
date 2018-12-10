@@ -1,4 +1,4 @@
-@import "../fonts/fonts-google-apis.css";
+@import "https://fonts.googleapis.com/css?family=Montserrat:300,400,700";
 .rwd-table {
   min-width: 300px;
 }
