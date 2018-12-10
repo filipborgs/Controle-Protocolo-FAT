@@ -72,7 +72,7 @@ public class UsuarioDAO extends DatabaseUtil {
             stmt.setString(4, String.valueOf(u.getPermissao().getUpdate()));
             stmt.setString(5, String.valueOf(u.getPermissao().getWrite()));
             stmt.setString(6, String.valueOf(u.getPermissao().getDelete()));
-            stmt.setString(7, String.valueOf(u.getPermissao().getRead()));
+            stmt.setString(7, String.valueOf("S"));
             stmt.setString(8, String.valueOf(u.getStatus()));
 
             stmt.executeUpdate();
