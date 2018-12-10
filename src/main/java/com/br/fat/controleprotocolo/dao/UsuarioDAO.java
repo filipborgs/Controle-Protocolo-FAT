@@ -6,6 +6,8 @@ import com.br.fat.controleprotocolo.model.Permissao;
 import com.br.fat.controleprotocolo.model.Usuario;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -57,10 +59,11 @@ public class UsuarioDAO extends DatabaseUtil {
     }
 
     public Usuario createUsuario(Usuario u) throws Exception {
-        String sql = "INSERT INTO usuario (" + UsuarioDaoUtil.USUARIO_ATRIBUTO_NOME + "," + UsuarioDaoUtil.USUARIO_ATRIBUTO_USER
-                + "," + UsuarioDaoUtil.USUARIO_ATRIBUTO_SENHA + "," + UsuarioDaoUtil.USUARIO_ATRIBUTO_EDITAR + ","
+        String sql = "INSERT INTO usuario (" + UsuarioDaoUtil.USUARIO_ATRIBUTO_NOME + "," + UsuarioDaoUtil.USUARIO_ATRIBUTO_USER + ","
+                + UsuarioDaoUtil.USUARIO_ATRIBUTO_SENHA + "," + UsuarioDaoUtil.USUARIO_ATRIBUTO_EDITAR + ","
                 + UsuarioDaoUtil.USUARIO_ATRIBUTO_INSERIR + "," + UsuarioDaoUtil.USUARIO_ATRIBUTO_DELETAR + ","
-                + UsuarioDaoUtil.USUARIO_ATRIBUTO_STATUS + ")" + " VALUES (?, ?, ?, ?, ?, ?, ?)";
+                + UsuarioDaoUtil.USUARIO_ATRIBUTO_LER + "," + UsuarioDaoUtil.USUARIO_ATRIBUTO_STATUS
+                + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try {
             stmt = con.prepareStatement(sql);
             stmt.setString(1, u.getNome());
@@ -69,50 +72,76 @@ public class UsuarioDAO extends DatabaseUtil {
             stmt.setString(4, String.valueOf(u.getPermissao().getUpdate()));
             stmt.setString(5, String.valueOf(u.getPermissao().getWrite()));
             stmt.setString(6, String.valueOf(u.getPermissao().getDelete()));
-            stmt.setString(7, String.valueOf(u.getStatus()));
+            stmt.setString(7, String.valueOf(u.getPermissao().getRead()));
+            stmt.setString(8, String.valueOf(u.getStatus()));
 
             stmt.executeUpdate();
             rs = stmt.getGeneratedKeys();
             if (rs.next()) {
                 u.setId(rs.getInt(1));
+                return u;
+            } else {
+                throw new Exception();
             }
-            return u;
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             throw new Exception(ex.getMessage());
         }
-    }
-//
-//    public List getListaTiposUsuario() throws SQLException {
-//        List<Tipo> listaTipos = null;
-//
-//        super.getCon();
-//        stmt = con.prepareStatement("SELECT * FROM tipos_usuario");
-//        rs = stmt.executeQuery();
-//        while (rs.next()) {
-//            Tipo t = new Tipo();
-//            listaTipos = new ArrayList<>();
-//            t.setDescricao(rs.getString(UsuarioDaoUtil.TIPO_ATRIBUTO_DESCRICAO));
-//            t.setTipo(rs.getString(UsuarioDaoUtil.TIPO_ATRIBUTO_TIPO));
-//            listaTipos.add(t);
-//        }
-//        return listaTipos;
-//    }
-//
-//    public List selectUsuariosByCurso(int idCurso) {
-//        String sql = "SELECT * FROM view_usuario_curso WHERE " + CursoDaoUtil.CURSO_ATRIBUTO_ID + " = ?";
-//        List<Usuario> listaUser = new ArrayList<>();
-//        super.getCon();
-//        try {
-//            stmt = con.prepareStatement(sql);
-//            stmt.setInt(1, idCurso);
-//            rs = stmt.executeQuery();
-//            while (rs.next()) {
-//                listaUser.add(createObjUsuarioDao(rs, 'U'));
-//            }
-//        } catch (SQLException ex) {
-//            Logger.getLogger(UsuarioDAO.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        return listaUser;
-//    }
 
+    }
+
+    public List<Usuario> selectAllUsuarios() throws Exception {
+        String sql = "SELECT * FROM usuario WHERE " + UsuarioDaoUtil.USUARIO_ATRIBUTO_EXCLUIDO + " = 'S'";
+        List<Usuario> listaUser = new ArrayList<>();
+        super.getCon();
+        try {
+            stmt = con.prepareStatement(sql);
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                listaUser.add(createObjUsuarioDao(rs));
+            }
+            return listaUser;
+        } catch (SQLException ex) {
+            Logger.getLogger(UsuarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+            throw new Exception();
+        }
+    }
+
+    public void updateUsuario(Usuario u) throws Exception {
+        String sql = "UPDATE usuario SET " + UsuarioDaoUtil.USUARIO_ATRIBUTO_NOME + "= ?,"
+                + UsuarioDaoUtil.USUARIO_ATRIBUTO_USER + "= ?," + UsuarioDaoUtil.USUARIO_ATRIBUTO_SENHA + "= ?,"
+                + UsuarioDaoUtil.USUARIO_ATRIBUTO_EDITAR + "= ?," + UsuarioDaoUtil.USUARIO_ATRIBUTO_INSERIR + "= ?,"
+                + UsuarioDaoUtil.USUARIO_ATRIBUTO_DELETAR + "= ?," + UsuarioDaoUtil.USUARIO_ATRIBUTO_LER + "= ?,"
+                + UsuarioDaoUtil.USUARIO_ATRIBUTO_STATUS + "= ? WHERE " + UsuarioDaoUtil.USUARIO_ATRIBUTO_ID + "= ?";
+        super.getCon();
+        try {
+            stmt = con.prepareStatement(sql);
+            stmt.setString(1, u.getNome());
+            stmt.setString(2, u.getUser());
+            stmt.setString(3, u.getSenha());
+            stmt.setString(4, String.valueOf(u.getPermissao().getUpdate()));
+            stmt.setString(5, String.valueOf(u.getPermissao().getWrite()));
+            stmt.setString(6, String.valueOf(u.getPermissao().getDelete()));
+            stmt.setString(7, String.valueOf(u.getPermissao().getRead()));
+            stmt.setString(8, String.valueOf(u.getStatus()));
+            stmt.setInt(9, u.getId());
+            stmt.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(LivroRegistroDao.class.getName()).log(Level.SEVERE, null, ex);
+            throw new Exception();
+        }
+    }
+
+    public void deleteUsuario(int id) throws Exception {
+        String sql = "UPDATE usuario SET " + UsuarioDaoUtil.USUARIO_ATRIBUTO_EXCLUIDO + " = 'S' WHERE "
+                + UsuarioDaoUtil.USUARIO_ATRIBUTO_ID + "= ?";
+        super.getCon();
+        try {
+            stmt = con.prepareCall(sql);
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(LivroRegistroDao.class.getName()).log(Level.SEVERE, null, ex);
+            throw new Exception();
+        }
+    }
 }

@@ -5,7 +5,6 @@
  */
 package com.br.fat.controleprotocolo.view.services;
 
-import com.br.fat.controleprotocolo.controller.ControllerLivroRegistro;
 import com.br.fat.controleprotocolo.controller.ControllerSituacao;
 import com.google.gson.Gson;
 import java.util.logging.Level;

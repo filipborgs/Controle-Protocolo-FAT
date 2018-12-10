@@ -15,42 +15,45 @@ import java.util.List;
  * @author Filipe Borges
  */
 public class ControllerPessoa extends Controller {
-
+    
     private final PessoaDAO pdao = new PessoaDAO();
-
+    
     public ControllerPessoa(Usuario u) {
         super(u);
     }
-
+    
     public String createPessoa(String jsonPessoa) throws Exception {
         this.verifyPermission(this.user.getPermissao().getWrite());
-
+        
         Pessoa p = gson.fromJson(jsonPessoa, Pessoa.class);
-
+        
         if (p.getNome().equals("") || p.getSetor().equals("")) {
             throw new Exception();
         } else {
+            if (p.getDescricao().equals("")) {
+                p.setDescricao(null);
+            }
             p = pdao.insertPessoa(p);
             return gson.toJson(p);
         }
     }
-
+    
     public List<Pessoa> getAllPessoa() throws Exception {
         this.verifyPermission(this.user.getPermissao().getWrite());
-
+        
         return pdao.selectAllPessoa();
     }
-
+    
     public void removePessoa(int idPessoa) throws Exception {
         this.verifyPermission(this.user.getPermissao().getDelete());
-
+        
         if (idPessoa <= 0) {
             throw new Exception();
         } else {
             pdao.deletePessoa(idPessoa);
         }
     }
-
+    
     public void editPessoa(String jsonPessoa) throws Exception {
         this.verifyPermission(this.user.getPermissao().getDelete());
         Pessoa p = gson.fromJson(jsonPessoa, Pessoa.class);

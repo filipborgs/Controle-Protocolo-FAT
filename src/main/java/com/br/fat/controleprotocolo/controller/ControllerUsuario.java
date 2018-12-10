@@ -46,8 +46,6 @@ public class ControllerUsuario extends Controller {
         }
     }
 
-   
-
     public Usuario createUsuario(Usuario u) throws Exception {
         super.verifyPermission(u.getPermissao().getWrite());
         if (u.getNome() == null || u.getNome().isEmpty() || u.getUser() == null || u.getUser().isEmpty()
@@ -55,6 +53,31 @@ public class ControllerUsuario extends Controller {
             throw new Exception();
         } else {
             return udao.createUsuario(u);
+        }
+    }
+
+    public String getAllUsuario() throws Exception {
+        this.verifyPermission(this.user.getPermissao().getWrite());
+
+        return gson.toJson(udao.selectAllUsuarios());
+    }
+
+    public void editUsuario(String jsonUsuario) throws Exception {
+        this.verifyPermission(this.user.getPermissao().getDelete());
+        Usuario u = gson.fromJson(jsonUsuario, Usuario.class);
+        if (u.getId() <= 0) {
+            throw new Exception();
+        }
+        udao.updateUsuario(u);
+    }
+
+    public void removeUsuario(int idUsuario) throws Exception {
+        this.verifyPermission(this.user.getPermissao().getDelete());
+
+        if (idUsuario <= 0) {
+            throw new Exception();
+        } else {
+            udao.deleteUsuario(idUsuario);
         }
     }
 }
