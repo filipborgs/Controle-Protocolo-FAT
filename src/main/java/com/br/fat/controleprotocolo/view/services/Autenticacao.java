@@ -13,7 +13,7 @@ import javax.ws.rs.core.SecurityContext;
  *
  * @author lippy
  */
-public class Autenticacao {
+public abstract class Autenticacao {
 
     protected Usuario criarUser(SecurityContext sc) {
         String s = sc.getUserPrincipal().getName();

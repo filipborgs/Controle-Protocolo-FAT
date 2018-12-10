@@ -69,7 +69,7 @@ public class SituacaoDAO extends DatabaseUtil {
     }
 
     public void deleteSituacao(int id) throws Exception {
-        String sql = "UPDATE livro SET " + SituacaoDaoUtil.SITUACAO_ATRIBUTO_EXCLUIDO + " = 'S' WHERE "
+        String sql = "UPDATE situacao SET " + SituacaoDaoUtil.SITUACAO_ATRIBUTO_EXCLUIDO + " = 'S' WHERE "
                 + SituacaoDaoUtil.SITUACAO_ATRIBUTO_ID + "= ?";
         super.getCon();
         try {
