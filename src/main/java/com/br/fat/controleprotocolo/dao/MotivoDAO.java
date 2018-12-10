@@ -52,7 +52,7 @@ public class MotivoDAO extends DatabaseUtil {
     }
 
     public List<Motivo> selectAllMotivo() throws Exception {
-        String sql = "SELECT * FROM motivo";
+        String sql = "SELECT * FROM motivo WHERE excluido = 'N'";
         super.getCon();
         try {
             stmt = con.prepareStatement(sql);

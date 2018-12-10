@@ -75,7 +75,7 @@ public class MotivoRest extends Autenticacao {
 
     @PUT
     @Secured
-    @Path("/editarLivro")
+    @Path("/editarMotivo")
     @Consumes("application/json")
     public String editarMotivo(String json, @Context SecurityContext sc) {
         Gson g = new Gson();

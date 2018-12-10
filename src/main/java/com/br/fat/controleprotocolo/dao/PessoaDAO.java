@@ -55,7 +55,7 @@ public class PessoaDAO extends DatabaseUtil {
     }
 
     public List<Pessoa> selectAllPessoa() throws Exception {
-        String sql = "SELECT * FROM pessoa WHERE " + PessoaDaoUtil.USUARIO_ATRIBUTO_EXCLUIDO + "='N'";
+        String sql = "SELECT * FROM view_table_pessoa WHERE " + PessoaDaoUtil.USUARIO_ATRIBUTO_EXCLUIDO + "='N'";
         super.getCon();
         try {
             stmt = con.prepareStatement(sql);
