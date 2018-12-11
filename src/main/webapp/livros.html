@@ -804,6 +804,7 @@
                             url: uri + metodo,
                             type: 'GET',
                             data: {},
+                            headers: { 'Authorization':localStorage.getItem('token') },
                             beforeSend: function () {
                                 //AlertModal("ENTRANDO...");
                             }

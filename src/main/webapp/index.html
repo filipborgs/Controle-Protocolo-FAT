@@ -67,7 +67,7 @@
                                 //alert("ENTRANDO...");
                             }
                         })
-                        .done(function (msg) {
+                        .done(function (msg, textStatus, request) {
 
                             if (msg.status === "A") {
                                 console.log(msg);
@@ -75,7 +75,8 @@
                                 salvarDadosUser('sdw3354SD&@!5231', msg.permissao.delete); // DELETE
                                 salvarDadosUser('zXGT*&&!3YHRU+|D', msg.permissao.update); // UPDATE
                                 salvarDadosUser('QWER8765@#*)--Z^', msg.permissao.write); // INSERT
-                                salvarDadosUser('Dw33&121#$%8\z|^', 'Dw33&121#$%8\z|^'); // TOKIN
+
+                                localStorage.setItem("token", request.getResponseHeader('Authorization'));
 
                                 function salvarDadosUser(chave, valor) {
                                     localStorage.setItem(chave, valor);
