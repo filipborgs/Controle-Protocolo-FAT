@@ -129,6 +129,7 @@
                                                 dataInicio: dtinicio,
                                                 dataFim: dtfim
                                             }),
+                                    headers: { 'Authorization':localStorage.getItem('token') },
                                     contentType: 'application/json',
                                     beforeSend: function () {
                                         //AlertModal("ENTRANDO...");
@@ -225,6 +226,7 @@
                             url: uri + metodo + "?idLivro=" + id,
                             type: 'DELETE',
                             data: {'': ''},
+                            headers: { 'Authorization':localStorage.getItem('token') },
                             beforeSend: function () {
                                 //AlertModal("ENTRANDO...");
                             }
@@ -473,6 +475,7 @@
                                 url: uri + metodo,
                                 type: 'GET',
                                 data: {},
+                                headers: { 'Authorization':localStorage.getItem('token') },
                                 beforeSend: function () {
                                     //AlertModal("ENTRANDO...");
                                 }
@@ -579,6 +582,7 @@
                                                 cor: cor,
                                                 dataInicio: dtinicio
                                             }),
+                                    headers: { 'Authorization':localStorage.getItem('token') },
                                     contentType: 'application/json',
                                     beforeSend: function () {
                                         //AlertModal("ENTRANDO...");

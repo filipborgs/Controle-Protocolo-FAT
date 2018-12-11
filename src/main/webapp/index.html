@@ -38,7 +38,10 @@
         </style>
 
         <script>
-
+            
+            //var req = createXMLHTTPObject();
+            //req.withCredentials = true;
+            
             if (localStorage.getItem('#$#EFR57AQw2#$!#') === '=U86?VFGT9@#$344') {
 
                 window.location.replace("protocolos.html"); // REDIRECIONA E NÃO PERMITE APERTAR O BOTÃO VOLTAR
@@ -63,6 +66,7 @@
                                         user: user,
                                         senha: senha
                                     },
+                            //contentType: 'application/json',
                             beforeSend: function () {
                                 //alert("ENTRANDO...");
                             }
@@ -130,7 +134,7 @@
                                 <label for="user">Usuário</label>
                                 <input required class="form-control input-lg" value="" name="user" id="user" type="text">
                             </div>
-
+                            <!-- --user-data-dir="C:/Chrome dev session" --disable-web-security -->
                             <div class="form-group">
                                 <label for="senha">Senha</label>
                                 <input required class="form-control input-lg" value="" name="senha" id="senha" type="password">

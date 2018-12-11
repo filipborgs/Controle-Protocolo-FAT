@@ -118,6 +118,7 @@
                                                 situacao: situacao,
                                                 descricao: descricao
                                             }),
+                                    headers: { 'Authorization':localStorage.getItem('token') },
                                     contentType: 'application/json',
                                     beforeSend: function () {
                                         //AlertModal("ENTRANDO...");
@@ -193,6 +194,7 @@
                             url: uri + metodo + "?idSituacao=" + id,
                             type: 'DELETE',
                             data: {},
+                            headers: { 'Authorization':localStorage.getItem('token') },
                             beforeSend: function () {
                                 //AlertModal("ENTRANDO...");
                             }
@@ -355,6 +357,7 @@
                                 url: uri + metodo,
                                 type: 'GET',
                                 data: {},
+                                headers: { 'Authorization':localStorage.getItem('token') },
                                 beforeSend: function () {
                                     //AlertModal("ENTRANDO...");
                                 }
@@ -452,6 +455,7 @@
                                                 situacao: situacao,
                                                 descricao: descricao
                                             }),
+                                    headers: { 'Authorization':localStorage.getItem('token') },
                                     contentType: 'application/json',
                                     beforeSend: function () {
                                         //AlertModal("ENTRANDO...");
@@ -608,6 +612,7 @@
                             url: uri + metodo,
                             type: 'GET',
                             data: {},
+                            headers: { 'Authorization':localStorage.getItem('token') },
                             beforeSend: function () {
                                 //AlertModal("ENTRANDO...");
                             }

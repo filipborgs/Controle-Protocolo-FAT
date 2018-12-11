@@ -118,6 +118,7 @@
                                                 motivo: motivo,
                                                 descricao: descricao
                                             }),
+                                    headers: { 'Authorization':localStorage.getItem('token') },
                                     contentType: 'application/json',
                                     beforeSend: function () {
                                         //AlertModal("ENTRANDO...");
@@ -229,6 +230,7 @@
                             url: uri + metodo + "?idUsuario=" + id,
                             type: 'DELETE',
                             data: {},
+                            headers: { 'Authorization':localStorage.getItem('token') },
                             beforeSend: function () {
                                 //AlertModal("ENTRANDO...");
                             }
@@ -391,6 +393,7 @@
                                 url: uri + metodo,
                                 type: 'GET',
                                 data: {},
+                                headers: { 'Authorization':localStorage.getItem('token') },
                                 beforeSend: function () {
                                     //AlertModal("ENTRANDO...");
                                 }
@@ -524,6 +527,7 @@
                                                     ler: 'S'
                                                 }
                                             }),
+                                    headers: { 'Authorization':localStorage.getItem('token') },
                                     contentType: 'application/json',
                                     beforeSend: function () {
                                         //AlertModal("ENTRANDO...");
@@ -800,6 +804,7 @@
                             url: uri + metodo,
                             type: 'GET',
                             data: {},
+                            headers: { 'Authorization':localStorage.getItem('token') },
                             beforeSend: function () {
                                 //AlertModal("ENTRANDO...");
                             }
