@@ -12,9 +12,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <script src="assest/js/vendor/jquery-1.12.4.min.js"></script>
 
-        <!-- ===== TABLE RESPONSIVE ===== -->
-        <link rel="stylesheet" href="assest/css/style.css">
-
         <!--====== FAVICON ICON =======-->
         <link rel="shortcut icon" type="image/ico" href="assest/img/favicon.png" />
 
@@ -27,25 +24,269 @@
 
         <script src="assest/js/project/dados_connection.js"></script>
         <script src="assest/js/project/control_user.js"></script>
+        <script src="assest/js/project/alertas.js"></script>
+        <!-- ===== TABLE RESPONSIVE ===== -->
+        <link rel="stylesheet" href="assest/css/style.css">
+        <link rel="stylesheet" href="assest/css/styles.css">
 
-        <style>
 
-            .footer {
+        <!-- \/\/\/\/\/\/\/\/ SCRIPTS JS \/\/\/\/\/\/\/\/ -->
+        <script>
 
-                bottom:0;
-                width:100%;
-                padding-left:0px;
-                padding-top:10%;
-                padding-bottom:0px;
+            /* 
+             *  **********   FUNÇÃO PARA EXIBIR O BOTÃO DE INSERIR
+             *  **********      APENAS DE USUÁRIO TIVER PERMISSÃO
+             */
+
+            function exibeButtonInserir() {
+
+                if (verifiquePermissaoInserir() === true) {
+
+                    divImg = document.getElementById("img_option_cadastrar");
+
+                    image = document.createElement("img");
+                    image.setAttribute("src", "assest/img/new.png");
+                    image.setAttribute("height", "45");
+                    image.setAttribute("style", "cursor:pointer;");
+                    image.setAttribute("onclick", "CallFormCadastrar();");
+                    image.setAttribute("width", "47");
+                    image.setAttribute("title", "Adicionar");
+
+                    divImg.append(image);
+                }
 
             }
 
-        </style>
+            /* 
+             *  **********   FUNÇÃO PARA EXIBIR QUALQUER MENSAGEM NA TELA 
+             *  **********  USANDO O MODAL QUE É CHAMADO PELA FUNÇÃO
+             */
+
+            function AlertModal(msg) {
+
+                sendMensage = document.getElementById("sendMensage");
+                $("#sendMensage").empty();
+                sendMensage.append(msg);
+                window.location.href = "#popup1";
+
+            }
+
+            /* 
+             *  **********   IDENTIFICA O ATO DE ENTRAR NA LINHA COM O MOUSE
+             *  ********** E ALTERA O ESTILO NA LINHA PARA DAR DESTAQUE 
+             */
+
+            function linhaI(id) {
+                tr1 = document.getElementById(id);
+
+                tr1.setAttribute("style", "background-color:#999;cursor:pointer;");
+            }
+
+            /* 
+             *  **********   IDENTIFICA O ATO DE SAIR DA LINHA COM O MOUSE
+             *  ********** E REMOVE O ESTILO DA LINHA PARA TIRAR O DESTAQUE 
+             */
+
+            function linhaO(id) {
+                tr1 = document.getElementById(id);
+                tr1.removeAttribute("style");
+            }
+
+            /* 
+             *  **********   FUNÇÃO PARA SALVAR EDIAÇÃO DO LIVRO E 
+             *  ********** REALIZAR ENVIO DO JSON PARA FAZER O UPDATE 
+             */
+
+            function SalveEdition(id) {
+
+             
+            }
+
+            /* 
+             *  **********   FUNÇÃO PARA VALIDAR OS CAMPOS DE INPUT 
+             *  **********       ANTES DE ENVIAR O FORMULÁRIO 
+             */
+
+            function ValidaCampos() {
+
+
+            }
+
+            /* 
+             *  **********   FUNÇÃO PARA CONFIRMAR A EXCLUIR UM LIVRO, 
+             *  ********** REALIZAR ENVIO DO JSON COM O ID PARA FAZER O UPDATE 
+             */
+
+            function RemoveItem(id) {
+
+              
+            }
+
+            /* 
+             *  **********   FUNÇÃO PARA CONFIRMAR A EXCLUIR UM LIVRO, 
+             *  ********** REALIZAR A PERGUNTA SE DESEJA REALMENTE EXCLUIR 
+             */
+
+            function ConfirmExclusao(id) {
+
+                CloseModal();
+
+                sendMensage = document.getElementById("sendMensage");
+                $("#sendMensage").empty();
+
+                div = document.createElement("div");
+                div.setAttribute("style", "");
+
+                div.append("Tem certeza que deseja excuir?");
+
+                sendMensage.appendChild(div);
+
+                confirm = document.createElement("input");
+                confirm.setAttribute("type", "submit");
+                confirm.setAttribute("value", "Confirmar");
+                confirm.setAttribute("class", "btn-danger");
+                confirm.setAttribute("onclick", "RemoveItem(" + id + ")");
+
+                cancelar = document.createElement("input");
+                cancelar.setAttribute("type", "submit");
+                cancelar.setAttribute("value", "Cancelar");
+                cancelar.setAttribute("style", "margin-right: 10px; margin-top: 10px;");
+                cancelar.setAttribute("onclick", "CloseModal();");
+
+                sendMensage.appendChild(cancelar);
+                sendMensage.appendChild(confirm);
+
+                window.location.href = "#popup1";
+
+            }
+
+            /* 
+             *  **********   FUNÇÃO PARA FECHAR O MODAL 
+             */
+
+            function CloseModal() {
+
+                window.location.href = "#";
+
+            }
+
+            /* 
+             *  **********   FUNÇÃO PARA OBTER OS CAMPOS DE INPUT E 
+             *  ********** REALIZAR ENVIO DO JSON PARA FAZER O UPDATE 
+             */
+
+            function CallFormEditar(id) {
+
+              
+
+                   
+            }
+
+            /* 
+             *  **********   FUNÇÃO PARA CHAMAR A EXIBIÇÃO DO MODAL 
+             *  ********** QUE APRESENTA AS OPÇÕES DE EXCLUIR E EDITAR
+             */
+
+            function chamaModal(id) {
+
+                sendMensage = document.getElementById("sendMensage");
+                $("#sendMensage").empty();
+
+                div = document.createElement("div");
+                div.setAttribute("style", "");
+
+                div.append("Selecione o que deseja fazer:");
+
+                sendMensage.appendChild(div);
+
+                excluir = document.createElement("input");
+                excluir.setAttribute("type", "submit");
+                excluir.setAttribute("value", "excluir");
+                excluir.setAttribute("class", "btn-danger");
+                excluir.setAttribute("onclick", "ConfirmExclusao(" + id + ")");
+
+                editar = document.createElement("input");
+                editar.setAttribute("type", "submit");
+                editar.setAttribute("value", "editar");
+                editar.setAttribute("style", "margin-right: 10px; margin-top: 10px;");
+                editar.setAttribute("onclick", "CallFormEditar(" + id + ")");
+
+                if ( verifiquePermissaoExcluir() === true ) {
+                    sendMensage.appendChild(excluir);
+                }
+
+                if ( verifiquePermissaoEditar() === true ) {
+                    sendMensage.appendChild(editar);
+                }
+
+                window.location.href = "#popup1";
+            }
+
+            /* 
+             *  **********   FUNÇÃO PARA OBTER OS CAMPOS DO INPUT E 
+             *  ********** REALIZAR ENVIO DO JSON PARA FAZER O INSERT (CADASTRAR LIVRO) 
+             */
+
+            function SendFormCadastrar() {
+
+               
+            }
+
+            /* 
+             *  **********   FUNÇÃO PARA LIMPAR TODOS OS CAMPOS DA TELA 
+             */
+
+            function cleanInputs() {
+
+                //document.getElementById("numero").value = "";
+   
+
+            }
+
+            /* 
+             *  **********   FUNÇÃO PARA CHAMAR O FORMULÁRIO DE CADASTRO DE LIVRO 
+             *  **********          E REMOVER A TABELA DE LIVROS DA TELA
+             */
+
+            function CallFormCadastrar() {
+
+               
+            }
+
+            /* 
+             *  **********       CHAMADO ATRAVES DO BOTÃO CANCELAR CADASTRO 
+             *  ********** FUNÇÃO QUE OCULTA O FORMULÁRIO E CHAMA A TABELA DE LIVROS 
+             */
+
+            function RemoveForm() {
+
+                $("#div-protocols").empty();
+
+                $("#div-row-inputs").empty();
+
+                GetListLivros();
+
+            }
+
+            /* 
+             *  **********   FUNÇÃO PARA EXIBIR TODOS OS LIVROS CADASTRADOS 
+             *  **********  REALIZAR UMA CHAMADA JSON PARA RECEBER OS DADOS
+             *  **********           CRIAR UMA TABELA E PREENCHER 
+             */
+
+            function GetListLivros() {
+
+               
+            }
+
+        </script>
 
     </head>
 
-    <body>
+    <body onload="GetListLivros();
+            exibeButtonInserir();">
 
+        <!-- \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ NAV MENU \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ -->
         <nav class="pushy pushy-left" data-focus="#first-link">
             <div class="pushy-content">
                 <ul>
@@ -60,45 +301,57 @@
             </div>
         </nav>
 
-        <!-- Your Content -->
+        <!-- \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ DIV MENU \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ -->
         <div id="container" style="padding-left:0px;padding-top:40px;padding-bottom:0px;height:50px;">
             <!-- Menu Button -->
             <button class="menu-btn">&#9776; Menu</button>
+            <div id="img_option_cadastrar" >
+            </div>
         </div>
-
-
 
         <!-- Pushy JS -->
         <script src="assest/js/pushy.min.js"></script>
 
+        <!-- \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ TÍTULO \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ -->
 
-        <h1 align="center" >Protocolos</h1>
-        <div>
-            <table class="rwd-table" id="table-protocols" >
-                <thead>
-                    <tr>
-                        <th>Movie Title</th>
-                        <th>Genre</th>
-                        <th>Year</th>
-                        <th>Gross</th>
-                    </tr>
-                </thead>
-                <tbody id="tboby-protocols">
-                    <tr>
-                        <td data-th="Movie Title">Star Wars</td>
-                        <td data-th="Genre">Adventure, Sci-fi</td>
-                        <td data-th="Year">1977</td>
-                        <td data-th="Gross">$460,935,665</td>
-                    </tr>
+        <h1 style="color: floralwhite; text-align: center; text-shadow:#000 1px -1px, #000 -1px 1px, #000 1px 1px, #000 -1px -1px" >
+            Protocolos
+        </h1>
 
-                </tbody>
-            </table>
+        <br/>
+        <!-- \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ DIV TABELA \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ -->
+        <div id="div-protocols" >
+
         </div>
 
+
+        <div id="popup1" class="overlay">
+            <div class="popup">
+                <h2 style="text-align: center;">Mensagem:</h2>
+                <a class="close" href="#">&times;</a>
+                <div class="content" id="sendMensage">
+                </div>
+            </div>
+        </div>
+
+        <!-- \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ DIV FORM \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ -->
+        <div id="div-create-protocol" >
+
+            <div class="container">
+
+                <div class="row" id="div-row-inputs" >
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ DIV RODAPE \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ -->
         <div>
-            <footer class="footer">
+            <footer class="footer" style="color: floralwhite; text-align: center; text-shadow:#000 1px -1px, #000 -1px 1px, #000 1px 1px, #000 -1px -1px" >
                 <!--FOOER AREA END-->
-                <p align="center">Desenvolvido pela turma de Sistemas para Internet</br> Faculdade Anísio Teixeira - 2018.2</p>
+                <p>Desenvolvido pela turma de Sistemas para Internet<br/> Faculdade Anísio Teixeira - 2018.2</p>
             </footer>
         </div>
 
