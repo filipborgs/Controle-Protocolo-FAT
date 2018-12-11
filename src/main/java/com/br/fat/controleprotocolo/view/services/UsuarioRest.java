@@ -46,7 +46,7 @@ public class UsuarioRest extends Autenticacao {
             String u = g.toJson(user);
             ControllerToken ctoken = new ControllerToken();
             String token = ctoken.gerarToken(user);
-            return Response.ok(u).header(HttpHeaders.AUTHORIZATION, token).build();
+            return Response.ok(u).header(HttpHeaders.AUTHORIZATION, token).header("Access-Control-Allow-Origin", "*").build();
 //            return g.toJson(control.autenticacao(senha, login));
         } catch (Exception ex) {
             return Response.serverError().build();
